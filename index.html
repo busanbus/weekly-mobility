@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>모빌리티 주간동향 아카이브</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans KR', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9fafe;
+      color: #1a1d29;
+    }
+    header {
+      background: linear-gradient(135deg, #0066ff, #003dd1);
+      color: white;
+      padding: 40px 0;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 32px;
+      margin: 0;
+    }
+    .container {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .year-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 8px;
+    }
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+      margin-bottom: 48px;
+    }
+    .month-card {
+      background: white;
+      border: 1px solid #e1e5eb;
+      border-radius: 12px;
+      text-align: center;
+      padding: 20px 0;
+      text-decoration: none;
+      color: #1a1d29;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    .month-card:hover {
+      background: #f0f4ff;
+      border-color: #0066ff;
+      transform: translateY(-2px);
+    }
+    footer {
+      text-align: center;
+      font-size: 13px;
+      color: #777;
+      padding: 40px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📂 모빌리티 주간동향 아카이브</h1>
+  </header>
+
+  <main class="container">
+    <section>
+      <div class="year-title">2025년</div>
+      <div class="month-grid">
+        <a href="/archive/2025/01/" class="month-card">1월</a>
+        <a href="/archive/2025/02/" class="month-card">2월</a>
+        <a href="/archive/2025/03/" class="month-card">3월</a>
+        <a href="/archive/2025/04/" class="month-card">4월</a>
+        <a href="/archive/2025/05/" class="month-card">5월</a>
+        <a href="/archive/2025/06/" class="month-card">6월</a>
+        <a href="/archive/2025/07/" class="month-card">7월</a>
+        <a href="/archive/2025/08/" class="month-card">8월</a>
+        <a href="/archive/2025/09/" class="month-card">9월</a>
+        <a href="/archive/2025/10/" class="month-card">10월</a>
+        <a href="/archive/2025/11/" class="month-card">11월</a>
+        <a href="/archive/2025/12/" class="month-card">12월</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Busan Metrobus Company Association<br />
+    모빌리티 주간동향 아카이브 페이지
+  </footer>
+
+</body>
+</html>
