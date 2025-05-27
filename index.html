@@ -3,100 +3,1033 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>모빌리티 주간동향 아카이브</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+  <title>모빌리티 주간동향 | 부산시내버스운송사업조합</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
   <style>
-    body {
-      font-family: 'Inter', 'Noto Sans KR', sans-serif;
+    * {
       margin: 0;
       padding: 0;
-      background: #f9fafe;
-      color: #1a1d29;
+      box-sizing: border-box;
     }
-    header {
-      background: linear-gradient(135deg, #0066ff, #003dd1);
+
+    :root {
+      --primary-blue: #0066ff;
+      --primary-dark: #003dd1;
+      --secondary-blue: #f0f4ff;
+      --accent-blue: #3b82f6;
+      --success-green: #10b981;
+      --warning-orange: #f59e0b;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #475569;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --text-primary: #1a1d29;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+    body {
+      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--gray-50);
+      overflow-x: hidden;
+    }
+
+    /* 애니메이션 */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* 헤더 */
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
       color: white;
-      padding: 40px 0;
+      padding: 80px 0 120px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
       text-align: center;
     }
-    header h1 {
-      font-size: 32px;
-      margin: 0;
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 32px;
+      animation: fadeInUp 0.8s ease-out;
     }
-    .container {
-      max-width: 960px;
-      margin: 40px auto;
-      padding: 0 20px;
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 900;
+      margin-bottom: 24px;
+      line-height: 1.1;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
     }
-    .year-title {
-      font-size: 24px;
+
+    .hero-subtitle {
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
+      opacity: 0.9;
+      margin-bottom: 48px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
+    }
+
+    .hero-stat {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-stat-number {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .hero-stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* 메인 컨테이너 */
+    .main-container {
+      max-width: 1200px;
+      margin: -60px auto 0;
+      padding: 0 24px;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* 최신 동향 섹션 */
+    .latest-section {
+      background: white;
+      border-radius: 24px;
+      padding: 48px;
+      margin-bottom: 48px;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--gray-200);
+      animation: fadeInUp 0.8s ease-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .latest-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--success-green), var(--warning-orange));
+    }
+
+    .latest-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .latest-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .latest-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--success-green), var(--warning-orange));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .latest-badge {
+      background: var(--success-green);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      animation: pulse 2s infinite;
+    }
+
+    .latest-content {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .latest-info h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--gray-900);
+    }
+
+    .latest-info p {
+      color: var(--gray-600);
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+
+    .latest-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 0.9rem;
+      color: var(--gray-500);
+      margin-bottom: 20px;
+    }
+
+    .latest-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      color: white;
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .btn-secondary {
+      background: var(--gray-100);
+      color: var(--gray-700);
+      padding: 12px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--gray-200);
+    }
+
+    .latest-preview {
+      background: var(--gray-50);
+      border-radius: 16px;
+      padding: 24px;
+      border: 2px dashed var(--gray-300);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+    }
+
+    .preview-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .preview-text {
+      color: var(--gray-600);
+      font-size: 0.9rem;
+    }
+
+    /* 섹션 헤더 */
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
       font-weight: 800;
       margin-bottom: 16px;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 8px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--gray-600);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* 연도 탭 */
+    .year-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 48px;
+      overflow-x: auto;
+      padding: 8px;
+    }
+
+    .year-tab {
+      background: white;
+      border: 2px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 12px 24px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .year-tab:hover {
+      border-color: var(--primary-blue);
+      background: var(--secondary-blue);
+    }
+
+    .year-tab.active {
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      color: white;
+      border-color: transparent;
+    }
+
+    .year-tab-badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .year-tab.active .year-tab-badge {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .year-tab:not(.active) .year-tab-badge {
+      background: var(--gray-100);
+      color: var(--gray-600);
+    }
+
+    /* 연도 컨텐츠 */
+    .year-content {
+      display: none;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .year-content.active {
+      display: block;
+    }
+
+    /* 연도 카드 */
+    .year-card {
+      background: white;
+      border-radius: 24px;
+      padding: 48px;
+      margin-bottom: 48px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--gray-200);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .year-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue));
+    }
+
+    .year-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .year-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .year-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .year-meta {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--gray-600);
+    }
+
+    .year-badge {
+      background: var(--secondary-blue);
+      color: var(--primary-blue);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* 월별 그리드 */
     .month-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 16px;
-      margin-bottom: 48px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
     }
+
     .month-card {
       background: white;
-      border: 1px solid #e1e5eb;
-      border-radius: 12px;
-      text-align: center;
-      padding: 20px 0;
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 24px;
       text-decoration: none;
-      color: #1a1d29;
-      font-weight: 600;
-      font-size: 16px;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      color: var(--text-primary);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
+
+    .month-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .month-card:hover::before {
+      opacity: 0.05;
+    }
+
     .month-card:hover {
-      background: #f0f4ff;
-      border-color: #0066ff;
-      transform: translateY(-2px);
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--primary-blue);
     }
-    footer {
+
+    .month-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .month-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .month-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .month-number {
+      background: var(--gray-100);
+      color: var(--gray-600);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .month-card:hover .month-number {
+      background: var(--primary-blue);
+      color: white;
+    }
+
+    .month-info {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      margin-bottom: 16px;
+    }
+
+    .month-arrow {
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: all 0.3s ease;
+      color: var(--primary-blue);
+      font-weight: 600;
+    }
+
+    .month-card:hover .month-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* 푸터 */
+    .footer {
+      background: var(--gray-900);
+      color: white;
+      padding: 64px 0 32px;
+      margin-top: 120px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
       text-align: center;
-      font-size: 13px;
-      color: #777;
-      padding: 40px 0;
+    }
+
+    .footer-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .footer-subtitle {
+      font-size: 1rem;
+      opacity: 0.8;
+      margin-bottom: 32px;
+    }
+
+    .footer-info {
+      font-size: 0.9rem;
+      opacity: 0.6;
+      line-height: 1.8;
+    }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 60px 0 80px;
+      }
+
+      .year-card {
+        padding: 32px 24px;
+      }
+
+      .latest-section {
+        padding: 32px 24px;
+      }
+
+      .latest-content {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .month-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .hero-stats {
+        gap: 24px;
+      }
+
+      .hero-stat-number {
+        font-size: 2rem;
+      }
+
+      .year-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .year-meta {
+        flex-wrap: wrap;
+      }
+
+      .year-tabs {
+        justify-content: flex-start;
+      }
+
+      .latest-actions {
+        flex-direction: column;
+      }
+    }
+
+    /* 로딩 애니메이션 */
+    .loading {
+      opacity: 0;
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .loading:nth-child(1) { animation-delay: 0.1s; }
+    .loading:nth-child(2) { animation-delay: 0.2s; }
+    .loading:nth-child(3) { animation-delay: 0.3s; }
+    .loading:nth-child(4) { animation-delay: 0.4s; }
+    .loading:nth-child(5) { animation-delay: 0.5s; }
+    .loading:nth-child(6) { animation-delay: 0.6s; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* 플로팅 SNS 버튼 - 컬러풀 & 더 크게, 더 위로 */
+    .floating-sns {
+      position: fixed;
+      right: 24px;
+      bottom: 120px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .floating-sns a {
+      border-radius: 50%;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      width: 68px;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .floating-sns a.instagram {
+      background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    }
+    .floating-sns a.naver {
+      background: #03c75a;
+    }
+    .floating-sns a.youtube {
+      background: #ff0000;
+    }
+    .floating-sns a:hover {
+      box-shadow: 0 8px 24px rgba(0,102,255,0.22);
+      transform: translateY(-3px) scale(1.10);
+    }
+    .floating-sns img {
+      width: 38px;
+      height: 38px;
+      display: block;
+      filter: brightness(0) invert(1);
+    }
+    .floating-sns a.naver img {
+      filter: none;
+      background: #fff;
+      border-radius: 8px;
+      padding: 2px;
+    }
+    @media (max-width: 600px) {
+      .floating-sns {
+        right: 10px;
+        bottom: 70px;
+        gap: 12px;
+      }
+      .floating-sns a {
+        width: 52px;
+        height: 52px;
+      }
+      .floating-sns img {
+        width: 28px;
+        height: 28px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- 히어로 섹션 -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">
+        📈 매주 업데이트
+      </div>
+      <h1 class="hero-title">
+        모빌리티<br>
+        <span style="background: linear-gradient(135deg, #60a5fa, #a78bfa); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">주간동향</span>
+      </h1>
+      <p class="hero-subtitle">
+        모빌리티 최신 동향과 정책 변화를 한눈에 확인하세요.<br>
+        카드뉴스 형식으로 모빌리티 트렌드를 파악할 수 있습니다.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-number">2</span>
+          <span class="hero-stat-label">누적 리포트</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-number">100%</span>
+          <span class="hero-stat-label">팩트체크</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-number">25-05-26</span>
+          <span class="hero-stat-label">최근 업데이트</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <header>
-    <h1>📂 모빌리티 주간동향 아카이브</h1>
-  </header>
-
-  <main class="container">
-    <section>
-      <div class="year-title">2025년</div>
-      <div class="month-grid">
-        <a href="mobility-weekly/archive/2025/01" class="month-card">1월</a>
-        <a href="mobility-weekly/archive/2025/02" class="month-card">2월</a>
-        <a href="mobility-weekly/archive/2025/03" class="month-card">3월</a>
-        <a href="mobility-weekly/archive/2025/04" class="month-card">4월</a>
-        <a href="archive/2025/05" class="month-card">5월</a>
-        <a href="mobility-weekly/archive/2025/06" class="month-card">6월</a>
-        <a href="mobility-weekly/archive/2025/07" class="month-card">7월</a>
-        <a href="mobility-weekly/archive/2025/08" class="month-card">8월</a>
-        <a href="mobility-weekly/archive/2025/09" class="month-card">9월</a>
-        <a href="mobility-weekly/archive/2025/10" class="month-card">10월</a>
-        <a href="mobility-weekly/archive/2025/11" class="month-card">11월</a>
-        <a href="mobility-weekly/archive/2025/12" class="month-card">12월</a>
+  <!-- 메인 컨테이너 -->
+  <main class="main-container">
+    <!-- 최신 동향 섹션 -->
+    <section class="latest-section">
+      <div class="latest-header">
+        <div class="latest-title">
+          <div class="latest-icon">🚀</div>
+          최신 동향
+        </div>
+        <div class="latest-badge">NEW</div>
+      </div>
+      
+      <div class="latest-content">
+        <div class="latest-info">
+          <h3>2025년 5월 3주차 모빌리티 주간동향</h3>
+          <div class="latest-meta">
+            <span>📅 2025.05.27 발행</span>
+          </div>
+          <p>
+            이번 주차에는 부산 BRT 2단계 사업 진행현황과 전기버스 도입 확대 계획, 
+            그리고 시민 만족도 조사 결과 등 주요 모빌리티 정책 동향을 다루고 있습니다.
+            특히 친환경 대중교통 전환 정책과 관련된 중요한 내용들이 포함되어 있습니다.
+          </p>
+          <div class="latest-actions" style="margin-top: 32px;">
+            <a href="mobility-weekly/archive/2025/05/week4.pdf" class="btn-primary">
+              📖 바로 읽기
+            </a>
+          </div>
+        </div>
+        <!-- 최신 동향 일러스트 SVG -->
+        <div style="display:flex; align-items:center; justify-content:center;">
+          <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="32" width="96" height="64" rx="12" fill="#f0f4ff"/>
+            <rect x="28" y="56" width="12" height="24" rx="4" fill="#3b82f6"/>
+            <rect x="48" y="44" width="12" height="36" rx="4" fill="#60a5fa"/>
+            <rect x="68" y="68" width="12" height="12" rx="4" fill="#a78bfa"/>
+            <rect x="88" y="36" width="12" height="44" rx="4" fill="#10b981"/>
+            <circle cx="60" cy="100" r="6" fill="#0066ff"/>
+            <rect x="12" y="32" width="96" height="64" rx="12" stroke="#3b82f6" stroke-width="2"/>
+          </svg>
+        </div>
       </div>
     </section>
+
+    <!-- 섹션 헤더 -->
+    <div class="section-header">
+      <h2 class="section-title">둘러보기</h2>
+      <p class="section-subtitle">
+        연도별로 정리된 모빌리티 주간동향 자료를 탐색하고 다운로드하세요
+      </p>
+    </div>
+
+    <!-- 연도 탭 -->
+    <div class="year-tabs">
+      <div class="year-tab active" onclick="showYear(2025)">
+        <span>2025년</span>
+        <span class="year-tab-badge">최신</span>
+      </div>
+    </div>
+
+    <!-- 2025년 컨텐츠 -->
+    <div id="year-2025" class="year-content active">
+      <div class="year-card">
+        <div class="year-header">
+          <div class="year-title">
+            <div class="year-icon">📅</div>
+            2025년
+          </div>
+          <div class="year-meta">
+            <span class="year-badge">진행중</span>
+          </div>
+        </div>
+        
+        <div class="month-grid">
+          <a href="archive/2025/04" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">4월</div>
+                  <div class="month-info">April 2025</div>
+                </div>
+                <div class="month-number">04</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+
+          <a href="archive/2025/05" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">5월</div>
+                  <div class="month-info">May 2025</div>
+                </div>
+                <div class="month-number">05</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+
+          <a href="archive/2025/06" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">6월</div>
+                  <div class="month-info">June 2025</div>
+                </div>
+                <div class="month-number">06</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+
+          <a href="archive/2025/07" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">7월</div>
+                  <div class="month-info">July 2025</div>
+                </div>
+                <div class="month-number">07</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+
+          <a href="archive/2025/08" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">8월</div>
+                  <div class="month-info">August 2025</div>
+                </div>
+                <div class="month-number">08</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+
+          <a href="archive/2025/09" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">9월</div>
+                  <div class="month-info">September 2025</div>
+                </div>
+                <div class="month-number">09</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+
+          <a href="archive/2025/10" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">10월</div>
+                  <div class="month-info">October 2025</div>
+                </div>
+                <div class="month-number">10</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+
+          <a href="archive/2025/11" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">11월</div>
+                  <div class="month-info">November 2025</div>
+                </div>
+                <div class="month-number">11</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+
+          <a href="archive/2025/12" class="month-card loading">
+            <div class="month-content">
+              <div class="month-header">
+                <div>
+                  <div class="month-name">12월</div>
+                  <div class="month-info">December 2025</div>
+                </div>
+                <div class="month-number">12</div>
+              </div>
+              <div class="month-arrow">자료 보기 →</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <footer>
-    © 2025 Busan Metrobus Company Association<br />
-    모빌리티 주간동향 아카이브 페이지
+  <!-- 추가 랜딩 소개 섹션 -->
+  <section class="about-section" style="background: var(--gray-100); padding: 64px 0 48px 0; text-align: center;">
+    <div style="max-width: 800px; margin: 0 auto; padding: 0 24px;">
+      <h2 style="font-size: 2rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 18px;">모빌리티 주간동향이란?</h2>
+      <p style="font-size: 1.15rem; color: var(--gray-800); margin-bottom: 32px; line-height: 1.8;">
+        <b>부산시내버스운송사업조합</b>이 제공하는 <b>모빌리티 주간동향</b>은<br>
+        전국의 대중교통, 친환경 모빌리티, 정책 트렌드, 시민 체감 이슈 등<br>
+        다양한 주간 리포트와 분석 자료를 한 곳에 모아<br>
+        <span style="color: var(--primary-blue); font-weight: 700;">누구나 쉽고 자유롭게</span> 열람할 수 있도록 만든 소식허브입니다.<br>
+        <br>
+        최신 정책 변화와 트렌드를 한눈에 파악하고,<br>
+        PDF 원문 다운로드, 월별/연도별 탐색 등 다양한 기능을 제공합니다.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: nowrap; margin-bottom: 16px;">
+        <div style="background: white; border-radius: 16px; box-shadow: var(--shadow-md); padding: 28px 32px; min-width: 180px;">
+          <div style="font-size: 2rem; color: var(--primary-blue); font-weight: 800; margin-bottom: 8px;">100% 무료</div>
+          <div style="color: var(--gray-700); font-size: 1rem;">회원가입 없이 누구나<br>모든 자료 열람 가능</div>
+        </div>
+        <div style="background: white; border-radius: 16px; box-shadow: var(--shadow-md); padding: 28px 32px; min-width: 180px;">
+          <div style="font-size: 2rem; color: var(--primary-blue); font-weight: 800; margin-bottom: 8px;">매주 업데이트</div>
+          <div style="color: var(--gray-700); font-size: 1rem;"><br>최신 정책·트렌드 지속 반영</div>
+        </div>
+        <div style="background: white; border-radius: 16px; box-shadow: var(--shadow-md); padding: 28px 32px; min-width: 180px;">
+          <div style="font-size: 2rem; color: var(--primary-blue); font-weight: 800; margin-bottom: 8px;">신뢰성 보장</div>
+          <div style="color: var(--gray-700); font-size: 1rem;">공공기관 발행<br>팩트체크 완료 자료</div>
+        </div>
+      </div>
+      <div style="margin-top: 32px; color: var(--gray-600); font-size: 1rem;">
+        <b>문의</b> : 부산시내버스운송사업조합 전략기획팀<br>
+        <span style="font-size: 0.97em;">이메일: <a href="mailto:chha@busanbus.or.kr" style="color: var(--primary-blue); text-decoration: underline;">chha@busanbus.or.kr</a></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer class="footer" style="background: var(--gray-900); color: white; padding: 56px 0 28px 0; margin-top: 0;">
+    <div class="footer-content" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; text-align: center;">
+      <div class="footer-title" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 12px;">모빌리티 주간동향</div>
+      <div class="footer-subtitle" style="font-size: 1rem; opacity: 0.8; margin-bottom: 18px;">
+        부산시내버스운송사업조합이 제공하는 대중교통·모빌리티 정책 트렌드 서비스
+      </div>
+      <div class="footer-info" style="font-size: 0.97rem; opacity: 0.7; line-height: 1.8; margin-bottom: 18px;">
+        본 사이트의 모든 자료는 공공 목적의 정보 제공을 위해 제작되었으며,<br>
+        무단 복제 및 상업적 이용을 금지합니다.<br>
+        © 2025 Busan Metrobus Company Association. All rights reserved.
+      </div>
+      <div style="margin-top: 12px;">
+        <a href="mailto:chha@busanbus.or.kr" style="color: #fff; text-decoration: underline; font-weight: 500;">문의하기</a>
+        <span style="margin: 0 8px; color: #888;">|</span>
+        <a href="https://busanbus.or.kr" target="_blank" style="color: #fff; text-decoration: underline; font-weight: 500;">공식 홈페이지</a>
+      </div>
+    </div>
   </footer>
 
+  <!-- 플로팅 SNS 버튼 -->
+  <div class="floating-sns">
+    <a href="https://www.instagram.com/busholic_busan/" class="instagram" target="_blank" title="인스타그램">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="인스타그램" />
+    </a>
+    <a href="https://www.youtube.com/channel/UCrBrdoITKYxidD_pqJnPCcg/?sub_confirmation=1" class="youtube" target="_blank" title="유튜브">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="유튜브" />
+    </a>
+    <a href="https://blog.naver.com/busholic" class="naver" target="_blank" title="블로그">
+      <img src="https://www.svgrepo.com/show/368248/naver-square.svg" alt="네이버블로그그" />
+    </a>
+  </div>
 </body>
 </html>
