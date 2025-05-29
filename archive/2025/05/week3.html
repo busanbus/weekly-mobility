@@ -290,13 +290,13 @@
       position: relative;
       display: flex;
       flex-direction: column;
+      box-shadow: var(--shadow-lg);
     }
 
     .news-card:hover {
-      /* 효과 제거: transform, box-shadow, border-color */
-      /* transform: translateY(-8px); */
-      /* box-shadow: var(--shadow-lg); */
-      /* border-color: var(--primary-blue); */
+      transform: none;
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-light);
     }
 
     .news-image {
@@ -325,8 +325,7 @@
     }
 
     .news-card:hover .news-image img {
-      /* 이미지 확대 효과 제거 */
-      /* transform: scale(1.05); */
+      transform: none;
     }
 
     .news-content {
@@ -387,7 +386,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      height: 34px;
+      height: 40px;
     }
 
     .news-link:hover {
@@ -696,7 +695,9 @@
             <span class="date-week-text">2025년 5월 3주차</span>
           </div>
           <div class="logo-section">
-            <img src="logo.png" alt="모빌리티 주간동향 로고" />
+            <a href="https://busanbus.github.io/mobility-weekly/" rel="noopener noreferrer">
+              <img src="logo.png" alt="모빌리티 주간동향 로고" />
+            </a>
           </div>
         </div>
       </div>
