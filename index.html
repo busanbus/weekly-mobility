@@ -724,18 +724,21 @@
       padding: 2px;
     }
     @media (max-width: 600px) {
+      /* about-section 카드 세로 정렬 */
+      .about-section > div[style*="display: flex"] {
+        flex-direction: column !important;
+        gap: 16px !important;
+        flex-wrap: nowrap !important;
+        align-items: stretch !important;
+      }
+      .about-section > div[style*="display: flex"] > div {
+        min-width: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box;
+      }
+      /* 플로팅 SNS 숨김 */
       .floating-sns {
-        right: 10px;
-        bottom: 70px;
-        gap: 12px;
-      }
-      .floating-sns a {
-        width: 52px;
-        height: 52px;
-      }
-      .floating-sns img {
-        width: 28px;
-        height: 28px;
+        display: none !important;
       }
     }
   </style>
