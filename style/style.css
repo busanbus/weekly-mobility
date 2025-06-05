@@ -482,8 +482,8 @@ body {
   gap: 20px;
 }
 .sns-btn {
-  width: 64px;
-  height: 64px;
+  width: 58px;
+  height: 58px;
   border-radius: 50%;
   box-shadow: 0 4px 16px rgba(0,0,0,0.13);
   display: flex;
