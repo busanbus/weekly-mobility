@@ -8,7 +8,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>모빌리티 주간동향 | 부산시내버스운송사업조합</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="https://www.busanbus.or.kr/assets/img/common/favicon.png">
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -681,67 +686,76 @@
       50% { opacity: 0.7; }
     }
 
-    /* 플로팅 SNS 버튼 - 컬러풀 & 더 크게, 더 위로 */
+    /* ===== 플로팅 SNS UI ===== */
     .floating-sns {
       position: fixed;
-      right: 24px;
-      bottom: 120px;
-      z-index: 999;
+      right: 40px;
+      bottom: 32px;
+      z-index: 9999;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
     }
-    .floating-sns a {
+    .sns-btn {
+      width: 58px;
+      height: 58px;
       border-radius: 50%;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      width: 68px;
-      height: 68px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.13);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .floating-sns a.instagram {
-      background: radial-gradient(circle at 30% 110%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
-    }
-    .floating-sns a.naver {
-      background: #03c75a;
-    }
-    .floating-sns a.youtube {
-      background: #ff0000;
-    }
-    .floating-sns a:hover {
-      box-shadow: 0 8px 24px rgba(0,102,255,0.22);
-      transform: translateY(-3px) scale(1.10);
-    }
-    .floating-sns img {
-      width: 38px;
-      height: 38px;
-      display: block;
-      filter: brightness(0) invert(1);
-    }
-    .floating-sns a.naver img {
-      filter: none;
+      transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+      border: none;
+      padding: 0;
       background: #fff;
-      border-radius: 8px;
-      padding: 2px;
+    }
+    .sns-btn.insta {
+      background: linear-gradient(135deg, #E1306C 0%, #F56040 100%);
+    }
+    .sns-btn.youtube {
+      background: #FF0000;
+    }
+    .sns-btn.naver {
+      background: #03C75A;
+    }
+    .sns-btn img {
+      width: 34px;
+      height: 34px;
+      filter: brightness(0) invert(1);
+      display: block;
+    }
+    .sns-btn:hover {
+      box-shadow: 0 0 0 6px rgba(0,0,0,0.08);
+      transform: translateY(-2px) scale(1.07);
+    }
+    .sns-btn:active,
+    .sns-btn:focus {
+      /* 클릭/포커스 효과도 제거 */
+      box-shadow: none;
+      transform: none;
+      outline: none;
+    }
+    .sns-btn.naver img {
+      width: 28px;
+      height: 28px;
     }
     @media (max-width: 600px) {
-      /* about-section 카드 세로 정렬 */
-      .about-section > div[style*="display: flex"] {
-        flex-direction: column !important;
-        gap: 16px !important;
-        flex-wrap: nowrap !important;
-        align-items: stretch !important;
-      }
-      .about-section > div[style*="display: flex"] > div {
-        min-width: 0 !important;
-        width: 100% !important;
-        box-sizing: border-box;
-      }
-      /* 플로팅 SNS 숨김 */
       .floating-sns {
-        display: none !important;
+        right: 18px;
+        bottom: 16px;
+        gap: 14px;
+      }
+      .sns-btn {
+        width: 52px;
+        height: 52px;
+      }
+      .sns-btn img {
+        width: 28px;
+        height: 28px;
+      }
+      .sns-btn.naver img {
+        width: 22px;
+        height: 22px;
       }
     }
   </style>
@@ -763,11 +777,11 @@
       </p>
       <div class="hero-stats">
         <div class="hero-stat">
-          <span class="hero-stat-number">3</span>
+          <span class="hero-stat-number">4</span>
           <span class="hero-stat-label">누적 리포트</span>
         </div>
         <div class="hero-stat">
-          <span class="hero-stat-number">25-06-02</span>
+          <span class="hero-stat-number">25-06-09</span>
           <span class="hero-stat-label">최근 업데이트</span>
         </div>
       </div>
@@ -788,15 +802,15 @@
       
       <div class="latest-content">
         <div class="latest-info">
-          <h3>2025년 5월 4주차 모빌리티 주간동향</h3>
+          <h3>2025년 6월 1주차 모빌리티 주간동향</h3>
           <div class="latest-meta">
-            <span>📅 2025.06.02 발행</span>
+            <span>📅 2025.06.09 발행</span>
           </div>
           <p>
-            이번 주차에는 교통패스 운영 현황, 울산 수소그린모빌리티 실증 확대, BRT 안정화 추진단 운영 등 모빌리티 트렌드를 한눈에 살펴봅니다.
+            이번 주차에는 전국 최대규모 수소청소차 도입, 도시철도 양산선 운영사 선정 난항, 택시 자격시험 응시 및 개인택시 면허값 역대 최대 등 모빌리티 트렌드를 한눈에 살펴봅니다.
           </p>
           <div class="latest-actions" style="margin-top: 32px;">
-            <a href="archive/2025/05/week4.html" class="btn-primary">
+            <a href="archive/2025/06/week1.html" class="btn-primary">
               📖 바로 읽기
             </a>
           </div>
@@ -989,10 +1003,6 @@
           <div style="font-size: 2rem; color: var(--primary-blue); font-weight: 800; margin-bottom: 8px;">매주 업데이트</div>
           <div style="color: var(--gray-700); font-size: 1rem;"><br>최신 정책·트렌드 지속 반영</div>
         </div>
-        <div style="background: white; border-radius: 16px; box-shadow: var(--shadow-md); padding: 28px 32px; min-width: 180px;">
-          <div style="font-size: 2rem; color: var(--primary-blue); font-weight: 800; margin-bottom: 8px;">신뢰성 보장</div>
-          <div style="color: var(--gray-700); font-size: 1rem;">공공기관 발행<br>팩트체크 완료 자료</div>
-        </div>
       </div>
       <div style="margin-top: 32px; color: var(--gray-600); font-size: 1rem;">
         <b>문의</b> : 부산시내버스운송사업조합 전략기획팀<br>
@@ -1023,14 +1033,14 @@
 
   <!-- 플로팅 SNS 버튼 -->
   <div class="floating-sns">
-    <a href="https://www.instagram.com/busholic_busan/" class="instagram" target="_blank" title="인스타그램">
+    <a href="https://www.instagram.com/busholic_busan/" target="_blank" class="sns-btn insta" title="인스타그램">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="인스타그램" />
     </a>
-    <a href="https://www.youtube.com/channel/UCrBrdoITKYxidD_pqJnPCcg/?sub_confirmation=1" class="youtube" target="_blank" title="유튜브">
+    <a href="https://www.youtube.com/channel/UCrBrdoITKYxidD_pqJnPCcg" target="_blank" class="sns-btn youtube" title="유튜브">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="유튜브" />
     </a>
-    <a href="https://blog.naver.com/busholic" class="naver" target="_blank" title="블로그">
-      <img src="https://www.svgrepo.com/show/368248/naver-square.svg" alt="네이버블로그그" />
+    <a href="https://blog.naver.com/busholic" target="_blank" class="sns-btn naver" title="네이버블로그">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/naver.svg" alt="네이버블로그" />
     </a>
   </div>
 </body>
