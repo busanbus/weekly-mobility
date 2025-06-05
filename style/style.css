@@ -469,4 +469,70 @@ body {
     max-width: 380px;
     width: 95vw;
   }
+}
+
+/* ===== 플로팅 SNS UI ===== */
+.floating-sns {
+  position: fixed;
+  right: 40px;
+  bottom: 32px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.sns-btn {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+  border: none;
+  padding: 0;
+  background: #fff;
+}
+.sns-btn.insta {
+  background: linear-gradient(135deg, #E1306C 0%, #F56040 100%);
+}
+.sns-btn.youtube {
+  background: #FF0000;
+}
+.sns-btn.naver {
+  background: #03C75A;
+}
+.sns-btn img {
+  width: 34px;
+  height: 34px;
+  filter: brightness(0) invert(1);
+  display: block;
+}
+.sns-btn:hover {
+  box-shadow: 0 0 0 6px rgba(0,0,0,0.08);
+  transform: translateY(-2px) scale(1.07);
+}
+.sns-btn.naver img {
+  width: 28px;
+  height: 28px;
+}
+@media (max-width: 600px) {
+  .floating-sns {
+    right: 18px;
+    bottom: 16px;
+    gap: 14px;
+  }
+  .sns-btn {
+    width: 52px;
+    height: 52px;
+  }
+  .sns-btn img {
+    width: 28px;
+    height: 28px;
+  }
+  .sns-btn.naver img {
+    width: 22px;
+    height: 22px;
+  }
 } 
