@@ -1,0 +1,472 @@
+/* ===== CSS VARIABLES ===== */
+:root {
+  --primary-blue: #0066FF;
+  --primary-dark: #003DD1;
+  --secondary-blue: #E6F1FF;
+  --accent-green: #00C48C;
+  --text-primary: #1A1D29;
+  --text-secondary: #5A6573;
+  --text-muted: #8B95A7;
+  --bg-primary: #FAFBFC;
+  --bg-card: #FFFFFF;
+  --border-light: #E8EAED;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --border-radius: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+}
+
+/* ===== BASE STYLES ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-feature-settings: 'kern' 1;
+  text-rendering: optimizeLegibility;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== HEADER STYLES ===== */
+.header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  min-height: 200px;
+  position: relative;
+  padding: 15px 24px 0;
+}
+
+.header-content {
+  position: relative;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Header Mobile Bar */
+.header-bar-mobile {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 8px;
+  margin-bottom: 16px;
+}
+
+/* Header Logo */
+.header-logo {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  height: 36px;
+}
+
+/* Header Publisher */
+.header-publisher {
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  font-size: 16px;
+  color: var(--text-primary);
+  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 700;
+}
+
+/* Main Logo Section */
+.logo-section {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 4px auto 0;
+}
+
+.logo-section img {
+  max-width: 380px;
+  width: 80vw;
+  height: auto;
+  display: block;
+}
+
+/* Header Date */
+.header-date {
+  position: static;
+  transform: none;
+  width: 100%;
+  text-align: center;
+  margin: 12px 0 0px;
+}
+
+.date-week-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+/* ===== PDF DOWNLOAD SECTION ===== */
+.pdf-download {
+  margin: 32px auto 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.pdf-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 380px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+}
+
+.pdf-box:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.pdf-content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pdf-icon {
+  width: 34px;
+  height: 34px;
+  opacity: 0.78;
+}
+
+.pdf-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--primary-blue);
+  margin-bottom: 2px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+
+
+}
+
+.pdf-description {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  text-align: justify;
+}
+
+/* ===== NEWS GRID ===== */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: 32px;
+  margin: 38px 0 64px;
+}
+
+.news-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+}
+
+.news-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.news-image {
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  position: relative;
+}
+
+.news-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 100%);
+  pointer-events: none;
+}
+
+.news-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.news-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.news-category {
+  display: inline-flex;
+  align-items: center;
+  background: var(--secondary-blue);
+  color: var(--primary-blue);
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin-bottom: 16px;
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.news-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.news-summary {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.news-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.news-link {
+  background: var(--gradient-primary);
+  color: white;
+  text-decoration: none;
+  padding: 7px 16px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+}
+
+.news-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3);
+}
+
+.news-link::after {
+  content: "→";
+  font-size: 16px;
+  transition: var(--transition);
+}
+
+.news-link:hover::after {
+  transform: translateX(4px);
+}
+
+/* ===== FOOTER STYLES ===== */
+.footer {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-light);
+  padding: 18px 0 10px;
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+
+.footer-description {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.footer-copyright {
+  color: var(--text-muted);
+  font-size: 14px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border-light);
+  margin-top: 24px;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.news-card {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.news-card:nth-child(1) { animation-delay: 0.1s; }
+.news-card:nth-child(2) { animation-delay: 0.2s; }
+.news-card:nth-child(3) { animation-delay: 0.3s; }
+.news-card:nth-child(4) { animation-delay: 0.4s; }
+.news-card:nth-child(5) { animation-delay: 0.5s; }
+.news-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .header {
+    min-height: 250px;
+    padding: 15px 16px 0;
+  }
+
+  .header-content {
+    min-height: auto;
+  }
+
+  /* Show mobile bar, hide desktop elements */
+  .header-bar-mobile {
+    display: flex;
+  }
+
+  .header-logo:not(.in-bar),
+  .header-publisher:not(.in-bar) {
+    display: none;
+  }
+
+  .header-logo.in-bar {
+    position: static;
+    height: 30px;
+    margin: 0;
+  }
+
+  .header-publisher.in-bar {
+    position: static;
+    font-size: 15px;
+    margin-right: 12px;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Logo section adjustments */
+  .logo-section {
+    position: static;
+    transform: none;
+    margin: 4px auto 0;
+    padding-top: 0;
+  }
+
+  .logo-section img {
+    max-width: 280px;
+    width: 98vw;
+  }
+
+  /* Header date adjustments */
+  .header-date {
+    position: static;
+    transform: none;
+    width: 100%;
+    text-align: center;
+    margin: 12px 0 0px;
+  }
+
+  .date-week-text {
+    font-size: 19px;
+  }
+
+  /* News grid adjustments */
+  .news-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .news-content {
+    padding: 20px;
+  }
+
+  .news-image {
+    height: 200px;
+  }
+
+  /* PDF download adjustments */
+  .pdf-download {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .pdf-box {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-section img {
+    max-width: 260px;
+    width: 95vw;
+  }
+
+  .header-publisher.in-bar {
+    font-size: 12px;
+    margin-right: 6px;
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 700;
+  }
+}
+
+@media (min-width: 769px) {
+  .logo-section img {
+    max-width: 380px;
+    width: 95vw;
+  }
+} 
