@@ -6,30 +6,23 @@
   <meta property="og:image" content="https://ifh.cc/g/OQ5Sgg.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2025년 5월 모빌리티 주간동향</title>
+  <title>2025년 4월 모빌리티 주간동향</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../style/style.css">
+  <link rel="icon" type="image/png" href="https://www.busanbus.or.kr/assets/img/common/favicon.png">
+  
+
   <style>
     body {
-      font-family: 'Inter', 'Noto Sans KR', sans-serif;
+      font-family: 'Noto Sans KR', sans-serif;
       margin: 0;
       padding: 0;
       background: #f9fafe;
       color: #1a1d29;
     }
 
-    header {
-      background: linear-gradient(135deg, #0066ff, #003dd1);
-      color: white;
-      padding: 40px 0;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    .container {
+    /* --- 카드뉴스 및 그리드 등 기존 스타일 유지, .container -> .main-container로 변경 --- */
+    .main-container {
       max-width: 960px;
       margin: 40px auto;
       padding: 0 20px;
@@ -81,68 +74,100 @@
     }
 
     .week-subtitle {
-      font-size: 14px;
+      font-size: 12.5px;
       color: #5a6573;
     }
 
-    footer {
+    .info-box {
+      background: #fff;
+      border: none;
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin: 36px 0 36px 0;
+      font-size: 18px;
+      color: #1a1d29;
       text-align: center;
-      font-size: 13px;
-      color: #777;
-      padding: 40px 0;
+      box-shadow: 0 4px 24px rgba(0,102,255,0.07), 0 1.5px 6px rgba(0,0,0,0.04);
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>2025년 5월 모빌리티 주간동향</h1>
-  </header>
-
-  <main class="container">
-    <p class="month-description">
-      2025년 5월 한 달간의 주간 모빌리티 정책·산업 동향을 정리했습니다.<br>
-      각 주차별 내용을 클릭하면 상세 페이지로 이동합니다.
-    </p>
-
-    <div class="week-grid">
-      <a href="week1.html" class="week-card">
-        <div class="week-image" style="background-image: url('https://via.placeholder.com/600x300?text=5월+1주차');"></div>
-        <div class="week-content">
-          <div class="week-title">5월 1주차</div>
-          <div class="week-subtitle">파업 예고 대응, 교통안전 캠페인 소식 등</div>
+  <div class="container">
+    <header class="header">
+      <div class="header-content">
+        <a href="https://www.busanbus.or.kr/#/" target="_blank" rel="noopener noreferrer">
+          <img src="logo.svg" alt="조합 로고" class="header-logo" />
+        </a>
+        <span class="header-publisher">발행 : 전략기획팀</span>
+        <div class="header-date">
+          <span class="date-week-text">2025년 4월 주간 모음</span>
         </div>
-      </a>
-
-      <a href="week2.html" class="week-card">
-        <div class="week-image" style="background-image: url('https://via.placeholder.com/600x300?text=5월+2주차');"></div>
-        <div class="week-content">
-          <div class="week-title">5월 2주차</div>
-          <div class="week-subtitle">전국 최대 수소출하센터 준공, 자율주행 V2X 실증사업 선정, 도로교통사고 사망자 감소대책 발표, 버스완전공영제 도입 불발</div>
+        <div class="logo-section">
+          <a href="https://busanbus.github.io/mobility-weekly/" rel="noopener noreferrer">
+            <img src="logo.png" alt="모빌리티 주간동향 로고" />
+          </a>
         </div>
-      </a>
+      </div>
+    </header>
+    <main class="main-container">
+      <div class="info-box">
+        2025년 4월 한 달간 주간 모빌리티 정책·산업 동향을 정리했습니다.<br>
+        각 주차별 내용을 클릭하면 상세 페이지로 이동합니다.
+      </div>
 
-      <a href="week3.html" class="week-card">
-        <div class="week-image" style="background-image: url('https://via.placeholder.com/600x300?text=5월+3주차');"></div>
-        <div class="week-content">
-          <div class="week-title">5월 3주차</div>
-          <div class="week-subtitle">외국인 전용 교통+통신패스 인기, 마을버스조합, 대중교통 무료환승 체계 이탈 예고, 홍보캐릭터 대전, 광안대교 출근시간 할인 확대</div>
+      <div class="week-grid">
+        <a href="week1.html" class="week-card">
+          <div class="week-image" style="background-image: url('week1.png');"></div>
+          <div class="week-content">
+            <div class="week-title">2025년 4월 1주차</div>
+            <div class="week-subtitle">자율주행 광역협의체 발족<br>교통카드 raw data 제한적 민간 개방<br>가덕신공항, 김해공항 역할분담 관련 자료 배포<br>
+              전국 최초 전기버스 이동식 ESS 프로젝트<br>7월, 1985년 첫 전동차 활용 전시체험관 운용</div>
+          </div>
+        </a>
+
+        <a href="week2.html" class="week-card">
+          <div class="week-image" style="background-image: url('week2.png');"></div>
+          <div class="week-content">
+            <div class="week-title">2025년 4월 2주차</div>
+            <div class="week-subtitle">전국 최초 청소년 대중교통 무료화 추진<br>통학용 전세버스, 교육청과 계약으로 확대</div>
+          </div>
+        </a>
+
+        <a href="week3.html" class="week-card">
+          <div class="week-image" style="background-image: url('week3.png');"></div>
+          <div class="week-content">
+            <div class="week-title">2025년 4월 3주차</div>
+            <div class="week-subtitle">티머니 가처분 신청 기각, 마이비 최종사업자 확정</div>
+          </div>
+        </a>
+
+        <a href="week4.html" class="week-card">
+          <div class="week-image" style="background-image: url('week4.png');"></div>
+          <div class="week-content">
+            <div class="week-title">2025년 4월 4주차</div>
+            <div class="week-subtitle">교통패스 운영 현황<br>울산 수소그린모빌리티 실증 확대<br>BRT 안정화 추진단 운영<br> 전국 최초 BRT 섬식정류장 운영<br> 카카오T, 부당 수수료 징수 관련 과징금 부과<br> 테슬라, 로보택시 출시            </div>
+          </div>
+        </a>
+
+
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="footer-content">
+        <h3 class="footer-title">모빌리티 주간 동향</h3>
+        <p class="footer-description">
+          모빌리티의 트렌드와 정책 동향을 매주 정리하여 전해드립니다.
+        </p>
+        <p class="footer-contact" style="font-size:13px; color:var(--text-secondary); margin-bottom:8px;">
+          문의 : 부산시내버스운송사업조합 전략기획팀<br>
+          이메일: <a href="mailto:chha@busanbus.or.kr" style="color:var(--primary-blue);text-decoration:underline;">chha@busanbus.or.kr</a>
+        </p>
+        <div class="footer-copyright">
+          © 2025 Busan Metrobus Company Association. All rights reserved.
         </div>
-      </a>
-
-      <a href="week4.html" class="week-card">
-        <div class="week-image" style="background-image: url('https://via.placeholder.com/600x300?text=5월+4주차');"></div>
-        <div class="week-content">
-          <div class="week-title">5월 4주차</div>
-          <div class="week-subtitle">부산 교통포럼 발표, 인프라 추진 현황</div>
-        </div>
-      </a>
-    </div>
-  </main>
-
-  <footer>
-    © 2025 Busan Metrobus Company Association
-  </footer>
-
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
