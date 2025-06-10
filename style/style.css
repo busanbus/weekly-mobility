@@ -524,6 +524,7 @@ body {
   width: 28px;
   height: 28px;
 }
+
 @media (max-width: 600px) {
   .floating-sns {
     right: 18px;
@@ -542,6 +543,8 @@ body {
     width: 22px;
     height: 22px;
   }
+} /* <<<-- 올바른 위치로 이동한 닫는 중괄호 -->>> */
+
 /* ===== 챗봇 UI 스타일 ===== */
 
 /* 챗봇 버튼 스타일 */
@@ -790,7 +793,7 @@ body {
   box-shadow: none;
 }
 
-/* 모바일 반응형 */
+/* 챗봇 모바일 반응형 */
 @media (max-width: 600px) {
   .chatbot-container {
     right: 18px;
@@ -819,5 +822,4 @@ body {
     right: 12px;
     height: 400px;
   }
-}
 }
