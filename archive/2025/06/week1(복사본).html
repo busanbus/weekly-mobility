@@ -35,7 +35,7 @@
         </div>
         <!-- Main Logo -->
         <div class="logo-section">
-          <a href="../../../index.html" rel="noopener noreferrer">
+          <a href="https://busanbus.github.io/mobility-weekly/" rel="noopener noreferrer">
             <img src="logo.png" alt="모빌리티 주간동향 로고" />
           </a>
         </div>
@@ -125,12 +125,49 @@
     </footer>
   </div>
 
-  <!-- 플로팅UI(SNS) -->
-  <floating-sns></floating-sns>
-  <!-- 새 플로팅 챗봇 UI 적용 -->
-  <floating-chatbot></floating-chatbot>
 
-  <script type="module" src="../../../components/floating-sns.js"></script>
-  <script type="module" src="../../../components/floating-chatbot.js"></script>
+  <!-- 플로팅UI(SNS) -->
+  <div class="floating-sns">
+      <!-- 챗봇 버튼 (맨 위에 추가) -->
+    <button class="sns-btn chatbot" id="chatbot-toggle" title="모빌리티 챗봇">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/wechat.svg" alt="챗봇" />
+    </button>
+
+    <a href="https://www.instagram.com/busholic_busan/" target="_blank" class="sns-btn insta" title="인스타그램">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="인스타그램" />
+    </a>
+    <a href="https://www.youtube.com/channel/UCrBrdoITKYxidD_pqJnPCcg" target="_blank" class="sns-btn youtube" title="유튜브">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="유튜브" />
+    </a>
+    <a href="https://blog.naver.com/busholic" target="_blank" class="sns-btn naver" title="네이버블로그">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/naver.svg" alt="네이버블로그" />
+    </a>
+  </div>
+
+  <div class="chatbot-container" id="chatbot-container">
+    <div class="chatbot-header">
+      <div class="chatbot-title">
+        <span class="chatbot-icon">💬</span>
+        <span>모빌리티 챗봇</span>
+      </div>
+      <button class="chatbot-close" id="chatbot-close">×</button>
+    </div>
+    
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="message bot-message">
+        <div class="message-content">
+          안녕하세요! 모빌리티 전문 챗봇입니다. 🚌<br>
+          교통, 대중교통, 모빌리티 관련 궁금한 점을 물어보세요!
+        </div>
+      </div>
+    </div>
+    
+    <div class="chatbot-input-area">
+      <input type="text" id="chatbot-input" placeholder="모빌리티 관련 질문을 입력하세요..." />
+      <button id="chatbot-send">전송</button>
+    </div>
+  </div>
+  <!-- 챗봇 JavaScript 로드 -->
+  <script src="../../../js/chatbot.js"></script>
 </body>
 </html>
