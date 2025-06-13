@@ -78,7 +78,13 @@ class FloatingSNS extends HTMLElement {
           .sns-list.open .sns-btn {
             opacity: 1;
             transform: translateY(0);
+            transition:
+              opacity 0.4s cubic-bezier(0.4,0,0.2,1),
+              transform 0.4s cubic-bezier(0.4,0,0.2,1);
           }
+          .sns-list.open .sns-btn:nth-child(1) { transition-delay: 0.05s; }
+          .sns-list.open .sns-btn:nth-child(2) { transition-delay: 0.15s; }
+          .sns-list.open .sns-btn:nth-child(3) { transition-delay: 0.25s; }
           .sns-btn.insta {
             background: linear-gradient(135deg, #E1306C 0%, #F56040 100%);
           }
