@@ -7,9 +7,9 @@ class FloatingSNS extends HTMLElement {
         <style>
           .floating-sns {
             position: fixed;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
+            right: 90px;
+            top: 15%;
+            transform: translateY(0);
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -102,7 +102,8 @@ class FloatingSNS extends HTMLElement {
           @media (max-width: 600px) {
             .floating-sns {
               right: 18px;
-              top: 50%;
+              top: 18%;
+              transform: translateY(0);
               gap: 8px;
             }
             .sns-toggle-btn {
