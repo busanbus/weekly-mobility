@@ -276,8 +276,8 @@ class MainNav extends HTMLElement {
       </style>
       <nav class="nav-bg">
         <div class="nav-inner">
-          <a class="nav-logo" href="../index.html">
-            <img src="../images/logo.png" alt="로고" />
+          <a class="nav-logo" href="../../../index.html">
+            <img src="../../../images/logo.png" alt="로고" />
           </a>
           <div class="nav-left">
             <a class="nav-link nav-home" href="/index.html">홈</a>
