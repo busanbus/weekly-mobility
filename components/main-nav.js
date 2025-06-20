@@ -40,7 +40,7 @@ class MainNav extends HTMLElement {
         .nav-right {
           display: flex;
           align-items: center;
-          gap: 18px;
+          gap: 12px;
           justify-content: flex-end;
         }
         .nav-logo {
@@ -67,6 +67,9 @@ class MainNav extends HTMLElement {
         }
         .search-box {
           position: relative;
+          width: 120px;
+          max-width: 120px;
+          min-width: 0;
         }
         .search-input {
           padding: 10px 36px 10px 16px;
@@ -76,6 +79,9 @@ class MainNav extends HTMLElement {
           outline: none;
           background: var(--bg-primary, #fafbfc);
           transition: border 0.2s;
+          width: 120px;
+          max-width: 120px;
+          min-width: 0;
         }
         .search-input:focus {
           border: 1.5px solid var(--primary-blue, #0066FF);
@@ -121,28 +127,162 @@ class MainNav extends HTMLElement {
         .search-result-item:hover {
           background: var(--bg-secondary);
         }
+        .burger-btn {
+          display: none;
+          background: none;
+          border: none;
+          font-size: 2rem;
+          color: var(--primary-blue, #0066FF);
+          cursor: pointer;
+          position: relative;
+          z-index: 1201;
+        }
+        .mobile-menu,
+        .mobile-menu-overlay {
+          display: none;
+        }
         @media (max-width: 700px) {
           .nav-inner {
-            flex-direction: column;
-            align-items: stretch;
-            padding: 0 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 16px;
             min-height: 48px;
           }
-          .nav-left, .nav-right {
-            gap: 10px;
-            justify-content: flex-start;
+          .nav-logo {
+            margin-right: 0;
           }
+          .nav-logo img {
+            height: 36px;
+            width: auto;
+            display: block;
+          }
+          .burger-btn {
+            display: block;
+            position: relative;
+            top: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: 24px;
+          }
+          .nav-left, .nav-right {
+            display: none !important;
+          }
+          body {
+            padding-top: 48px !important;
+          }
+          .header {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+          }
+          .mobile-menu-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.25);
+            z-index: 1200;
+          }
+          .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; right: 0;
+            width: 80vw;
+            max-width: 320px;
+            height: 100vh;
+            background: #fff;
+            box-shadow: -2px 0 16px rgba(0,0,0,0.10);
+            z-index: 1202;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+          }
+          .mobile-menu.open {
+            display: block;
+            transform: translateX(0);
+          }
+          .mobile-menu-content {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            padding: 32px 20px 20px 20px;
+          }
+          .mobile-menu .nav-link {
+            font-size: 1.15rem;
+            padding: 12px 0;
+          }
+          .mobile-menu .search-box,
+          .mobile-menu .search-input {
+            width: 80vw;
+            max-width: 80vw;
+          }
+          .mobile-menu .lang-select-wrapper {
+            margin-left: 0;
+            padding: 0;
+            box-shadow: none;
+            border-radius: 8px;
+            background: none;
+          }
+          .mobile-menu .lang-label {
+            font-size: 0.98rem;
+          }
+          .mobile-menu .lang-select {
+            font-size: 1rem;
+            padding: 8px 28px 8px 10px;
+            border-radius: 8px;
+          }
+          .nav-bg {
+            margin-bottom: 0;
+            padding-bottom: 0;
+          }
+          .search-box,
+          .search-input,
+          .mobile-menu .search-box,
+          .mobile-menu .search-input {
+            width: 80vw;
+            max-width: 80vw;
+          }
+          .mobile-menu .nav-link.nav-about,
+          .mobile-menu .nav-link.nav-archive,
+          .mobile-menu .search-box {
+            display: none !important;
+          }
+          .mobile-menu .nav-link.nav-home {
+            display: none !important;
+          }
+        }
+        .close-btn {
+          display: block;
+          background: none;
+          border: none;
+          font-size: 2.2rem;
+          color: var(--primary-blue, #0066FF);
+          cursor: pointer;
+          position: absolute;
+          top: 12px;
+          right: 18px;
+          z-index: 1300;
+        }
+        .lang-select-wrapper {
+          min-width: 0;
+        }
+        .nav-link.nav-about,
+        .nav-link.nav-archive,
+        .search-box {
+          display: none !important;
+        }
+        .nav-link.nav-home {
+          display: none !important;
         }
       </style>
       <nav class="nav-bg">
         <div class="nav-inner">
+          <a class="nav-logo" href="/index.html">
+            <img src="/images/logo.png" alt="로고" />
+          </a>
           <div class="nav-left">
-            <a class="nav-logo" href="/weekly-mobility/">
-              <img src="/images/logo.png" alt="로고" />
-            </a>
-            <a class="nav-link" href="/weekly-mobility/">홈</a>
-            <a class="nav-link" href="/weekly-mobility/about.html">소개</a>
-            <a class="nav-link" href="/weekly-mobility/archive/">아카이브</a>
+            <a class="nav-link nav-home" href="/index.html">홈</a>
+            <a class="nav-link nav-about" href="/weekly-mobility/about.html">소개</a>
+            <a class="nav-link nav-archive" href="/weekly-mobility/archive/">아카이브</a>
           </div>
           <div class="nav-right">
             <div class="search-box">
@@ -150,10 +290,35 @@ class MainNav extends HTMLElement {
               <span class="search-icon">🔍</span>
               <div class="search-results"></div>
             </div>
-            <select class="lang-select">
-              <option value="ko">한국어</option>
-              <option value="en">English</option>
-            </select>
+            <div class="lang-select-wrapper">
+              <label for="lang-select" class="lang-label">🌐 언어</label>
+              <select id="lang-select" class="lang-select">
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="en">🇺🇸 English</option>
+              </select>
+            </div>
+          </div>
+          <button class="burger-btn" aria-label="메뉴 열기" tabindex="0">☰</button>
+        </div>
+        <div class="mobile-menu-overlay"></div>
+        <div class="mobile-menu">
+          <button class="close-btn" aria-label="메뉴 닫기" tabindex="0">×</button>
+          <div class="mobile-menu-content">
+            <a class="nav-link nav-home" href="/index.html">홈</a>
+            <a class="nav-link nav-about" href="/weekly-mobility/about.html">소개</a>
+            <a class="nav-link nav-archive" href="/weekly-mobility/archive/">아카이브</a>
+            <div class="search-box">
+              <input class="search-input" type="text" placeholder="카드뉴스 검색..." />
+              <span class="search-icon">🔍</span>
+              <div class="search-results"></div>
+            </div>
+            <div class="lang-select-wrapper">
+              <label for="lang-select-mobile" class="lang-label">🌐 언어</label>
+              <select id="lang-select-mobile" class="lang-select">
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="en">🇺🇸 English</option>
+              </select>
+            </div>
           </div>
         </div>
       </nav>
@@ -164,9 +329,77 @@ class MainNav extends HTMLElement {
     this.searchInput = shadow.querySelector('.search-input');
     this.searchResults = shadow.querySelector('.search-results');
     this.langSelect = shadow.querySelector('.lang-select');
+    this.burgerBtn = shadow.querySelector('.burger-btn');
+    this.mobileMenu = shadow.querySelector('.mobile-menu');
+    this.mobileMenuOverlay = shadow.querySelector('.mobile-menu-overlay');
+    this.closeBtn = shadow.querySelector('.close-btn');
+    this.langSelectMobile = shadow.querySelector('#lang-select-mobile');
 
     // 이벤트 리스너 설정
     this.setupEventListeners();
+    this.updateLanguageSelector();
+
+    // 햄버거 메뉴 동작
+    if (this.burgerBtn && this.mobileMenu && this.mobileMenuOverlay) {
+      this.burgerBtn.addEventListener('click', () => {
+        this.mobileMenu.classList.add('open');
+        this.mobileMenuOverlay.style.display = 'block';
+      });
+      this.mobileMenuOverlay.addEventListener('click', () => {
+        this.mobileMenu.classList.remove('open');
+        this.mobileMenuOverlay.style.display = 'none';
+      });
+    }
+
+    if (this.closeBtn && this.mobileMenu && this.mobileMenuOverlay) {
+      this.closeBtn.addEventListener('click', () => {
+        this.mobileMenu.classList.remove('open');
+        this.mobileMenuOverlay.style.display = 'none';
+      });
+    }
+
+    // 언어 드롭다운 동기화 및 이벤트 연결
+    if (this.langSelectMobile && this.langSelect) {
+      // 값 동기화
+      this.langSelectMobile.value = this.langSelect.value;
+      this.langSelect.addEventListener('change', (e) => {
+        this.langSelectMobile.value = e.target.value;
+      });
+      this.langSelectMobile.addEventListener('change', (e) => {
+        this.langSelect.value = e.target.value;
+        // 언어 변경 로직 직접 실행
+        const selectedLang = e.target.value;
+        const currentPath = window.location.pathname;
+        let newPath;
+        if (selectedLang === 'en') {
+          if (!currentPath.includes('/en/')) {
+            const lastSlashIndex = currentPath.lastIndexOf('/');
+            const path = currentPath.substring(0, lastSlashIndex);
+            const file = currentPath.substring(lastSlashIndex + 1);
+            if (path === '' && file === 'index.html') {
+              newPath = `/en/`;
+            } else {
+              newPath = `${path}/en/${file}`;
+            }
+            window.location.href = newPath.replace('//', '/');
+          }
+        } else if (selectedLang === 'ko') {
+          if (currentPath.includes('/en/')) {
+            newPath = currentPath.replace('/en/', '/');
+            window.location.href = newPath.replace('//', '/');
+          }
+        }
+      });
+    }
+  }
+
+  updateLanguageSelector() {
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/en/')) {
+      this.langSelect.value = 'en';
+    } else {
+      this.langSelect.value = 'ko';
+    }
   }
 
   setupEventListeners() {
@@ -199,15 +432,6 @@ class MainNav extends HTMLElement {
     document.addEventListener('click', (e) => {
       if (!this.searchBox.contains(e.target)) {
         this.searchResults.style.display = 'none';
-      }
-    });
-
-    // 언어 선택
-    this.langSelect.addEventListener('change', e => {
-      if(e.target.value === 'en') {
-        window.location.href = '/weekly-mobility/en/';
-      } else {
-        window.location.href = '/weekly-mobility/';
       }
     });
   }

@@ -74,6 +74,7 @@ body {
   background: var(--bg-secondary);
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
+  padding-top: 70px; /* For main-nav */
 }
 
 .container {
@@ -402,6 +403,12 @@ body {
 .news-card:nth-child(6) { animation-delay: 0.6s; }
 
 /* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 700px) {
+  body {
+    padding-top: 48px; /* nav 높이와 일치, header와 딱 붙게 */
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 0 16px;
