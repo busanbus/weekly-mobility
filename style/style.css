@@ -1,21 +1,59 @@
 /* ===== CSS VARIABLES ===== */
 :root {
-  --primary-blue: #0066FF;
-  --primary-dark: #003DD1;
-  --secondary-blue: #E6F1FF;
-  --accent-green: #00C48C;
-  --text-primary: #1A1D29;
+  /* Light mode variables */
+  --primary-blue: #0066ff;
+  --primary-dark: #003dd1;
+  --secondary-blue: #f0f4ff;
+  --accent-blue: #3b82f6;
+  --success-green: #10b981;
+  --warning-orange: #f59e0b;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-600: #475569;
+  --gray-800: #1e293b;
+  --gray-900: #0f172a;
+  --text-primary: #1a1d29;
   --text-secondary: #5A6573;
-  --text-muted: #8B95A7;
-  --bg-primary: #FAFBFC;
-  --bg-card: #FFFFFF;
-  --border-light: #E8EAED;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --border-light: #e8eaed;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --border-radius: 16px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --gradient-primary: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-dark) 100%);
+}
+
+/* Dark mode */
+:root[data-theme="dark"] {
+  --primary-blue: #3b82f6;
+  --primary-dark: #60a5fa;
+  --secondary-blue: #1e293b;
+  --accent-blue: #60a5fa;
+  --success-green: #059669;
+  --warning-orange: #d97706;
+  --gray-50: #0f172a;
+  --gray-100: #1e293b;
+  --gray-200: #334155;
+  --gray-300: #475569;
+  --gray-600: #94a3b8;
+  --gray-800: #e2e8f0;
+  --gray-900: #f1f5f9;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-card: #1e293b;
+  --border-light: #334155;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
 }
 
 /* ===== BASE STYLES ===== */
@@ -25,13 +63,18 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  font-family: 'Noto Sans KR', 'Inter', sans-serif;
   line-height: 1.6;
-  font-feature-settings: 'kern' 1;
-  text-rendering: optimizeLegibility;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  padding-top: 70px; /* For main-nav */
 }
 
 .container {
@@ -360,6 +403,12 @@ body {
 .news-card:nth-child(6) { animation-delay: 0.6s; }
 
 /* ===== MOBILE RESPONSIVE ===== */
+@media (max-width: 700px) {
+  body {
+    padding-top: 48px; /* nav 높이와 일치, header와 딱 붙게 */
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 0 16px;

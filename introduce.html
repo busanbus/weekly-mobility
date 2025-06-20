@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모빌리티 주간동향</title>
+  <meta name="description" content="모빌리티 최신 동향과 정책 변화를 한눈에 확인하세요. 카드뉴스 형식으로 모빌리티 트렌드를 파악할 수 있습니다.">
+  <meta name="keywords" content="모빌리티, 주간동향, 모빌리티 트렌드, 모빌리티 정책, 카드뉴스">
+  <meta name="author" content="부산버스">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="모빌리티 주간동향">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://ifh.cc/g/OQ5Sgg.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>모빌리티 주간동향 | 부산시내버스운송사업조합</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZXZ064TVJE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZXZ064TVJE');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="https://www.busanbus.or.kr/assets/img/common/favicon.png">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --primary-blue: #0066ff;
+      --primary-dark: #003dd1;
+      --secondary-blue: #f0f4ff;
+      --accent-blue: #3b82f6;
+      --success-green: #10b981;
+      --warning-orange: #f59e0b;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #475569;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --text-primary: #1a1d29;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      --bg-container: #ffffff;
+    }
+    body {
+      font-family: 'Noto Sans KR', 'Inter', sans-serif;
+      line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--gray-50);
+      overflow-x: hidden;
+    }
+    /* 이하 250~650라인까지 index.html의 style 전체 복사 */
+    /* 애니메이션 */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    /* 헤더 */
+    .hero-section { background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.75) 100%), url('https://images.unsplash.com/photo-1445264918150-66a2371142a2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat; color: white; padding: 80px 0 120px; position: relative; overflow: hidden; }
+    .hero-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat; animation: float 6s ease-in-out infinite; }
+    .hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; padding: 0 24px; text-align: center; }
+    .hero-badge { display: inline-flex; align-items: center; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50px; padding: 8px 20px; font-size: 14px; font-weight: 500; margin-bottom: 32px; animation: fadeInUp 0.8s ease-out; }
+    .hero-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; margin-bottom: 24px; line-height: 1.1; animation: fadeInUp 0.8s ease-out 0.2s both; }
+    .hero-subtitle { font-size: clamp(1.1rem, 2vw, 1.3rem); opacity: 0.9; margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto; animation: fadeInUp 0.8s ease-out 0.4s both; }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; animation: fadeInUp 0.8s ease-out 0.6s both; }
+    .hero-stat { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .hero-stat-number { display: block; font-size: 2.5rem; font-weight: 800; margin-bottom: 4px; }
+    .hero-stat-label { font-size: 0.9rem; opacity: 0.8; }
+    .main-container { max-width: 1200px; margin: -60px auto 0; padding: 0 24px; position: relative; z-index: 3; }
+    .latest-section { background: white; border-radius: 24px; padding: 48px; margin-bottom: 48px; box-shadow: var(--shadow-xl); border: 1px solid var(--gray-200); animation: fadeInUp 0.8s ease-out; position: relative; overflow: hidden; }
+    .latest-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--success-green), var(--warning-orange)); }
+    .latest-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+    .latest-title { font-size: 1.8rem; font-weight: 800; color: var(--gray-900); display: flex; align-items: center; gap: 12px; }
+    .latest-icon { width: 36px; height: 36px; background: linear-gradient(135deg, var(--success-green), var(--warning-orange)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; }
+    .latest-badge { background: var(--success-green); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; animation: pulse 2s infinite; }
+    .latest-content { display: grid; grid-template-columns: 1fr 300px; gap: 32px; align-items: center; }
+    .latest-info h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 12px; color: var(--gray-900); }
+    .latest-info p { color: var(--gray-600); margin-bottom: 16px; line-height: 1.7; }
+    .latest-meta { display: flex; gap: 16px; font-size: 0.9rem; color: var(--gray-500); margin-bottom: 20px; }
+    .latest-actions { display: flex; gap: 12px; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .btn-secondary { background: var(--gray-100); color: var(--gray-700); padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-secondary:hover { background: var(--gray-200); }
+    .latest-preview { background: var(--gray-50); border-radius: 16px; padding: 24px; border: 2px dashed var(--gray-300); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
+    .preview-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
+    .preview-text { color: var(--gray-600); font-size: 0.9rem; }
+    .section-header { text-align: center; margin-bottom: 48px; animation: fadeInUp 0.8s ease-out; }
+    .section-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 16px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .section-subtitle { font-size: 1.1rem; color: var(--gray-600); max-width: 500px; margin: 0 auto; }
+    .year-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 48px; overflow-x: auto; padding: 8px; }
+    .year-tab { background: white; border: 2px solid var(--gray-200); border-radius: 16px; padding: 12px 24px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+    .year-tab:hover { border-color: var(--primary-blue); background: var(--secondary-blue); }
+    .year-tab.active { background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); color: white; border-color: transparent; }
+    .year-tab-badge { background: rgba(255, 255, 255, 0.2); padding: 4px 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; }
+    .year-tab.active .year-tab-badge { background: rgba(255, 255, 255, 0.2); color: white; }
+    .year-tab:not(.active) .year-tab-badge { background: var(--gray-100); color: var(--gray-600); }
+    .year-content { display: none; animation: slideIn 0.5s ease-out; }
+    .year-content.active { display: block; }
+    .year-card { background: white; border-radius: 24px; padding: 48px; margin-bottom: 48px; box-shadow: var(--shadow-lg); border: 1px solid var(--gray-200); position: relative; overflow: hidden; }
+    .year-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--primary-blue), var(--accent-blue)); }
+    .year-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; flex-wrap: wrap; gap: 16px; }
+    .year-title { font-size: 2rem; font-weight: 800; color: var(--gray-900); display: flex; align-items: center; gap: 12px; }
+    .year-icon { width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; }
+    .year-meta { display: flex; gap: 24px; align-items: center; font-size: 0.9rem; color: var(--gray-600); }
+    .year-badge { background: var(--secondary-blue); color: var(--primary-blue); padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; }
+    .month-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .month-card { background: white; border: 1px solid var(--gray-200); border-radius: 16px; padding: 24px; text-decoration: none; color: var(--text-primary); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+    .month-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); opacity: 0; transition: all 0.3s ease; z-index: 1; }
+    .month-card:hover::before { opacity: 0.05; }
+    .month-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); border-color: var(--primary-blue); }
+    .month-content { position: relative; z-index: 2; }
+    .month-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .month-name { font-size: 1.4rem; font-weight: 700; margin-bottom: 4px; }
+    .month-number { background: var(--gray-100); color: var(--gray-600); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 600; }
+    .month-card:hover .month-number { background: var(--primary-blue); color: white; }
+    .month-info { font-size: 0.9rem; color: var(--gray-600); margin-bottom: 16px; }
+    .month-arrow { opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; color: var(--primary-blue); font-weight: 600; }
+    .month-card:hover .month-arrow { opacity: 1; transform: translateX(0); }
+    .footer { background: var(--gray-900); color: white; padding: 64px 0 32px; margin-top: 120px; }
+    .footer-content { max-width: 1200px; margin: 0 auto; padding: 0 24px; text-align: center; }
+    .footer-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 16px; }
+    .footer-subtitle { font-size: 1rem; opacity: 0.8; margin-bottom: 32px; }
+    .footer-info { font-size: 0.9rem; opacity: 0.6; line-height: 1.8; }
+    @media (max-width: 768px) { .hero-section { padding: 60px 0 80px; } .year-card { padding: 32px 24px; } .latest-section { padding: 32px 24px; } .latest-content { grid-template-columns: 1fr; gap: 24px; } .month-grid { grid-template-columns: 1fr; gap: 16px; } .hero-stats { gap: 24px; } .hero-stat-number { font-size: 2rem; } .year-header { flex-direction: column; align-items: flex-start; } .year-meta { flex-wrap: wrap; } .year-tabs { justify-content: flex-start; } .latest-actions { flex-direction: column; } }
+    .about-section {
+      background: var(--gray-100);
+      padding: 70px 0 50px;
+      margin-top: 15px; /* nav 마진 제거 */
+    }
+    .about-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px;
+      background: var(--bg-container);
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      animation: fadeInUp 0.8s ease-out;
+      margin-top: 0px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .about-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary-blue);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .about-description {
+      font-size: 1.2rem;
+      color: var(--gray-800);
+      margin-bottom: 48px;
+      line-height: 1.8;
+      text-align: center;
+    }
+    .features-grid {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: nowrap;
+      margin-bottom: 48px;
+    }
+    .feature-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: var(--shadow-md);
+      padding: 32px;
+      min-width: 220px;
+      text-align: center;
+      transition: transform 0.3s ease;
+      border: 1px solid var(--gray-200);
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary-blue);
+      box-shadow: 0 8px 20px rgba(0, 102, 255, 0.1);
+    }
+    .feature-number {
+      font-size: 2.2rem;
+      color: var(--primary-blue);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .feature-text {
+      color: var(--gray-700);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    .contact-info {
+      margin-top: 48px;
+      color: var(--gray-600);
+      font-size: 1.1rem;
+      text-align: center;
+    }
+    .contact-email {
+      color: var(--primary-blue);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+    @media (max-width: 768px) {
+      .features-grid {
+        flex-direction: column;
+        gap: 24px;
+      }
+      .feature-card {
+        min-width: auto;
+      }
+      .about-container {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main-nav></main-nav>
+  <section class="about-section">
+    <div class="about-container">
+      <h2 class="about-title">모빌리티 주간동향이란?</h2>
+      <p class="about-description">
+        <b>부산시내버스운송사업조합</b>이 제공하는 <b>모빌리티 주간동향</b>은<br>
+        전국의 대중교통, 친환경 모빌리티, 정책 트렌드, 시민 체감 이슈 등<br>
+        다양한 주간 리포트와 분석 자료를 한 곳에 모아<br>
+        <span style="color: var(--primary-blue); font-weight: 700;">누구나 쉽고 자유롭게</span> 열람할 수 있도록 만든 소식허브입니다.<br>
+        <br>
+        최신 정책 변화와 트렌드를 한눈에 파악하고,<br>
+        PDF 원문 다운로드, 월별/연도별 탐색 등 다양한 기능을 제공합니다.
+      </p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-number">100% 무료</div>
+          <div class="feature-text">회원가입 없이 누구나<br>모든 자료 열람 가능</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-number">매주 업데이트</div>
+          <div class="feature-text">최신 정책·트렌드<br>지속 반영</div>
+        </div>
+      </div>
+      <div class="contact-info">
+        <b>문의</b> : 부산시내버스운송사업조합 전략기획팀<br>
+        <span>이메일: <a href="mailto:chha@busanbus.or.kr" class="contact-email">chha@busanbus.or.kr</a></span>
+      </div>
+    </div>
+  </section>
+  <footer class="footer" style="background: var(--gray-900); color: white; padding: 56px 0 28px 0; margin-top: 0;">
+    <div class="footer-content" style="max-width: 1200px; margin: 0 auto; padding: 0 24px; text-align: center;">
+      <div class="footer-title" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 12px;">모빌리티 주간동향</div>
+      <div class="footer-subtitle" style="font-size: 1rem; opacity: 0.8; margin-bottom: 18px;">
+        부산시내버스운송사업조합이 제공하는 대중교통·모빌리티 정책 트렌드 서비스
+      </div>
+      <div class="footer-info" style="font-size: 0.97rem; opacity: 0.7; line-height: 1.8; margin-bottom: 18px;">
+        본 사이트의 모든 자료는 공공 목적의 정보 제공을 위해 제작되었으며,<br>
+        무단 복제 및 상업적 이용을 금지합니다.<br>
+        © 2025 Busan Metrobus Company Association. All rights reserved.
+      </div>
+      <div style="margin-top: 12px;">
+        <a href="mailto:chha@busanbus.or.kr" style="color: #fff; text-decoration: underline; font-weight: 500;">문의하기</a>
+        <span style="margin: 0 8px; color: #888;">|</span>
+        <a href="https://busanbus.or.kr" target="_blank" style="color: #fff; text-decoration: underline; font-weight: 500;">공식 홈페이지</a>
+      </div>
+    </div>
+  </footer>
+  <floating-sns></floating-sns>
+  <script type="module" src="js/chatbot.js"></script>
+  <script type="module" src="components/floating-sns.js"></script>
+  <script type="module" src="components/main-nav.js"></script>
+</body>
+</html> 
