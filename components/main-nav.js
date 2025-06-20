@@ -335,6 +335,34 @@ class MainNav extends HTMLElement {
     this.closeBtn = shadow.querySelector('.close-btn');
     this.langSelectMobile = shadow.querySelector('#lang-select-mobile');
 
+    // 공통 언어 변경 함수
+    const handleLanguageChange = (selectedLang) => {
+      // 두 드롭다운 값 동기화 (이벤트 없이)
+      if (this.langSelect) this.langSelect.value = selectedLang;
+      if (this.langSelectMobile) this.langSelectMobile.value = selectedLang;
+      // 페이지 이동 로직
+      const currentPath = window.location.pathname;
+      let newPath;
+      if (selectedLang === 'en') {
+        if (!currentPath.includes('/en/')) {
+          const lastSlashIndex = currentPath.lastIndexOf('/');
+          const path = currentPath.substring(0, lastSlashIndex);
+          const file = currentPath.substring(lastSlashIndex + 1);
+          if (path === '' && file === 'index.html') {
+            newPath = `/en/`;
+          } else {
+            newPath = `${path}/en/${file}`;
+          }
+          window.location.href = newPath.replace('//', '/');
+        }
+      } else if (selectedLang === 'ko') {
+        if (currentPath.includes('/en/')) {
+          newPath = currentPath.replace('/en/', '/');
+          window.location.href = newPath.replace('//', '/');
+        }
+      }
+    };
+
     // 이벤트 리스너 설정
     this.setupEventListeners();
     this.updateLanguageSelector();
@@ -342,6 +370,16 @@ class MainNav extends HTMLElement {
     // 햄버거 메뉴 동작
     if (this.burgerBtn && this.mobileMenu && this.mobileMenuOverlay) {
       this.burgerBtn.addEventListener('click', () => {
+        // 모바일 메뉴 열릴 때 언어 드롭다운 동기화
+        if (this.langSelectMobile) {
+          let lang = 'ko';
+          if (document.documentElement.lang) {
+            lang = document.documentElement.lang;
+          } else if (window.location.pathname.includes('/en/')) {
+            lang = 'en';
+          }
+          this.langSelectMobile.value = lang;
+        }
         this.mobileMenu.classList.add('open');
         this.mobileMenuOverlay.style.display = 'block';
       });
@@ -359,36 +397,14 @@ class MainNav extends HTMLElement {
     }
 
     // 언어 드롭다운 동기화 및 이벤트 연결
-    if (this.langSelectMobile && this.langSelect) {
-      // 값 동기화
-      this.langSelectMobile.value = this.langSelect.value;
+    if (this.langSelect) {
       this.langSelect.addEventListener('change', (e) => {
-        this.langSelectMobile.value = e.target.value;
+        handleLanguageChange(e.target.value);
       });
+    }
+    if (this.langSelectMobile) {
       this.langSelectMobile.addEventListener('change', (e) => {
-        this.langSelect.value = e.target.value;
-        // 언어 변경 로직 직접 실행
-        const selectedLang = e.target.value;
-        const currentPath = window.location.pathname;
-        let newPath;
-        if (selectedLang === 'en') {
-          if (!currentPath.includes('/en/')) {
-            const lastSlashIndex = currentPath.lastIndexOf('/');
-            const path = currentPath.substring(0, lastSlashIndex);
-            const file = currentPath.substring(lastSlashIndex + 1);
-            if (path === '' && file === 'index.html') {
-              newPath = `/en/`;
-            } else {
-              newPath = `${path}/en/${file}`;
-            }
-            window.location.href = newPath.replace('//', '/');
-          }
-        } else if (selectedLang === 'ko') {
-          if (currentPath.includes('/en/')) {
-            newPath = currentPath.replace('/en/', '/');
-            window.location.href = newPath.replace('//', '/');
-          }
-        }
+        handleLanguageChange(e.target.value);
       });
     }
   }
