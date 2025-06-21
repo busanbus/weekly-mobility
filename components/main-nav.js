@@ -131,12 +131,36 @@ class MainNav extends HTMLElement {
           display: none;
           background: none;
           border: none;
-          font-size: 2rem;
-          color: var(--primary-blue, #0066FF);
           cursor: pointer;
           position: relative;
           z-index: 1201;
+          width: 24px;
+          height: 18px;
         }
+        .burger-btn .line {
+          position: absolute;
+          height: 2.5px;
+          width: 100%;
+          background-color: #1A1D29;
+          border-radius: 4px;
+          transition: all 0.25s ease-in-out;
+        }
+        .burger-btn .line1 { top: 0; }
+        .burger-btn .line2 { top: 50%; transform: translateY(-50%); }
+        .burger-btn .line3 { bottom: 0; }
+
+        .burger-btn.open .line1 {
+          top: 50%;
+          transform: translateY(-50%) rotate(45deg);
+        }
+        .burger-btn.open .line2 {
+          opacity: 0;
+        }
+        .burger-btn.open .line3 {
+          bottom: 50%;
+          transform: translateY(50%) rotate(-45deg);
+        }
+
         .mobile-menu,
         .mobile-menu-overlay {
           display: none;
@@ -159,12 +183,12 @@ class MainNav extends HTMLElement {
             display: block;
           }
           .burger-btn {
-            display: block;
+            display: block !important;
             position: relative;
             top: 0;
             right: 0;
             margin-left: auto;
-            margin-right: 24px;
+            margin-right: 48px;
           }
           .nav-left, .nav-right {
             display: none !important;
@@ -177,27 +201,35 @@ class MainNav extends HTMLElement {
             padding-top: 0 !important;
           }
           .mobile-menu-overlay {
-            display: none;
+            display: block;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.25);
             z-index: 1200;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+          }
+          .mobile-menu-overlay.open {
+            opacity: 1;
+            visibility: visible;
           }
           .mobile-menu {
-            display: none;
+            display: block;
             position: fixed;
             top: 0; right: 0;
-            width: 80vw;
-            max-width: 320px;
+            width: 64vw;
+            max-width: 256px;
             height: 100vh;
             background: #fff;
             box-shadow: -2px 0 16px rgba(0,0,0,0.10);
             z-index: 1202;
             transform: translateX(100%);
             transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+            visibility: hidden;
           }
           .mobile-menu.open {
-            display: block;
+            visibility: visible;
             transform: translateX(0);
           }
           .mobile-menu-content {
@@ -249,13 +281,34 @@ class MainNav extends HTMLElement {
           .mobile-menu .nav-link.nav-home {
             display: none !important;
           }
+          .lang-popover {
+            right: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 180px;
+            width: 90vw;
+            max-width: 320px;
+            top: 44px;
+            z-index: 4000;
+          }
+          .mobile-menu .lang-popover {
+            position: absolute;
+            right: 50%;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 180px;
+            width: 90vw;
+            max-width: 320px;
+            top: 44px;
+            z-index: 5000;
+          }
         }
         .close-btn {
           display: block;
           background: none;
           border: none;
           font-size: 2.2rem;
-          color: var(--primary-blue, #0066FF);
+          color: #1A1D29;
           cursor: pointer;
           position: absolute;
           top: 12px;
@@ -272,6 +325,91 @@ class MainNav extends HTMLElement {
         }
         .nav-link.nav-home {
           display: none !important;
+        }
+        .lang-popover-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+          margin-left: 8px;
+        }
+        .lang-btn {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 0 18px 0 12px;
+          height: 40px;
+          background: #fff;
+          border: 1.5px solid var(--border-light, #e8eaed);
+          border-radius: 9999px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+          font-size: 1.08rem;
+          cursor: pointer;
+          transition: box-shadow 0.2s, border 0.2s, background 0.2s;
+          position: relative;
+        }
+        .lang-btn:focus, .lang-btn:hover {
+          /* border: 1.5px solid #0066FF; */
+          background: #e6f1ff;
+          box-shadow: 0 6px 24px rgba(0,102,255,0.10);
+          transform: translateY(-2px);
+          transition: box-shadow 0.18s, background 0.18s, transform 0.18s;
+        }
+        .lang-flag img {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          object-fit: cover;
+          display: block;
+          margin: 0;
+          padding: 0;
+        }
+        .lang-arrow {
+          font-size: 0.8rem;
+          margin-left: 4px;
+          color: var(--text-secondary, #5A6573);
+        }
+        .lang-popover {
+          position: absolute;
+          top: 48px;
+          right: 0;
+          background: #fff;
+          border: 1.5px solid var(--border-light, #e8eaed);
+          border-radius: 16px;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+          display: flex;
+          flex-direction: column;
+          min-width: 140px;
+          z-index: 3000;
+          animation: fadeInPop 0.18s cubic-bezier(0.4,0,0.2,1);
+          padding: 8px;
+        }
+        @keyframes fadeInPop {
+          0% { opacity: 0; transform: translateY(-8px) scale(0.95); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .lang-option {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 10px 24px;
+          font-size: 1.08rem;
+          background: none;
+          border: none;
+          cursor: pointer;
+          border-radius: 12px;
+          transition: background 0.18s;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .lang-option:hover, .lang-option:focus {
+          background: #f0f4ff;
+        }
+        .lang-label {
+          font-family: 'Inter', 'Noto Sans KR', 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
+          font-weight: 700;
+          font-size: 1.15rem;
+          color: #1A1D29;
+          letter-spacing: -0.01em;
         }
       </style>
       <nav class="nav-bg">
@@ -290,15 +428,47 @@ class MainNav extends HTMLElement {
               <span class="search-icon">🔍</span>
               <div class="search-results"></div>
             </div>
-            <div class="lang-select-wrapper">
-              <label for="lang-select" class="lang-label">🌐 언어</label>
-              <select id="lang-select" class="lang-select">
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="en">🇺🇸 English</option>
-              </select>
+            <div class="lang-popover-wrapper">
+              <button class="lang-btn" aria-label="언어 선택" tabindex="0">
+                <span class="lang-flag" data-lang="ko">
+                  <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
+                </span>
+                <span class="lang-label">한국어</span>
+                <span class="lang-arrow">▼</span>
+              </button>
+              <div class="lang-popover" style="display:none;">
+                <button class="lang-option" data-lang="ko" aria-label="한국어">
+                  <span class="lang-flag">
+                    <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
+                  </span>
+                  <span class="lang-label">한국어</span>
+                </button>
+                <button class="lang-option" data-lang="en" aria-label="English">
+                  <span class="lang-flag">
+                    <img src="https://hatscripts.github.io/circle-flags/flags/us.svg" alt="미국 국기" />
+                  </span>
+                  <span class="lang-label">English</span>
+                </button>
+                <button class="lang-option" data-lang="zh" aria-label="중국어">
+                  <span class="lang-flag">
+                    <img src="https://hatscripts.github.io/circle-flags/flags/cn.svg" alt="중국 국기" />
+                  </span>
+                  <span class="lang-label">中文</span>
+                </button>
+                <button class="lang-option" data-lang="jp" aria-label="일본어">
+                  <span class="lang-flag">
+                    <img src="https://hatscripts.github.io/circle-flags/flags/jp.svg" alt="일본 국기" />
+                  </span>
+                  <span class="lang-label">日本語</span>
+                </button>
+              </div>
             </div>
           </div>
-          <button class="burger-btn" aria-label="메뉴 열기" tabindex="0">☰</button>
+          <button class="burger-btn" aria-label="메뉴 열기" tabindex="0">
+            <span class="line line1"></span>
+            <span class="line line2"></span>
+            <span class="line line3"></span>
+          </button>
         </div>
         <div class="mobile-menu-overlay"></div>
         <div class="mobile-menu">
@@ -312,12 +482,40 @@ class MainNav extends HTMLElement {
               <span class="search-icon">🔍</span>
               <div class="search-results"></div>
             </div>
-            <div class="lang-select-wrapper">
-              <label for="lang-select-mobile" class="lang-label">🌐 언어</label>
-              <select id="lang-select-mobile" class="lang-select">
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="en">🇺🇸 English</option>
-              </select>
+            <div class="lang-popover-wrapper">
+              <button class="lang-btn" aria-label="언어 선택" tabindex="0">
+                <span class="lang-flag" data-lang="ko">
+                  <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
+                </span>
+                <span class="lang-label">한국어</span>
+                <span class="lang-arrow">▼</span>
+              </button>
+              <div class="lang-popover" style="display:none;">
+                <button class="lang-option" data-lang="ko" aria-label="한국어">
+                  <span class="lang-flag">
+                    <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
+                  </span>
+                  <span class="lang-label">한국어</span>
+                </button>
+                <button class="lang-option" data-lang="en" aria-label="English">
+                  <span class="lang-flag">
+                    <img src="https://hatscripts.github.io/circle-flags/flags/us.svg" alt="미국 국기" />
+                  </span>
+                  <span class="lang-label">English</span>
+                </button>
+                <button class="lang-option" data-lang="zh" aria-label="중국어">
+                  <span class="lang-flag">
+                    <img src="https://hatscripts.github.io/circle-flags/flags/cn.svg" alt="중국 국기" />
+                  </span>
+                  <span class="lang-label">中文</span>
+                </button>
+                <button class="lang-option" data-lang="jp" aria-label="일본어">
+                  <span class="lang-flag">
+                    <img src="https://hatscripts.github.io/circle-flags/flags/jp.svg" alt="일본 국기" />
+                  </span>
+                  <span class="lang-label">日本語</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -328,18 +526,129 @@ class MainNav extends HTMLElement {
     this.searchBox = shadow.querySelector('.search-box');
     this.searchInput = shadow.querySelector('.search-input');
     this.searchResults = shadow.querySelector('.search-results');
-    this.langSelect = shadow.querySelector('.lang-select');
     this.burgerBtn = shadow.querySelector('.burger-btn');
     this.mobileMenu = shadow.querySelector('.mobile-menu');
     this.mobileMenuOverlay = shadow.querySelector('.mobile-menu-overlay');
     this.closeBtn = shadow.querySelector('.close-btn');
-    this.langSelectMobile = shadow.querySelector('#lang-select-mobile');
+
+    // 언어 팝오버 관련
+    this.langPopoverWrapper = shadow.querySelector('.lang-popover-wrapper');
+    this.langBtn = shadow.querySelector('.lang-btn');
+    this.langPopover = shadow.querySelector('.lang-popover');
+    this.langFlag = this.langBtn.querySelector('.lang-flag img');
+    this.langLabel = this.langBtn.querySelector('.lang-label');
+
+    // 모바일 메뉴 언어 버튼/팝오버
+    this.mobileLangBtn = this.mobileMenu ? this.mobileMenu.querySelector('.lang-btn') : null;
+    this.mobileLangPopover = this.mobileMenu ? this.mobileMenu.querySelector('.lang-popover') : null;
+    this.mobileLangFlag = this.mobileLangBtn ? this.mobileLangBtn.querySelector('.lang-flag img') : null;
+    this.mobileLangLabel = this.mobileLangBtn ? this.mobileLangBtn.querySelector('.lang-label') : null;
+
+    // SVG 생성 함수
+    function createKORSVG() {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '24');
+      svg.setAttribute('height', '24');
+      svg.setAttribute('viewBox', '0 0 32 32');
+      svg.innerHTML = "<circle fill='#fff' cx='16' cy='16' r='16'/><ellipse fill='#c60c30' cx='16' cy='16' rx='7' ry='7'/><ellipse fill='#003478' cx='16' cy='16' rx='4.5' ry='4.5'/>";
+      return svg;
+    }
+    function createENGSVG() {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '24');
+      svg.setAttribute('height', '24');
+      svg.setAttribute('viewBox', '0 0 32 32');
+      svg.innerHTML = "<circle fill='#fff' cx='16' cy='16' r='16'/><g><rect fill='#00247d' width='32' height='32'/><g><rect fill='#fff' y='13' width='32' height='6'/><rect fill='#fff' x='13' width='6' height='32'/></g><g><rect fill='#cf142b' y='15' width='32' height='2'/><rect fill='#cf142b' x='15' width='2' height='32'/></g></g>";
+      return svg;
+    }
+    // 최초 렌더링 시 SVG 삽입
+    this.langFlag.innerHTML = '';
+    this.langFlag.appendChild(createKORSVG());
+
+    // 언어 팝오버 관련
+    this.langPopoverWrapper = shadow.querySelector('.lang-popover-wrapper');
+    this.langBtn = shadow.querySelector('.lang-btn');
+    this.langPopover = shadow.querySelector('.lang-popover');
+    this.langFlag = this.langBtn.querySelector('.lang-flag img');
+    this.langLabel = this.langBtn.querySelector('.lang-label');
+
+    // 언어 팝오버 이벤트 연결 함수 (공통화)
+    function setupLangPopoverEvents(btn, popover, flagImg, labelSpan) {
+      if (!btn || !popover) return;
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = popover.style.display === 'block';
+        popover.style.display = isOpen ? 'none' : 'block';
+      });
+      document.addEventListener('click', (e) => {
+        if (!btn.parentElement.contains(e.target)) {
+          popover.style.display = 'none';
+        }
+      });
+      popover.querySelectorAll('.lang-option').forEach(optionBtn => {
+        optionBtn.addEventListener('click', (e) => {
+          const lang = optionBtn.getAttribute('data-lang');
+          popover.style.display = 'none';
+          // 국기 이미지와 언어명 교체
+          let flagUrl = '';
+          let altText = '';
+          let labelText = '';
+          if (lang === 'ko') {
+            flagUrl = 'https://hatscripts.github.io/circle-flags/flags/kr.svg';
+            altText = '한국 국기';
+            labelText = '한국어';
+          } else if (lang === 'en') {
+            flagUrl = 'https://hatscripts.github.io/circle-flags/flags/us.svg';
+            altText = '미국 국기';
+            labelText = 'English';
+          } else if (lang === 'zh') {
+            flagUrl = 'https://hatscripts.github.io/circle-flags/flags/cn.svg';
+            altText = '중국 국기';
+            labelText = '中文';
+          } else if (lang === 'jp') {
+            flagUrl = 'https://hatscripts.github.io/circle-flags/flags/jp.svg';
+            altText = '일본 국기';
+            labelText = '日本語';
+          }
+          if (flagImg) {
+            flagImg.src = flagUrl;
+            flagImg.alt = altText;
+          }
+          if (labelSpan) {
+            labelSpan.textContent = labelText;
+          }
+          // 기존 언어 변경 로직 호출 (ko/en만 실제 페이지 이동)
+          if (lang === 'en' && !window.location.pathname.includes('/en/')) {
+            let newPath = window.location.pathname.replace(/\/en\//, '/');
+            if (!window.location.pathname.includes('/en/')) {
+              const lastSlashIndex = window.location.pathname.lastIndexOf('/');
+              const path = window.location.pathname.substring(0, lastSlashIndex);
+              const file = window.location.pathname.substring(lastSlashIndex + 1);
+              if (path === '' && file === 'index.html') {
+                newPath = `/en/`;
+              } else {
+                newPath = `${path}/en/${file}`;
+              }
+              window.location.href = newPath.replace('//', '/');
+            }
+          } else if (lang === 'ko' && window.location.pathname.includes('/en/')) {
+            const newPath = window.location.pathname.replace('/en/', '/');
+            window.location.href = newPath.replace('//', '/');
+          } else {
+            // zh, jp는 현재 페이지 이동 없이 국기만 바뀜
+          }
+        });
+      });
+    }
+
+    // 데스크탑/모바일 모두 이벤트 연결
+    setupLangPopoverEvents(this.langBtn, this.langPopover, this.langFlag, this.langLabel);
+    setupLangPopoverEvents(this.mobileLangBtn, this.mobileLangPopover, this.mobileLangFlag, this.mobileLangLabel);
 
     // 공통 언어 변경 함수
     const handleLanguageChange = (selectedLang) => {
       // 두 드롭다운 값 동기화 (이벤트 없이)
-      if (this.langSelect) this.langSelect.value = selectedLang;
-      if (this.langSelectMobile) this.langSelectMobile.value = selectedLang;
+      if (this.langPopover) this.langPopover.style.display = 'none';
       // 페이지 이동 로직
       const currentPath = window.location.pathname;
       let newPath;
@@ -370,41 +679,28 @@ class MainNav extends HTMLElement {
     // 햄버거 메뉴 동작
     if (this.burgerBtn && this.mobileMenu && this.mobileMenuOverlay) {
       this.burgerBtn.addEventListener('click', () => {
-        // 모바일 메뉴 열릴 때 언어 드롭다운 동기화
-        if (this.langSelectMobile) {
-          let lang = 'ko';
-          if (document.documentElement.lang) {
-            lang = document.documentElement.lang;
-          } else if (window.location.pathname.includes('/en/')) {
-            lang = 'en';
-          }
-          this.langSelectMobile.value = lang;
+        const isOpen = this.mobileMenu.classList.contains('open');
+        this.burgerBtn.classList.toggle('open', !isOpen);
+        if (isOpen) {
+          this.mobileMenu.classList.remove('open');
+          this.mobileMenuOverlay.classList.remove('open');
+        } else {
+          this.mobileMenu.classList.add('open');
+          this.mobileMenuOverlay.classList.add('open');
         }
-        this.mobileMenu.classList.add('open');
-        this.mobileMenuOverlay.style.display = 'block';
       });
       this.mobileMenuOverlay.addEventListener('click', () => {
         this.mobileMenu.classList.remove('open');
-        this.mobileMenuOverlay.style.display = 'none';
+        this.mobileMenuOverlay.classList.remove('open');
+        this.burgerBtn.classList.remove('open');
       });
     }
 
     if (this.closeBtn && this.mobileMenu && this.mobileMenuOverlay) {
       this.closeBtn.addEventListener('click', () => {
         this.mobileMenu.classList.remove('open');
-        this.mobileMenuOverlay.style.display = 'none';
-      });
-    }
-
-    // 언어 드롭다운 동기화 및 이벤트 연결
-    if (this.langSelect) {
-      this.langSelect.addEventListener('change', (e) => {
-        handleLanguageChange(e.target.value);
-      });
-    }
-    if (this.langSelectMobile) {
-      this.langSelectMobile.addEventListener('change', (e) => {
-        handleLanguageChange(e.target.value);
+        this.mobileMenuOverlay.classList.remove('open');
+        this.burgerBtn.classList.remove('open');
       });
     }
   }
@@ -412,9 +708,9 @@ class MainNav extends HTMLElement {
   updateLanguageSelector() {
     const currentPath = window.location.pathname;
     if (currentPath.includes('/en/')) {
-      this.langSelect.value = 'en';
+      this.langPopover.style.display = 'block';
     } else {
-      this.langSelect.value = 'ko';
+      this.langPopover.style.display = 'none';
     }
   }
 
