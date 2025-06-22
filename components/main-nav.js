@@ -170,12 +170,15 @@ class MainNav extends HTMLElement {
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: space-between;
             padding: 0 16px;
-            min-height: 48px;
+            min-height: 56px;
           }
           .nav-logo {
             margin-right: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
           }
           .nav-logo img {
             height: 36px;
@@ -186,9 +189,10 @@ class MainNav extends HTMLElement {
             display: block !important;
             position: relative;
             top: 0;
-            right: 0;
-            margin-left: auto;
-            margin-right: 48px;
+            left: 0;
+            margin-left: 0;
+            margin-right: 0;
+            order: -1;
           }
           .nav-left, .nav-right {
             display: none !important;
@@ -253,6 +257,7 @@ class MainNav extends HTMLElement {
             box-shadow: none;
             border-radius: 8px;
             background: none;
+            position: relative;
           }
           .mobile-menu .lang-label {
             font-size: 0.98rem;
@@ -261,6 +266,28 @@ class MainNav extends HTMLElement {
             font-size: 1rem;
             padding: 8px 28px 8px 10px;
             border-radius: 8px;
+          }
+          .mobile-menu .lang-btn {
+            width: auto;
+            justify-content: flex-start;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            display: inline-flex;
+          }
+          .mobile-menu .lang-popover {
+            position: absolute;
+            right: 0;
+            left: auto;
+            transform: none;
+            min-width: 140px;
+            width: auto;
+            max-width: 200px;
+            top: 52px;
+            z-index: 5000;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
           }
           .nav-bg {
             margin-bottom: 0;
@@ -291,16 +318,15 @@ class MainNav extends HTMLElement {
             top: 44px;
             z-index: 4000;
           }
-          .mobile-menu .lang-popover {
-            position: absolute;
-            right: 50%;
-            left: 50%;
-            transform: translateX(-50%);
-            min-width: 180px;
-            width: 90vw;
-            max-width: 320px;
-            top: 44px;
-            z-index: 5000;
+          .mobile-menu .lang-option {
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            margin: 2px 0;
+          }
+          .mobile-menu .lang-flag img {
+            width: 24px;
+            height: 24px;
           }
         }
         .close-btn {
@@ -605,13 +631,31 @@ class MainNav extends HTMLElement {
       if (!btn || !popover) return;
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        popover.style.display = popover.style.display === 'block' ? 'none' : 'block';
+        const isVisible = popover.style.display === 'block';
+        popover.style.display = isVisible ? 'none' : 'block';
+        
+        // floating-sns 컴포넌트 숨기기/보이기
+        const floatingSns = document.querySelector('floating-sns');
+        if (floatingSns) {
+          if (isVisible) {
+            // 드롭다운이 닫힐 때 floating-sns 보이기
+            floatingSns.style.display = 'block';
+          } else {
+            // 드롭다운이 열릴 때 floating-sns 숨기기
+            floatingSns.style.display = 'none';
+          }
+        }
       });
 
       popover.querySelectorAll('.lang-option').forEach(optionBtn => {
         optionBtn.addEventListener('click', () => {
           const lang = optionBtn.getAttribute('data-lang');
           handleLanguageChange(lang);
+          // floating-sns 컴포넌트 다시 보이기
+          const floatingSns = document.querySelector('floating-sns');
+          if (floatingSns) {
+            floatingSns.style.display = 'block';
+          }
         });
       });
     };
@@ -622,9 +666,19 @@ class MainNav extends HTMLElement {
     document.addEventListener('click', (e) => {
       if (this.langPopover && !this.langPopover.contains(e.target) && !this.langBtn.contains(e.target)) {
         this.langPopover.style.display = 'none';
+        // floating-sns 컴포넌트 다시 보이기
+        const floatingSns = document.querySelector('floating-sns');
+        if (floatingSns) {
+          floatingSns.style.display = 'block';
+        }
       }
       if (this.mobileLangPopover && this.mobileLangBtn && !this.mobileLangPopover.contains(e.target) && !this.mobileLangBtn.contains(e.target)) {
         this.mobileLangPopover.style.display = 'none';
+        // floating-sns 컴포넌트 다시 보이기
+        const floatingSns = document.querySelector('floating-sns');
+        if (floatingSns) {
+          floatingSns.style.display = 'block';
+        }
       }
     });
 
