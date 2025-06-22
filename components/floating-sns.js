@@ -60,7 +60,7 @@ class FloatingSNS extends HTMLElement {
           @media (max-width: 600px) {
             .floating-sns {
               right: 18px;
-              top: 75%;
+              top: 67%;
               transform: translateY(0);
               gap: 14px;
             }
