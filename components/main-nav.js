@@ -414,8 +414,8 @@ class MainNav extends HTMLElement {
       </style>
       <nav class="nav-bg">
         <div class="nav-inner">
-          <a class="nav-logo" href="../../../index.html">
-            <img src="../../../images/logo.png" alt="로고" />
+          <a class="nav-logo" href="https://busanbus.github.io/weekly-mobility">
+            <img src="https://i.ibb.co/svMm1DPr/logo.png" alt="로고" />
           </a>
           <div class="nav-left">
             <a class="nav-link nav-home" href="/index.html">홈</a>
@@ -449,7 +449,7 @@ class MainNav extends HTMLElement {
                   </span>
                   <span class="lang-label">English</span>
                 </button>
-                <button class="lang-option" data-lang="zh" aria-label="중국어">
+                <button class="lang-option" data-lang="cn" aria-label="중국어">
                   <span class="lang-flag">
                     <img src="https://hatscripts.github.io/circle-flags/flags/cn.svg" alt="중국 국기" />
                   </span>
@@ -503,7 +503,7 @@ class MainNav extends HTMLElement {
                   </span>
                   <span class="lang-label">English</span>
                 </button>
-                <button class="lang-option" data-lang="zh" aria-label="중국어">
+                <button class="lang-option" data-lang="cn" aria-label="중국어">
                   <span class="lang-flag">
                     <img src="https://hatscripts.github.io/circle-flags/flags/cn.svg" alt="중국 국기" />
                   </span>
@@ -573,104 +573,60 @@ class MainNav extends HTMLElement {
     this.langLabel = this.langBtn.querySelector('.lang-label');
 
     // 언어 팝오버 이벤트 연결 함수 (공통화)
-    function setupLangPopoverEvents(btn, popover, flagImg, labelSpan) {
-      if (!btn || !popover) return;
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = popover.style.display === 'block';
-        popover.style.display = isOpen ? 'none' : 'block';
-      });
-      document.addEventListener('click', (e) => {
-        if (!btn.parentElement.contains(e.target)) {
-          popover.style.display = 'none';
-        }
-      });
-      popover.querySelectorAll('.lang-option').forEach(optionBtn => {
-        optionBtn.addEventListener('click', (e) => {
-          const lang = optionBtn.getAttribute('data-lang');
-          popover.style.display = 'none';
-          // 국기 이미지와 언어명 교체
-          let flagUrl = '';
-          let altText = '';
-          let labelText = '';
-          if (lang === 'ko') {
-            flagUrl = 'https://hatscripts.github.io/circle-flags/flags/kr.svg';
-            altText = '한국 국기';
-            labelText = '한국어';
-          } else if (lang === 'en') {
-            flagUrl = 'https://hatscripts.github.io/circle-flags/flags/us.svg';
-            altText = '미국 국기';
-            labelText = 'English';
-          } else if (lang === 'zh') {
-            flagUrl = 'https://hatscripts.github.io/circle-flags/flags/cn.svg';
-            altText = '중국 국기';
-            labelText = '中文';
-          } else if (lang === 'jp') {
-            flagUrl = 'https://hatscripts.github.io/circle-flags/flags/jp.svg';
-            altText = '일본 국기';
-            labelText = '日本語';
-          }
-          if (flagImg) {
-            flagImg.src = flagUrl;
-            flagImg.alt = altText;
-          }
-          if (labelSpan) {
-            labelSpan.textContent = labelText;
-          }
-          // 기존 언어 변경 로직 호출 (ko/en만 실제 페이지 이동)
-          if (lang === 'en' && !window.location.pathname.includes('/en/')) {
-            let newPath = window.location.pathname.replace(/\/en\//, '/');
-            if (!window.location.pathname.includes('/en/')) {
-              const lastSlashIndex = window.location.pathname.lastIndexOf('/');
-              const path = window.location.pathname.substring(0, lastSlashIndex);
-              const file = window.location.pathname.substring(lastSlashIndex + 1);
-              if (path === '' && file === 'index.html') {
-                newPath = `/en/`;
-              } else {
-                newPath = `${path}/en/${file}`;
-              }
-              window.location.href = newPath.replace('//', '/');
-            }
-          } else if (lang === 'ko' && window.location.pathname.includes('/en/')) {
-            const newPath = window.location.pathname.replace('/en/', '/');
-            window.location.href = newPath.replace('//', '/');
-          } else {
-            // zh, jp는 현재 페이지 이동 없이 국기만 바뀜
-          }
-        });
-      });
-    }
-
-    // 데스크탑/모바일 모두 이벤트 연결
-    setupLangPopoverEvents(this.langBtn, this.langPopover, this.langFlag, this.langLabel);
-    setupLangPopoverEvents(this.mobileLangBtn, this.mobileLangPopover, this.mobileLangFlag, this.mobileLangLabel);
-
-    // 공통 언어 변경 함수
     const handleLanguageChange = (selectedLang) => {
-      // 두 드롭다운 값 동기화 (이벤트 없이)
       if (this.langPopover) this.langPopover.style.display = 'none';
-      // 페이지 이동 로직
+    
       const currentPath = window.location.pathname;
+      const langCodes = ['en', 'cn', 'jp'];
+      const currentLang = langCodes.find(code => currentPath.includes(`/${code}/`)) || 'ko';
+    
+      if (selectedLang === currentLang) return;
+    
       let newPath;
-      if (selectedLang === 'en') {
-        if (!currentPath.includes('/en/')) {
+      
+      if (selectedLang === 'ko') {
+        newPath = currentPath.replace(new RegExp(`/${currentLang}/`), '/');
+      } else {
+        if (currentLang === 'ko') {
           const lastSlashIndex = currentPath.lastIndexOf('/');
           const path = currentPath.substring(0, lastSlashIndex);
           const file = currentPath.substring(lastSlashIndex + 1);
-          if (path === '' && file === 'index.html') {
-            newPath = `/en/`;
-          } else {
-            newPath = `${path}/en/${file}`;
-          }
-          window.location.href = newPath.replace('//', '/');
-        }
-      } else if (selectedLang === 'ko') {
-        if (currentPath.includes('/en/')) {
-          newPath = currentPath.replace('/en/', '/');
-          window.location.href = newPath.replace('//', '/');
+          newPath = `${path}/${selectedLang}/${file}`;
+        } else {
+          newPath = currentPath.replace(`/${currentLang}/`, `/${selectedLang}/`);
         }
       }
+      
+      window.location.href = newPath.replace('//', '/');
     };
+
+    // 데스크탑/모바일 모두 이벤트 연결
+    const setupLangPopoverEvents = (btn, popover) => {
+      if (!btn || !popover) return;
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        popover.style.display = popover.style.display === 'block' ? 'none' : 'block';
+      });
+
+      popover.querySelectorAll('.lang-option').forEach(optionBtn => {
+        optionBtn.addEventListener('click', () => {
+          const lang = optionBtn.getAttribute('data-lang');
+          handleLanguageChange(lang);
+        });
+      });
+    };
+
+    setupLangPopoverEvents(this.langBtn, this.langPopover);
+    setupLangPopoverEvents(this.mobileLangBtn, this.mobileLangPopover);
+
+    document.addEventListener('click', (e) => {
+      if (this.langPopover && !this.langPopover.contains(e.target) && !this.langBtn.contains(e.target)) {
+        this.langPopover.style.display = 'none';
+      }
+      if (this.mobileLangPopover && this.mobileLangBtn && !this.mobileLangPopover.contains(e.target) && !this.mobileLangBtn.contains(e.target)) {
+        this.mobileLangPopover.style.display = 'none';
+      }
+    });
 
     // 이벤트 리스너 설정
     this.setupEventListeners();
@@ -706,12 +662,36 @@ class MainNav extends HTMLElement {
   }
 
   updateLanguageSelector() {
-    const currentPath = window.location.pathname;
-    if (currentPath.includes('/en/')) {
-      this.langPopover.style.display = 'block';
-    } else {
-      this.langPopover.style.display = 'none';
-    }
+    const langBtn = this.shadowRoot.querySelector('.lang-btn');
+    const mobileLangBtn = this.shadowRoot.querySelector('.mobile-menu .lang-btn');
+
+    const updateButton = (btn) => {
+      if (!btn) return;
+      const flagImg = btn.querySelector('img');
+      const labelSpan = btn.querySelector('span.lang-label');
+      const currentPath = window.location.pathname;
+
+      if (currentPath.includes('/en/')) {
+        flagImg.src = 'https://hatscripts.github.io/circle-flags/flags/us.svg';
+        flagImg.alt = '미국 국기';
+        labelSpan.textContent = 'English';
+      } else if (currentPath.includes('/cn/')) {
+        flagImg.src = 'https://hatscripts.github.io/circle-flags/flags/cn.svg';
+        flagImg.alt = '중국 국기';
+        labelSpan.textContent = '中文';
+      } else if (currentPath.includes('/jp/')) {
+        flagImg.src = 'https://hatscripts.github.io/circle-flags/flags/jp.svg';
+        flagImg.alt = '일본 국기';
+        labelSpan.textContent = '日本語';
+      } else {
+        flagImg.src = 'https://hatscripts.github.io/circle-flags/flags/kr.svg';
+        flagImg.alt = '한국 국기';
+        labelSpan.textContent = '한국어';
+      }
+    };
+    
+    updateButton(langBtn);
+    updateButton(mobileLangBtn);
   }
 
   setupEventListeners() {
