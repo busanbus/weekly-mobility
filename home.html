@@ -201,36 +201,52 @@
 
   <!-- 메인 컨테이너: 최신 동향만 -->
   <main class="main-container">
-    <section class="latest-section">
-      <div class="latest-header">
-        <div class="latest-title">
-          <div class="latest-icon">🚀</div>
-          최신 동향
-        </div>
-        <div class="latest-badge">NEW</div>
-      </div>
-      <div class="latest-content">
-        <div class="latest-info">
-          <h3>2025년 6월 2주차 모빌리티 주간동향</h3>
-          <div class="latest-meta">
-            <span>📅 2025.06.16 발행</span>
-          </div>
-          <p>
-            이번 주차에는 양방향 BRT 시행, 제주도 vs. 도민 엇갈린 의견, 수도권 지하철 30분 지연 택시비 보상 보험 출시, 전국민 무료버스 사업 현황,전기차 캐즘 대응, EREV 시장 확대,장애인 바우처택시 확대 등 모빌리티 트렌드를 한눈에 살펴봅니다.
-          </p>
-          <div class="latest-actions" style="margin-top: 32px;">
-            <a href="archive/2025/06/week2.html" class="btn-primary">
-              📖 바로 읽기
-            </a>
-          </div>
-        </div>
-        <div style="display:flex; align-items:center; justify-content:center;">
-          <img src="https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-               alt="버스 이미지"
-               style="width: 280px; height: auto; object-fit: cover; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.10);" />
-        </div>
-      </div>
-    </section>
+    <!-- 기존 .latest-section div 삭제 또는 주석처리 -->
+    <!-- <div class="latest-section"></div> -->
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('/archive/latest-weeks.json')
+        .then(res => res.json())
+        .then(data => {
+          // 기존 latest-section 모두 제거
+          document.querySelectorAll('.latest-section').forEach(el => el.remove());
+
+          // 원하는 위치에 section을 추가 (예: main 태그 내부)
+          const parent = document.querySelector('main') || document.body;
+
+          data.forEach(item => {
+            const sec = document.createElement('section');
+            sec.className = 'latest-section';
+
+            const h3 = document.createElement('h3');
+            h3.textContent = `${item.year}년 ${item.month}월 ${item.week}주차 모빌리티 주간동향`;
+
+            const p = document.createElement('p');
+            if (item.titles && item.titles.length > 0) {
+              const titleList = item.titles.map(t => `「${t}」`).join(', ');
+              p.textContent = `이번 주차에는 ${titleList} 등 모빌리티 트렌드를 한눈에 살펴봅니다.`;
+            } else {
+              p.textContent = '이번 주차의 주요 모빌리티 트렌드를 한눈에 살펴봅니다.';
+            }
+
+            const a = document.createElement('a');
+            a.className = 'btn-primary';
+            a.href = '/' + item.path.replace(/^\\|^\//, '');
+            a.textContent = '바로 읽기';
+
+            sec.appendChild(h3);
+            sec.appendChild(p);
+            sec.appendChild(a);
+
+            parent.appendChild(sec);
+          });
+        })
+        .catch(err => {
+          console.error('최신 주차 정보를 불러오지 못했습니다:', err);
+        });
+    });
+    </script>
   </main>
 
   <footer class="footer" style="background: var(--gray-900); color: white; padding: 56px 0 28px 0; margin-top: 0;">
