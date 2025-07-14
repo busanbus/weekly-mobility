@@ -57,6 +57,18 @@ class FloatingSNS extends HTMLElement {
             width: 28px;
             height: 28px;
           }
+          .sns-btn.kakao {
+            background: #FEE500;
+          }
+          .sns-btn.kakao img {
+            width: 36px;
+            height: 36px;
+            background: none;
+            border-radius: 0;
+            display: block;
+            margin: 0 auto;
+            filter: none;
+          }
           @media (max-width: 600px) {
             .floating-sns {
               right: 18px;
@@ -76,6 +88,11 @@ class FloatingSNS extends HTMLElement {
               width: 22px;
               height: 22px;
             }
+            .sns-btn.kakao img {
+              width: 22px;
+              height: 22px;
+              padding: 3px;
+            }
           }
         </style>
         <div class="floating-sns">
@@ -87,6 +104,9 @@ class FloatingSNS extends HTMLElement {
           </a>
           <a href="https://blog.naver.com/busholic" target="_blank" class="sns-btn naver" title="네이버블로그">
             <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/naver.svg" alt="네이버블로그" />
+          </a>
+          <a href="http://pf.kakao.com/_xbcLxin" target="_blank" class="sns-btn kakao" title="카카오톡 채널">
+            <img src="https://t1.daumcdn.net/cfile/tistory/99FE484C5C3451F218" alt="카카오톡 채널" />
           </a>
         </div>
       `;
