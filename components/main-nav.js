@@ -1149,61 +1149,61 @@ class MainNav extends HTMLElement {
         {
           title: "양방향 BRT 시행, 제주도 vs. 도민 엇갈린 의견",
           date: "2025.06.주차2",
-          url: "weekly-mobility/archive/2025/06/week2.html",
+          url: "/weekly-mobility/archive/2025/06/week2.html",
           keywords: ["BRT", "제주도", "양방향", "교통", "버스"]
         },
         {
           title: "BRT 안정화 추진단 운영",
           date: "2025.05.주차4",
-          url: "weekly-mobility/archive/2025/05/week4.html",
+          url: "/weekly-mobility/archive/2025/05/week4.html",
           keywords: ["BRT", "안정화", "추진단", "교통", "버스"]
         },
         {
           title: "전국 최초 BRT 섬식정류장 운영",
           date: "2025.05.주차4",
-          url: "weekly-mobility/archive/2025/05/week4.html",
+          url: "/weekly-mobility/archive/2025/05/week4.html",
           keywords: ["BRT", "섬식정류장", "교통", "버스", "정류장"]
         },
         {
           title: "동백패스, '2025 국가서비스대상'선정 및 모바일 서비스 시행",
           date: "2025.06.주차4",
-          url: "weekly-mobility/archive/2025/06/week4.html",
+          url: "/weekly-mobility/archive/2025/06/week4.html",
           keywords: ["동백패스", "모바일", "서비스", "교통카드", "부산"]
         },
         {
           title: "심야 자율주행택시 운행확대",
           date: "2025.06.주차3",
-          url: "weekly-mobility/archive/2025/06/week3.html",
+          url: "/weekly-mobility/archive/2025/06/week3.html",
           keywords: ["자율주행", "택시", "심야", "운행", "확대"]
         },
         {
           title: "전기차 캐즘 대응, EREV 시장 확대",
           date: "2025.06.주차2",
-          url: "weekly-mobility/archive/2025/06/week2.html",
+          url: "/weekly-mobility/archive/2025/06/week2.html",
           keywords: ["전기차", "EREV", "시장", "캐즘", "확대"]
         },
         {
           title: "친환경차가 내연차보다 잘 팔리는데, 왜 휘발유 소비 늘지?",
           date: "2025.06.주차4",
-          url: "weekly-mobility/archive/2025/06/week4.html",
+          url: "/weekly-mobility/archive/2025/06/week4.html",
           keywords: ["친환경차", "내연차", "휘발유", "소비", "판매"]
         },
         {
           title: "울산 수소그린모빌리티 실증 확대",
           date: "2025.05.주차4",
-          url: "weekly-mobility/archive/2025/05/week4.html",
+          url: "/weekly-mobility/archive/2025/05/week4.html",
           keywords: ["수소", "그린모빌리티", "울산", "실증", "확대"]
         },
         {
           title: "카카오T, 부당 수수료 징수 관련 과징금 38.82억원 부과",
           date: "2025.05.주차4",
-          url: "weekly-mobility/archive/2025/05/week4.html",
+          url: "/weekly-mobility/archive/2025/05/week4.html",
           keywords: ["카카오T", "과징금", "수수료", "부당", "징수"]
         },
         {
           title: "테슬라, 로보택시 출시",
           date: "2025.05.주차4",
-          url: "weekly-mobility/archive/2025/05/week4.html",
+          url: "/weekly-mobility/archive/2025/05/week4.html",
           keywords: ["테슬라", "로보택시", "출시", "자율주행", "택시"]
         }
       ];
