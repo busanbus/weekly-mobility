@@ -27,7 +27,6 @@ class MainNav extends HTMLElement {
           margin: 0 auto;
           display: flex;
           align-items: center;
-          justify-content: space-between;
           min-height: 70px;
           padding: 0 32px;
         }
@@ -35,18 +34,19 @@ class MainNav extends HTMLElement {
           display: flex;
           align-items: center;
           gap: 18px;
-          justify-content: center;
+          justify-content: flex-start;
         }
         .nav-right {
           display: flex;
           align-items: center;
           gap: 12px;
           justify-content: flex-end;
+          margin-left: auto;
         }
         .nav-logo {
           display: flex;
           align-items: center;
-          margin-right: 32px;
+          margin-right: 70px;
         }
         .nav-logo img {
           height: 48px;
@@ -56,44 +56,55 @@ class MainNav extends HTMLElement {
         .nav-link {
           color: var(--text-primary, #1A1D29);
           text-decoration: none;
-          font-weight: 500;
-          font-size: 1.15rem;
+          font-weight: 600;
+          font-size: 1.22rem;
+          font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', sans-serif;
           padding: 12px 16px;
           border-radius: 8px;
           transition: background 0.2s;
+          letter-spacing: -0.02em;
         }
         .nav-link:hover {
           background: var(--secondary-blue, #E6F1FF);
         }
-        .search-box {
-          position: relative;
-          width: 120px;
-          max-width: 120px;
-          min-width: 0;
-        }
-        .search-input {
-          padding: 10px 36px 10px 16px;
-          border: 1px solid var(--border-light, #e8eaed);
-          border-radius: 8px;
-          font-size: 1.08rem;
-          outline: none;
-          background: var(--bg-primary, #fafbfc);
-          transition: border 0.2s;
-          width: 120px;
-          max-width: 120px;
-          min-width: 0;
-        }
-        .search-input:focus {
-          border: 1.5px solid var(--primary-blue, #0066FF);
-        }
-        .search-icon {
-          position: absolute;
-          right: 8px;
-          top: 50%;
-          transform: translateY(-50%);
-          font-size: 1.1rem;
-          color: var(--text-secondary, #5A6573);
-        }
+                 .search-trigger-btn {
+           display: flex;
+           align-items: center;
+           justify-content: space-between;
+           gap: 8px;
+           padding: 8px 16px;
+           border: 1.5px solid var(--border-light, #e8eaed);
+           background: rgba(255, 255, 255, 0.9);
+           border-radius: 20px;
+           cursor: pointer;
+           color: var(--text-secondary, #5A6573);
+           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+           font-size: 0.9rem;
+           font-weight: 500;
+           min-width: 160px;
+           height: 40px;
+           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+         }
+         .search-trigger-btn:hover {
+           background: var(--secondary-blue, #E6F1FF);
+           border-color: var(--primary-blue, #0066FF);
+           color: var(--primary-blue, #0066FF);
+           transform: translateY(-1px);
+           box-shadow: 0 4px 12px rgba(0, 102, 255, 0.15);
+         }
+         .search-trigger-icon {
+           width: 20px;
+           height: 20px;
+           flex-shrink: 0;
+         }
+         .search-trigger-text {
+           opacity: 0.7;
+           transition: opacity 0.2s;
+           font-size: 20px;
+         }
+         .search-trigger-btn:hover .search-trigger-text {
+           opacity: 1;
+         }
         .lang-select {
           padding: 10px 16px;
           border-radius: 8px;
@@ -101,31 +112,232 @@ class MainNav extends HTMLElement {
           background: var(--bg-primary, #fafbfc);
           font-size: 1.08rem;
         }
-        .search-results {
-          position: absolute;
-          top: 100%;
+        .search-modal {
+          position: fixed;
+          top: 0;
           left: 0;
           right: 0;
-          background: var(--bg-card);
-          border: 1px solid var(--border-light);
-          border-radius: 8px;
-          margin-top: 8px;
-          box-shadow: var(--shadow-lg);
-          max-height: 400px;
-          overflow-y: auto;
+          bottom: 0;
+          background: rgba(15, 23, 42, 0.6);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          z-index: 9999;
           display: none;
-          z-index: 1000;
+          align-items: flex-start;
+          justify-content: center;
+          padding-top: 8vh;
+          opacity: 0;
+          transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .search-modal.active {
+          display: flex;
+          opacity: 1;
+        }
+        .search-modal-content {
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          border-radius: 20px;
+          box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.25),
+            0 0 0 1px rgba(255, 255, 255, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+          width: 92vw;
+          max-width: 680px;
+          max-height: 75vh;
+          overflow: hidden;
+          transform: translateY(20px) scale(0.95);
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .search-modal.active .search-modal-content {
+          transform: translateY(0) scale(1);
+        }
+        .search-modal-header {
+          padding: 24px 24px 20px 24px;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.9) 100%);
+          border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+          position: relative;
+        }
+        .search-modal-title {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: #1e293b;
+          margin-bottom: 16px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .search-icon-large {
+          width: 24px;
+          height: 24px;
+          color: #3b82f6;
+        }
+        .search-input-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+        .search-modal-input {
+          width: 100%;
+          padding: 16px 20px 16px 50px;
+          border: 2px solid rgba(226, 232, 240, 0.8);
+          border-radius: 16px;
+          font-size: 1.1rem;
+          font-weight: 500;
+          outline: none;
+          background: rgba(255, 255, 255, 0.9);
+          backdrop-filter: blur(10px);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          color: #1e293b;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .search-modal-input:focus {
+          border-color: #3b82f6;
+          background: rgba(255, 255, 255, 1);
+          box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), 0 8px 25px rgba(0, 0, 0, 0.1);
+          transform: translateY(-1px);
+        }
+        .search-modal-input::placeholder {
+          color: #94a3b8;
+          font-weight: 400;
+        }
+        .search-input-icon {
+          position: absolute;
+          left: 16px;
+          width: 20px;
+          height: 20px;
+          color: #64748b;
+          transition: color 0.2s;
+        }
+        .search-modal-input:focus + .search-input-icon {
+          color: #3b82f6;
+        }
+        .search-modal-results {
+          max-height: 420px;
+          overflow-y: auto;
+          padding: 12px 0;
+          background: rgba(255, 255, 255, 0.5);
+          backdrop-filter: blur(10px);
+        }
+        .search-modal-results::-webkit-scrollbar {
+          width: 6px;
+        }
+        .search-modal-results::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .search-modal-results::-webkit-scrollbar-thumb {
+          background: rgba(148, 163, 184, 0.3);
+          border-radius: 10px;
+        }
+        .search-modal-results::-webkit-scrollbar-thumb:hover {
+          background: rgba(148, 163, 184, 0.5);
         }
         .search-result-item {
           display: block;
-          padding: 12px 16px;
-          color: var(--text-primary);
+          padding: 18px 24px;
+          color: #1e293b;
           text-decoration: none;
-          border-bottom: 1px solid var(--border-light);
-          transition: background 0.2s;
+          border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          background: transparent;
         }
         .search-result-item:hover {
-          background: var(--bg-secondary);
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.08) 100%);
+          transform: translateX(4px);
+          border-left: 3px solid #3b82f6;
+          padding-left: 21px;
+        }
+        .search-result-item:last-child {
+          border-bottom: none;
+        }
+        .search-result-title {
+          font-weight: 600;
+          margin-bottom: 8px;
+          color: #1e293b;
+          line-height: 1.4;
+          font-size: 1.05rem;
+        }
+        .search-result-meta {
+          font-size: 0.85rem;
+          color: #64748b;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .search-result-date {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .search-result-arrow {
+          color: #3b82f6;
+          font-weight: 500;
+          opacity: 0;
+          transform: translateX(-10px);
+          transition: all 0.2s;
+        }
+        .search-result-item:hover .search-result-arrow {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        .search-modal-close {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          width: 36px;
+          height: 36px;
+          border: none;
+          background: rgba(248, 250, 252, 0.8);
+          backdrop-filter: blur(10px);
+          cursor: pointer;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #64748b;
+          font-size: 18px;
+          font-weight: 300;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          border: 1px solid rgba(226, 232, 240, 0.5);
+        }
+        .search-modal-close:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+          transform: scale(1.05);
+          border-color: rgba(239, 68, 68, 0.2);
+        }
+        .search-empty-state {
+          padding: 60px 24px;
+          text-align: center;
+          color: #64748b;
+        }
+        .search-empty-icon {
+          width: 48px;
+          height: 48px;
+          color: #cbd5e1;
+          margin: 0 auto 16px;
+        }
+        .search-suggestions {
+          margin-top: 20px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          justify-content: center;
+        }
+        .search-suggestion-tag {
+          background: rgba(59, 130, 246, 0.1);
+          color: #3b82f6;
+          padding: 6px 12px;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .search-suggestion-tag:hover {
+          background: rgba(59, 130, 246, 0.15);
+          transform: translateY(-1px);
         }
         .burger-btn {
           display: none;
@@ -162,18 +374,60 @@ class MainNav extends HTMLElement {
         }
 
         .mobile-menu,
-        .mobile-menu-overlay {
+        .mobile-menu-overlay,
+        .mobile-lang-wrapper {
           display: none;
         }
-        @media (max-width: 700px) {
-          .nav-inner {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 16px;
-            min-height: 56px;
-          }
+        .mobile-lang-wrapper {
+          position: relative;
+        }
+        .mobile-lang-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+        .mobile-lang-btn:hover {
+          transform: scale(1.1);
+        }
+        .mobile-lang-flag img {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        .mobile-lang-popover {
+          position: absolute;
+          top: 48px;
+          right: 0;
+          background: #fff;
+          border: 1.5px solid var(--border-light, #e8eaed);
+          border-radius: 12px;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+          display: flex;
+          flex-direction: column;
+          min-width: 140px;
+          z-index: 3000;
+          padding: 8px;
+        }
+                 @media (max-width: 700px) {
+           .search-trigger-btn {
+             display: none !important;
+           }
+           .nav-inner {
+             display: flex;
+             flex-direction: row;
+             align-items: center;
+             justify-content: space-between;
+             padding: 0 16px;
+             min-height: 56px;
+             position: relative;
+           }
           .nav-logo {
             margin-right: 0;
             position: absolute;
@@ -196,6 +450,13 @@ class MainNav extends HTMLElement {
           }
           .nav-left, .nav-right {
             display: none !important;
+          }
+          .mobile-lang-wrapper {
+            display: block !important;
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
           }
           body {
             padding-top: 48px !important;
@@ -305,9 +566,6 @@ class MainNav extends HTMLElement {
           .mobile-menu .search-box {
             display: none !important;
           }
-          .mobile-menu .nav-link.nav-home {
-            display: none !important;
-          }
           .lang-popover {
             right: 50%;
             left: 50%;
@@ -345,11 +603,7 @@ class MainNav extends HTMLElement {
           min-width: 0;
         }
         .nav-link.nav-about,
-        .nav-link.nav-archive,
-        .search-box {
-          display: none !important;
-        }
-        .nav-link.nav-home {
+        .nav-link.nav-archive {
           display: none !important;
         }
         .lang-popover-wrapper {
@@ -358,57 +612,49 @@ class MainNav extends HTMLElement {
           align-items: center;
           margin-left: 8px;
         }
-        .lang-btn {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 0 18px 0 12px;
-          height: 40px;
-          background: #fff;
-          border: 1.5px solid var(--border-light, #e8eaed);
-          border-radius: 9999px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-          font-size: 1.08rem;
-          cursor: pointer;
-          transition: box-shadow 0.2s, border 0.2s, background 0.2s;
-          position: relative;
-        }
+                 .lang-btn {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           background: transparent;
+           border: none;
+           cursor: pointer;
+           transition: transform 0.2s;
+           position: relative;
+         }
         .lang-btn:focus, .lang-btn:hover {
-          /* border: 1.5px solid #0066FF; */
-          background: #e6f1ff;
-          box-shadow: 0 6px 24px rgba(0,102,255,0.10);
-          transform: translateY(-2px);
-          transition: box-shadow 0.18s, background 0.18s, transform 0.18s;
+          transform: scale(1.1);
+          transition: transform 0.2s;
         }
-        .lang-flag img {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          object-fit: cover;
-          display: block;
-          margin: 0;
-          padding: 0;
-        }
+                 .lang-flag img {
+           width: 36px;
+           height: 36px;
+           border-radius: 50%;
+           object-fit: cover;
+           display: block;
+           margin: 0;
+           padding: 0;
+         }
         .lang-arrow {
           font-size: 0.8rem;
           margin-left: 4px;
           color: var(--text-secondary, #5A6573);
         }
-        .lang-popover {
-          position: absolute;
-          top: 48px;
-          right: 0;
-          background: #fff;
-          border: 1.5px solid var(--border-light, #e8eaed);
-          border-radius: 16px;
-          box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-          display: flex;
-          flex-direction: column;
-          min-width: 140px;
-          z-index: 3000;
-          animation: fadeInPop 0.18s cubic-bezier(0.4,0,0.2,1);
-          padding: 8px;
-        }
+                 .lang-popover {
+           position: absolute;
+           top: 48px;
+           right: -50px;
+           background: #fff;
+           border: 1.5px solid var(--border-light, #e8eaed);
+           border-radius: 16px;
+           box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+           display: flex;
+           flex-direction: column;
+           min-width: 140px;
+           z-index: 3000;
+           animation: fadeInPop 0.18s cubic-bezier(0.4,0,0.2,1);
+           padding: 8px;
+         }
         @keyframes fadeInPop {
           0% { opacity: 0; transform: translateY(-8px) scale(0.95); }
           100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -444,24 +690,24 @@ class MainNav extends HTMLElement {
             <img src="https://i.ibb.co/svMm1DPr/logo.png" alt="로고" />
           </a>
           <div class="nav-left">
-            <a class="nav-link nav-home" href="/index.html">홈</a>
+            <a class="nav-link nav-home" href="https://busanbus.github.io/weekly-mobility/">홈</a>
             <a class="nav-link nav-about" href="/weekly-mobility/about.html">소개</a>
             <a class="nav-link nav-archive" href="/weekly-mobility/archive/">아카이브</a>
           </div>
           <div class="nav-right">
-            <div class="search-box">
-              <input class="search-input" type="text" placeholder="카드뉴스 검색..." />
-              <span class="search-icon">🔍</span>
-              <div class="search-results"></div>
-            </div>
+                         <button class="search-trigger-btn" aria-label="검색" title="검색하기">
+               <span class="search-trigger-text">동향 검색</span>
+               <svg class="search-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                 <circle cx="11" cy="11" r="8"></circle>
+                 <path d="m21 21-4.35-4.35"></path>
+               </svg>
+             </button>
             <div class="lang-popover-wrapper">
-              <button class="lang-btn" aria-label="언어 선택" tabindex="0">
-                <span class="lang-flag" data-lang="ko">
-                  <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
-                </span>
-                <span class="lang-label">한국어</span>
-                <span class="lang-arrow">▼</span>
-              </button>
+                             <button class="lang-btn" aria-label="언어 선택" tabindex="0">
+                 <span class="lang-flag" data-lang="ko">
+                   <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
+                 </span>
+               </button>
               <div class="lang-popover" style="display:none;">
                 <button class="lang-option" data-lang="ko" aria-label="한국어">
                   <span class="lang-flag">
@@ -488,6 +734,39 @@ class MainNav extends HTMLElement {
                   <span class="lang-label">日本語</span>
                 </button>
               </div>
+            </div>
+          </div>
+          <div class="mobile-lang-wrapper">
+            <button class="mobile-lang-btn" aria-label="언어 선택" tabindex="0">
+              <span class="mobile-lang-flag" data-lang="ko">
+                <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
+              </span>
+            </button>
+            <div class="mobile-lang-popover" style="display:none;">
+              <button class="lang-option" data-lang="ko" aria-label="한국어">
+                <span class="lang-flag">
+                  <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
+                </span>
+                <span class="lang-label">한국어</span>
+              </button>
+              <button class="lang-option" data-lang="en" aria-label="English">
+                <span class="lang-flag">
+                  <img src="https://hatscripts.github.io/circle-flags/flags/us.svg" alt="미국 국기" />
+                </span>
+                <span class="lang-label">English</span>
+              </button>
+              <button class="lang-option" data-lang="cn" aria-label="중국어">
+                <span class="lang-flag">
+                  <img src="https://hatscripts.github.io/circle-flags/flags/cn.svg" alt="중국 국기" />
+                </span>
+                <span class="lang-label">中文</span>
+              </button>
+              <button class="lang-option" data-lang="jp" aria-label="일본어">
+                <span class="lang-flag">
+                  <img src="https://hatscripts.github.io/circle-flags/flags/jp.svg" alt="일본 국기" />
+                </span>
+                <span class="lang-label">日本語</span>
+              </button>
             </div>
           </div>
           <button class="burger-btn" aria-label="메뉴 열기" tabindex="0">
@@ -500,7 +779,7 @@ class MainNav extends HTMLElement {
         <div class="mobile-menu">
           <button class="close-btn" aria-label="메뉴 닫기" tabindex="0">×</button>
           <div class="mobile-menu-content">
-            <a class="nav-link nav-home" href="/index.html">홈</a>
+            <a class="nav-link nav-home" href="https://busanbus.github.io/weekly-mobility/">홈</a>
             <a class="nav-link nav-about" href="/weekly-mobility/about.html">소개</a>
             <a class="nav-link nav-archive" href="/weekly-mobility/archive/">아카이브</a>
             <div class="search-box">
@@ -508,39 +787,45 @@ class MainNav extends HTMLElement {
               <span class="search-icon">🔍</span>
               <div class="search-results"></div>
             </div>
-            <div class="lang-popover-wrapper">
-              <button class="lang-btn" aria-label="언어 선택" tabindex="0">
-                <span class="lang-flag" data-lang="ko">
-                  <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
-                </span>
-                <span class="lang-label">한국어</span>
-                <span class="lang-arrow">▼</span>
-              </button>
-              <div class="lang-popover" style="display:none;">
-                <button class="lang-option" data-lang="ko" aria-label="한국어">
-                  <span class="lang-flag">
-                    <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
-                  </span>
-                  <span class="lang-label">한국어</span>
-                </button>
-                <button class="lang-option" data-lang="en" aria-label="English">
-                  <span class="lang-flag">
-                    <img src="https://hatscripts.github.io/circle-flags/flags/us.svg" alt="미국 국기" />
-                  </span>
-                  <span class="lang-label">English</span>
-                </button>
-                <button class="lang-option" data-lang="cn" aria-label="중국어">
-                  <span class="lang-flag">
-                    <img src="https://hatscripts.github.io/circle-flags/flags/cn.svg" alt="중국 국기" />
-                  </span>
-                  <span class="lang-label">中文</span>
-                </button>
-                <button class="lang-option" data-lang="jp" aria-label="일본어">
-                  <span class="lang-flag">
-                    <img src="https://hatscripts.github.io/circle-flags/flags/jp.svg" alt="일본 국기" />
-                  </span>
-                  <span class="lang-label">日本語</span>
-                </button>
+          </div>
+        </div>
+        
+        <!-- 검색 모달 -->
+        <div class="search-modal" id="search-modal">
+          <div class="search-modal-content">
+            <div class="search-modal-header">
+              <div class="search-modal-title">
+                <svg class="search-icon-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                모빌리티 동향 검색
+              </div>
+              <div class="search-input-wrapper">
+                <input type="text" class="search-modal-input" placeholder="BRT, 자율주행, 전기차 등 키워드를 입력하세요..." id="search-modal-input" />
+                <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </div>
+              <button class="search-modal-close" id="search-modal-close">×</button>
+            </div>
+            <div class="search-modal-results" id="search-modal-results">
+              <div class="search-empty-state">
+                <svg class="search-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <div style="font-size: 1.2em; font-weight: 600; margin-bottom: 8px; color: #475569;">검색어를 입력하세요</div>
+                <div style="font-size: 0.95em; color: #64748b; margin-bottom: 20px;">모빌리티 관련 키워드로 최신 동향을 찾아보세요</div>
+                <div class="search-suggestions">
+                  <span class="search-suggestion-tag">BRT</span>
+                  <span class="search-suggestion-tag">자율주행</span>
+                  <span class="search-suggestion-tag">전기차</span>
+                  <span class="search-suggestion-tag">수소차</span>
+                  <span class="search-suggestion-tag">카카오T</span>
+                  <span class="search-suggestion-tag">MaaS</span>
+                </div>
               </div>
             </div>
           </div>
@@ -549,13 +834,21 @@ class MainNav extends HTMLElement {
     `;
 
     // DOM 요소 참조
-    this.searchBox = shadow.querySelector('.search-box');
-    this.searchInput = shadow.querySelector('.search-input');
-    this.searchResults = shadow.querySelector('.search-results');
+    this.searchTriggerBtn = shadow.querySelector('.search-trigger-btn');
+    this.searchModal = shadow.querySelector('.search-modal');
+    this.searchModalInput = shadow.querySelector('.search-modal-input');
+    this.searchModalResults = shadow.querySelector('.search-modal-results');
+    this.searchModalClose = shadow.querySelector('.search-modal-close');
     this.burgerBtn = shadow.querySelector('.burger-btn');
     this.mobileMenu = shadow.querySelector('.mobile-menu');
     this.mobileMenuOverlay = shadow.querySelector('.mobile-menu-overlay');
     this.closeBtn = shadow.querySelector('.close-btn');
+
+    // 모바일 언어 버튼 참조
+    this.mobileLangWrapper = shadow.querySelector('.mobile-lang-wrapper');
+    this.mobileLangBtnMain = shadow.querySelector('.mobile-lang-btn');
+    this.mobileLangPopoverMain = shadow.querySelector('.mobile-lang-popover');
+    this.mobileLangFlagMain = this.mobileLangBtnMain ? this.mobileLangBtnMain.querySelector('.mobile-lang-flag img') : null;
 
     // 언어 팝오버 관련
     this.langPopoverWrapper = shadow.querySelector('.lang-popover-wrapper');
@@ -662,6 +955,7 @@ class MainNav extends HTMLElement {
 
     setupLangPopoverEvents(this.langBtn, this.langPopover);
     setupLangPopoverEvents(this.mobileLangBtn, this.mobileLangPopover);
+    setupLangPopoverEvents(this.mobileLangBtnMain, this.mobileLangPopoverMain);
 
     document.addEventListener('click', (e) => {
       if (this.langPopover && !this.langPopover.contains(e.target) && !this.langBtn.contains(e.target)) {
@@ -680,10 +974,19 @@ class MainNav extends HTMLElement {
           floatingSns.style.display = 'block';
         }
       }
+      if (this.mobileLangPopoverMain && this.mobileLangBtnMain && !this.mobileLangPopoverMain.contains(e.target) && !this.mobileLangBtnMain.contains(e.target)) {
+        this.mobileLangPopoverMain.style.display = 'none';
+        // floating-sns 컴포넌트 다시 보이기
+        const floatingSns = document.querySelector('floating-sns');
+        if (floatingSns) {
+          floatingSns.style.display = 'block';
+        }
+      }
     });
 
     // 이벤트 리스너 설정
     this.setupEventListeners();
+    this.setupSearchModal();
     this.updateLanguageSelector();
 
     // 햄버거 메뉴 동작
@@ -718,6 +1021,7 @@ class MainNav extends HTMLElement {
   updateLanguageSelector() {
     const langBtn = this.shadowRoot.querySelector('.lang-btn');
     const mobileLangBtn = this.shadowRoot.querySelector('.mobile-menu .lang-btn');
+    const mobileLangBtnMain = this.shadowRoot.querySelector('.mobile-lang-btn');
 
     const updateButton = (btn) => {
       if (!btn) return;
@@ -728,68 +1032,288 @@ class MainNav extends HTMLElement {
       if (currentPath.includes('/en/')) {
         flagImg.src = 'https://hatscripts.github.io/circle-flags/flags/us.svg';
         flagImg.alt = '미국 국기';
-        labelSpan.textContent = 'English';
+        if (labelSpan) labelSpan.textContent = 'English';
       } else if (currentPath.includes('/cn/')) {
         flagImg.src = 'https://hatscripts.github.io/circle-flags/flags/cn.svg';
         flagImg.alt = '중국 국기';
-        labelSpan.textContent = '中文';
+        if (labelSpan) labelSpan.textContent = '中文';
       } else if (currentPath.includes('/jp/')) {
         flagImg.src = 'https://hatscripts.github.io/circle-flags/flags/jp.svg';
         flagImg.alt = '일본 국기';
-        labelSpan.textContent = '日本語';
+        if (labelSpan) labelSpan.textContent = '日本語';
       } else {
         flagImg.src = 'https://hatscripts.github.io/circle-flags/flags/kr.svg';
         flagImg.alt = '한국 국기';
-        labelSpan.textContent = '한국어';
+        if (labelSpan) labelSpan.textContent = '한국어';
       }
     };
     
     updateButton(langBtn);
     updateButton(mobileLangBtn);
+    updateButton(mobileLangBtnMain);
   }
 
   setupEventListeners() {
-    // 검색 기능
+    // 기존 코드는 비워두고 나중에 정리
+  }
+
+  setupSearchModal() {
+    // 검색 트리거 버튼 클릭
+    this.searchTriggerBtn.addEventListener('click', () => {
+      this.openSearchModal();
+    });
+
+    // 모달 닫기 버튼
+    this.searchModalClose.addEventListener('click', () => {
+      this.closeSearchModal();
+    });
+
+    // 모달 배경 클릭 시 닫기
+    this.searchModal.addEventListener('click', (e) => {
+      if (e.target === this.searchModal) {
+        this.closeSearchModal();
+      }
+    });
+
+    // ESC 키로 모달 닫기
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.searchModal.classList.contains('active')) {
+        this.closeSearchModal();
+      }
+    });
+
+    // 검색 입력
     let searchTimeout;
-    this.searchInput.addEventListener('input', (e) => {
+    this.searchModalInput.addEventListener('input', (e) => {
       clearTimeout(searchTimeout);
       const query = e.target.value.trim();
       
       if (query.length < 2) {
-        this.searchResults.style.display = 'none';
+        this.showModalSearchResults([]);
         return;
       }
 
-      searchTimeout = setTimeout(() => {
-        // 임시 검색 결과
-        const mockResults = [
-          { title: '2025년 6월 2주차 모빌리티 동향', date: '2025.06.16', url: '/archive/2025/06/week2.html' },
-          { title: '2025년 6월 1주차 모빌리티 동향', date: '2025.06.09', url: '/archive/2025/06/week1.html' }
-        ].filter(item => 
-          item.title.toLowerCase().includes(query.toLowerCase()) ||
-          item.date.includes(query)
-        );
-        
-        this.showSearchResults(mockResults);
+      searchTimeout = setTimeout(async () => {
+        await this.performNetworkSearch(query);
       }, 300);
-    });
-
-    // 검색창 외부 클릭 시 결과 숨기기
-    document.addEventListener('click', (e) => {
-      if (!this.searchBox.contains(e.target)) {
-        this.searchResults.style.display = 'none';
-      }
     });
   }
 
+  openSearchModal() {
+    this.searchModal.classList.add('active');
+    setTimeout(() => {
+      this.searchModalInput.focus();
+    }, 100);
+  }
+
+  closeSearchModal() {
+    this.searchModal.classList.remove('active');
+    this.searchModalInput.value = '';
+    // 초기 상태로 복원
+    this.searchModalResults.innerHTML = `
+      <div class="search-empty-state">
+        <svg class="search-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <div style="font-size: 1.2em; font-weight: 600; margin-bottom: 8px; color: #475569;">검색어를 입력하세요</div>
+        <div style="font-size: 0.95em; color: #64748b; margin-bottom: 20px;">모빌리티 관련 키워드로 최신 동향을 찾아보세요</div>
+        <div class="search-suggestions">
+          <span class="search-suggestion-tag">BRT</span>
+          <span class="search-suggestion-tag">자율주행</span>
+          <span class="search-suggestion-tag">전기차</span>
+          <span class="search-suggestion-tag">수소차</span>
+          <span class="search-suggestion-tag">카카오T</span>
+          <span class="search-suggestion-tag">MaaS</span>
+        </div>
+      </div>`;
+    this.addSuggestionClickEvents();
+  }
+
+  formatDate(dateString) {
+    // "2025.06.주차2" 형태를 "2025년 6월 2주차" 형태로 변환
+    const match = dateString.match(/(\d{4})\.(\d{2})\.주차(\d+)/);
+    if (match) {
+      const year = match[1];
+      const month = parseInt(match[2]);
+      const week = match[3];
+      return `${year}년 ${month}월 ${week}주차`;
+    }
+    return dateString; // 변환 실패 시 원본 반환
+  }
+
+  async performNetworkSearch(query) {
+    try {
+      // 실제 네트워크 검색 구현
+      const searchData = [
+        {
+          title: "양방향 BRT 시행, 제주도 vs. 도민 엇갈린 의견",
+          date: "2025.06.주차2",
+          url: "/archive/2025/06/week2.html",
+          keywords: ["BRT", "제주도", "양방향", "교통", "버스"]
+        },
+        {
+          title: "BRT 안정화 추진단 운영",
+          date: "2025.05.주차4",
+          url: "/archive/2025/05/week4.html",
+          keywords: ["BRT", "안정화", "추진단", "교통", "버스"]
+        },
+        {
+          title: "전국 최초 BRT 섬식정류장 운영",
+          date: "2025.05.주차4",
+          url: "/archive/2025/05/week4.html",
+          keywords: ["BRT", "섬식정류장", "교통", "버스", "정류장"]
+        },
+        {
+          title: "동백패스, '2025 국가서비스대상'선정 및 모바일 서비스 시행",
+          date: "2025.06.주차4",
+          url: "/archive/2025/06/week4.html",
+          keywords: ["동백패스", "모바일", "서비스", "교통카드", "부산"]
+        },
+        {
+          title: "심야 자율주행택시 운행확대",
+          date: "2025.06.주차3",
+          url: "/archive/2025/06/week3.html",
+          keywords: ["자율주행", "택시", "심야", "운행", "확대"]
+        },
+        {
+          title: "전기차 캐즘 대응, EREV 시장 확대",
+          date: "2025.06.주차2",
+          url: "/archive/2025/06/week2.html",
+          keywords: ["전기차", "EREV", "시장", "캐즘", "확대"]
+        },
+        {
+          title: "친환경차가 내연차보다 잘 팔리는데, 왜 휘발유 소비 늘지?",
+          date: "2025.06.주차4",
+          url: "/archive/2025/06/week4.html",
+          keywords: ["친환경차", "내연차", "휘발유", "소비", "판매"]
+        },
+        {
+          title: "울산 수소그린모빌리티 실증 확대",
+          date: "2025.05.주차4",
+          url: "/archive/2025/05/week4.html",
+          keywords: ["수소", "그린모빌리티", "울산", "실증", "확대"]
+        },
+        {
+          title: "카카오T, 부당 수수료 징수 관련 과징금 38.82억원 부과",
+          date: "2025.05.주차4",
+          url: "/archive/2025/05/week4.html",
+          keywords: ["카카오T", "과징금", "수수료", "부당", "징수"]
+        },
+        {
+          title: "테슬라, 로보택시 출시",
+          date: "2025.05.주차4",
+          url: "/archive/2025/05/week4.html",
+          keywords: ["테슬라", "로보택시", "출시", "자율주행", "택시"]
+        }
+      ];
+
+      // 검색 실행
+      const results = searchData.filter(item => {
+        const searchText = query.toLowerCase();
+        return item.title.toLowerCase().includes(searchText) ||
+               item.keywords.some(keyword => keyword.toLowerCase().includes(searchText));
+      }).slice(0, 8);
+
+      this.showModalSearchResults(results);
+    } catch (error) {
+      console.error('검색 중 오류:', error);
+      this.showModalSearchResults([]);
+    }
+  }
+
   showSearchResults(results) {
-    this.searchResults.innerHTML = results.length ? results.map(result => `
-      <a href="${result.url}" class="search-result-item">
-        <div style="font-weight: 500; margin-bottom: 4px;">${result.title}</div>
-        <div style="font-size: 0.9em; color: var(--text-secondary);">${result.date}</div>
-      </a>
-    `).join('') : '<div style="padding: 16px; text-align: center; color: var(--text-secondary);">검색 결과가 없습니다.</div>';
+    if (results.length === 0) {
+      this.searchResults.innerHTML = `
+        <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
+          <div style="font-size: 1.1em; margin-bottom: 8px;">🔍 검색 결과가 없습니다</div>
+          <div style="font-size: 0.9em;">다른 키워드로 검색해보세요</div>
+        </div>`;
+    } else {
+      this.searchResults.innerHTML = results.map(result => `
+        <a href="${result.url}" class="search-result-item">
+          <div style="font-weight: 600; margin-bottom: 6px; color: #1A1D29; line-height: 1.4;">
+            ${this.highlightSearchTerm(result.title)}
+          </div>
+          <div style="font-size: 0.85em; color: #5A6573; display: flex; align-items: center; gap: 8px;">
+            <span>📅 ${result.date}</span>
+            <span style="color: #0066FF;">자세히 보기 →</span>
+          </div>
+        </a>
+      `).join('');
+    }
     this.searchResults.style.display = 'block';
+  }
+
+  showModalSearchResults(results) {
+    if (results.length === 0) {
+      this.searchModalResults.innerHTML = `
+        <div class="search-empty-state">
+          <svg class="search-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <div style="font-size: 1.2em; font-weight: 600; margin-bottom: 8px; color: #475569;">검색 결과가 없습니다</div>
+          <div style="font-size: 0.95em; color: #64748b; margin-bottom: 20px;">다른 키워드로 다시 검색해보세요</div>
+          <div class="search-suggestions">
+            <span class="search-suggestion-tag">BRT</span>
+            <span class="search-suggestion-tag">자율주행</span>
+            <span class="search-suggestion-tag">전기차</span>
+            <span class="search-suggestion-tag">수소차</span>
+            <span class="search-suggestion-tag">카카오T</span>
+            <span class="search-suggestion-tag">MaaS</span>
+          </div>
+        </div>`;
+    } else {
+      this.searchModalResults.innerHTML = results.map(result => `
+        <a href="${result.url}" class="search-result-item">
+          <div class="search-result-title">
+            ${this.highlightModalSearchTerm(result.title)}
+          </div>
+          <div class="search-result-meta">
+            <div class="search-result-date">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              ${this.formatDate(result.date)}
+            </div>
+            <div class="search-result-arrow">자세히 보기 →</div>
+          </div>
+        </a>
+      `).join('');
+    }
+    
+    // 검색 제안 태그 클릭 이벤트 추가
+    this.addSuggestionClickEvents();
+  }
+
+  addSuggestionClickEvents() {
+    const suggestions = this.searchModalResults.querySelectorAll('.search-suggestion-tag');
+    suggestions.forEach(tag => {
+      tag.addEventListener('click', () => {
+        this.searchModalInput.value = tag.textContent;
+        this.performNetworkSearch(tag.textContent);
+      });
+    });
+  }
+
+  highlightModalSearchTerm(text) {
+    const query = this.searchModalInput.value.trim();
+    if (!query) return text;
+    
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark style="background: #FFF3CD; color: #856404; padding: 2px 4px; border-radius: 4px; font-weight: 700;">$1</mark>');
+  }
+
+  highlightSearchTerm(text) {
+    const query = this.searchInput ? this.searchInput.value.trim() : '';
+    if (!query) return text;
+    
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<mark style="background: #FFF3CD; color: #856404; padding: 1px 3px; border-radius: 3px;">$1</mark>');
   }
 }
 

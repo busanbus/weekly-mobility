@@ -89,9 +89,9 @@ class FloatingSNS extends HTMLElement {
               height: 22px;
             }
             .sns-btn.kakao img {
-              width: 22px;
-              height: 22px;
-              padding: 3px;
+              width: 32px;
+              height: 32px;
+              padding: 2px;
             }
           }
         </style>
