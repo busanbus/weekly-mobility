@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta property="og:title" content="검색 결과 - 모빌리티 주간동향">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://i.ibb.co/MxP3nf65/og-image2.png">
+  <meta property="og:description" content="모빌리티 주간동향 검색 결과">
+  <meta property="og:site_name" content="모빌리티 주간동향">
+  <meta property="og:url" content="https://busanbus.github.io/weekly-mobility/search-results.html">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>검색 결과 - 모빌리티 주간동향</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZXZ064TVJE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ZXZ064TVJE');
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style/style.css">
+  <link rel="icon" type="image/png" href="https://www.busanbus.or.kr/assets/img/common/favicon.png">
+  <style>
+    .search-page {
+      min-height: 100vh;
+      background: var(--bg-primary, #fafbfc);
+      padding: 100px 0 40px;
+    }
+    
+    .search-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .search-header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    
+    .search-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--text-primary, #2c3e50);
+      margin-bottom: 0;
+    }
+    
+    .secondary-search {
+      margin: 30px 0;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .secondary-search-form {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: white;
+      border: 2px solid var(--primary-blue, #0066FF);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 102, 255, 0.12);
+      height: 44px;
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    .secondary-search-form:focus-within {
+      box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.25), 0 3px 8px rgba(0, 102, 255, 0.15);
+    }
+    
+    .secondary-search-input {
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-primary, #2c3e50);
+      font-size: 16px;
+      font-weight: 400;
+      flex: 1;
+      height: 100%;
+      outline: none;
+      line-height: 1.4;
+    }
+    
+    .secondary-search-input::placeholder {
+      color: var(--text-tertiary, #8f95a1);
+      font-size: 16px;
+    }
+    
+    .secondary-search-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 100%;
+      border: none;
+      background: var(--primary-blue, #0066FF);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    
+    .secondary-search-btn:hover {
+      background: var(--primary-blue-dark, #0052cc);
+    }
+    
+    .secondary-search-btn:active {
+      background: var(--primary-blue-darker, #003d99);
+      transform: scale(0.98);
+    }
+    
+    .secondary-search-btn-icon {
+      width: 20px;
+      height: 20px;
+      stroke: white;
+      stroke-width: 2.5;
+    }
+    
+    .search-results-count {
+      margin: 30px 0 20px;
+      font-size: 1rem;
+      color: var(--text-secondary, #5A6573);
+    }
+    
+    .loading-spinner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 60px 20px;
+      color: var(--text-secondary, #5A6573);
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border-light, #e8eaed);
+      border-top: 3px solid var(--primary-blue, #0066FF);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .search-result-item {
+      background: white;
+      border: 1px solid var(--border-light, #e8eaed);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    }
+    
+    .search-result-item:hover {
+      border-color: var(--primary-blue, #0066FF);
+      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .result-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+    
+    .result-thumbnail {
+      width: 300px;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: var(--bg-secondary, #f8f9fa);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .result-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .result-thumbnail-placeholder {
+      width: 24px;
+      height: 24px;
+      color: var(--text-secondary, #5A6573);
+    }
+    
+    .result-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .result-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary, #2c3e50);
+      line-height: 1.4;
+      margin-bottom: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    
+    .result-title:hover {
+      color: var(--primary-blue, #0066FF);
+    }
+    
+    .result-card-clickable {
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    
+    .result-card-clickable:hover {
+      transform: translateY(-1px);
+    }
+    
+    .result-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: var(--text-secondary, #5A6573);
+    }
+    
+    .result-category {
+      background: var(--secondary-blue, #E6F1FF);
+      color: var(--primary-blue, #0066FF);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .result-date {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .result-summary {
+      color: var(--text-secondary, #5A6573);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    
+    .result-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .result-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: var(--primary-blue, #0066FF);
+      color: white;
+      text-decoration: none;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .result-link:hover {
+      background: var(--primary-blue-dark, #0052cc);
+      transform: translateY(-1px);
+    }
+    
+    .result-weekly-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: transparent;
+      color: var(--text-secondary, #5A6573);
+      text-decoration: none;
+      border: 1px solid var(--border-light, #e8eaed);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .result-weekly-link:hover {
+      border-color: var(--primary-blue, #0066FF);
+      color: var(--primary-blue, #0066FF);
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary, #5A6573);
+    }
+    
+    .no-results-icon {
+      width: 64px;
+      height: 64px;
+      color: var(--text-tertiary, #a0aec0);
+      margin: 0 auto 20px;
+    }
+    
+    .no-results-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary, #2c3e50);
+      margin-bottom: 8px;
+    }
+    
+    .no-results-message {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    
+    .search-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .suggestion-tag {
+      padding: 6px 12px;
+      background: var(--bg-secondary, #f8f9fa);
+      border: 1px solid var(--border-light, #e8eaed);
+      border-radius: 16px;
+      font-size: 0.9rem;
+      color: var(--text-secondary, #5A6573);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    
+    .suggestion-tag:hover {
+      background: var(--secondary-blue, #E6F1FF);
+      border-color: var(--primary-blue, #0066FF);
+      color: var(--primary-blue, #0066FF);
+    }
+    
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: transparent;
+      color: var(--text-secondary, #5A6573);
+      text-decoration: none;
+      border: 1px solid var(--border-light, #e8eaed);
+      border-radius: 20px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      margin-bottom: 30px;
+    }
+    
+    .back-button:hover {
+      border-color: var(--primary-blue, #0066FF);
+      color: var(--primary-blue, #0066FF);
+    }
+    
+    /* PC에서는 기본 버튼 스타일 강제 적용 */
+    @media (min-width: 769px) {
+      .search-results .search-result-item .result-actions .result-link {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 8px 16px !important;
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+        border-radius: 20px !important;
+        background: var(--primary-blue, #0066FF) !important;
+        color: white !important;
+        text-decoration: none !important;
+        box-shadow: none !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      .result-link:hover {
+        background: var(--primary-blue-dark, #0052cc) !important;
+        transform: translateY(-1px) !important;
+      }
+      
+      .search-results .search-result-item .result-actions .result-weekly-link {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 8px 16px !important;
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+        border-radius: 20px !important;
+        background: transparent !important;
+        color: var(--text-secondary, #5A6573) !important;
+        text-decoration: none !important;
+        border: 1px solid var(--border-light, #e8eaed) !important;
+        box-shadow: none !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+        transition: all 0.2s ease !important;
+      }
+      
+      .search-results .search-result-item .result-actions .result-weekly-link:hover {
+        border-color: var(--primary-blue, #0066FF) !important;
+        color: var(--primary-blue, #0066FF) !important;
+      }
+      
+      .search-results .search-result-item .result-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 12px !important;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .search-page {
+        padding: 70px 0 20px;
+      }
+      
+      .search-title {
+        font-size: 1.5rem;
+      }
+      
+      .result-header {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .result-thumbnail {
+        width: 100%;
+        height: 220px;
+      }
+      
+      .result-actions {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .result-link {
+        width: 80%;
+        margin: 0 auto;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--primary-blue, #0066FF), #0052cc);
+        box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+        text-align: center;
+      }
+      
+      .result-weekly-link {
+        width: 80%;
+        margin: 0 auto;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        background: #f8fafc;
+        color: var(--text-primary, #2c3e50);
+        border: 2px solid #e2e8f0;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+      
+      .search-suggestions {
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script type="module" src="components/main-nav-no-lang.js"></script>
+  <main-nav-no-lang></main-nav-no-lang>
+  
+  <div class="search-page">
+    <div class="search-container">
+      <a href="javascript:history.back()" class="back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="m15 18-6-6 6-6"/>
+        </svg>
+        뒤로가기
+      </a>
+      
+      <div class="search-header">
+        <h1 class="search-title">
+          "<span id="search-query-text">-</span>" 검색 결과
+        </h1>
+      </div>
+      
+      <div id="search-results-count" class="search-results-count" style="display: none;"></div>
+      
+      <!-- 추가 검색창 -->
+      <div class="secondary-search">
+        <form class="secondary-search-form" id="secondary-search-form" role="search">
+          <input 
+            type="text" 
+            class="secondary-search-input" 
+            id="secondary-search-input"
+            placeholder="다른 키워드로 다시 검색해보세요..." 
+            aria-label="추가 검색어 입력"
+            autocomplete="off"
+            spellcheck="false">
+          <button type="submit" class="secondary-search-btn" aria-label="검색 실행" title="검색하기">
+            <svg class="secondary-search-btn-icon" viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </button>
+        </form>
+      </div>
+      
+      <div id="loading" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>검색 중...</p>
+      </div>
+      
+      <div id="search-results" class="search-results"></div>
+      
+      <div id="no-results" class="no-results" style="display: none;">
+        <svg class="no-results-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+        <h2 class="no-results-title">검색 결과가 없습니다</h2>
+        <p class="no-results-message">다른 키워드로 다시 검색해보세요.</p>
+        <div class="search-suggestions">
+          <a href="?q=BRT" class="suggestion-tag">BRT</a>
+          <a href="?q=자율주행" class="suggestion-tag">자율주행</a>
+          <a href="?q=전기차" class="suggestion-tag">전기차</a>
+          <a href="?q=교통정책" class="suggestion-tag">교통정책</a>
+          <a href="?q=대중교통" class="suggestion-tag">대중교통</a>
+          <a href="?q=모빌리티" class="suggestion-tag">모빌리티</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 플로팅UI(SNS) -->
+  <floating-sns></floating-sns>
+  <script type="module" src="components/floating-sns.js"></script>
+  
+  <!-- 검색 시스템 -->
+  <script type="module" src="components/search-system.js"></script>
+  
+  <script type="module">
+    import SearchSystem from './components/search-system.js';
+    
+    class SearchResultsPage {
+      constructor() {
+        this.searchSystem = new SearchSystem();
+        this.init();
+      }
+      
+      async init() {
+        // URL에서 검색어 추출
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('q');
+        
+        if (!query) {
+          this.showNoResults('검색어가 없습니다.');
+          return;
+        }
+        
+        // 검색어 표시
+        document.getElementById('search-query-text').textContent = query;
+        document.title = `"${query}" 검색 결과 - 모빌리티 주간동향`;
+        
+        // 추가 검색창 이벤트 설정
+        this.setupSecondarySearch();
+        
+        try {
+          // 검색 실행
+          const results = await this.searchSystem.search(query, 50);
+          this.displayResults(results, query);
+        } catch (error) {
+          console.error('검색 중 오류 발생:', error);
+          this.showError('검색 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        }
+      }
+      
+      setupSecondarySearch() {
+        const secondaryForm = document.getElementById('secondary-search-form');
+        const secondaryInput = document.getElementById('secondary-search-input');
+        
+        if (secondaryForm && secondaryInput) {
+          secondaryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = secondaryInput.value.trim();
+            
+            if (!query) {
+              alert('검색어를 입력해주세요.');
+              return;
+            }
+            
+            if (query.length < 2) {
+              alert('검색어는 2글자 이상 입력해주세요.');
+              return;
+            }
+            
+            // 새로운 검색어로 페이지 이동
+            const searchUrl = `/weekly-mobility/search-results.html?q=${encodeURIComponent(query)}`;
+            window.location.href = searchUrl;
+          });
+        }
+      }
+      
+      displayResults(results, query) {
+        const loadingEl = document.getElementById('loading');
+        const resultsEl = document.getElementById('search-results');
+        const countEl = document.getElementById('search-results-count');
+        const noResultsEl = document.getElementById('no-results');
+        
+        loadingEl.style.display = 'none';
+        
+        if (results.length === 0) {
+          noResultsEl.style.display = 'block';
+          return;
+        }
+        
+        // 결과 개수 표시
+        countEl.textContent = `총 ${results.length}개의 검색 결과`;
+        countEl.style.display = 'block';
+        
+        // 결과 렌더링
+        resultsEl.innerHTML = results.map(item => this.renderResultItem(item, query)).join('');
+        
+        // 클릭 이벤트 추가
+        this.addClickEvents();
+      }
+      
+      renderResultItem(item, query) {
+        const highlightedTitle = this.highlightText(item.title, query);
+        const highlightedSummary = this.highlightText(item.summary, query);
+        const thumbnailHtml = item.image ? 
+          `<img src="${item.image}" alt="${item.title}" loading="lazy" onerror="this.parentElement.innerHTML='&lt;svg class=&quot;result-thumbnail-placeholder&quot; viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot;&gt;&lt;rect x=&quot;3&quot; y=&quot;3&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;2&quot; ry=&quot;2&quot;/&gt;&lt;circle cx=&quot;8.5&quot; cy=&quot;8.5&quot; r=&quot;1.5&quot;/&gt;&lt;polyline points=&quot;21,15 16,10 5,21&quot;/&gt;&lt;/svg&gt;'">` :
+          `<svg class="result-thumbnail-placeholder" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>`;
+        
+        return `
+          <div class="search-result-item result-card-clickable" data-link="${item.link}">
+            <div class="result-header">
+              <div class="result-thumbnail">
+                ${thumbnailHtml}
+              </div>
+              <div class="result-content">
+                <h3 class="result-title" data-link="${item.link}">${highlightedTitle}</h3>
+                <div class="result-meta">
+                  <span class="result-category">${item.category}</span>
+                  <div class="result-date">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    ${item.dateText}
+                  </div>
+                </div>
+                <p class="result-summary">${highlightedSummary}</p>
+                <div class="result-actions">
+                  <a href="${item.link}" class="result-link" target="_blank" rel="noopener noreferrer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                      <polyline points="15,3 21,3 21,9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    자세히 보기
+                  </a>
+                  <a href="${item.weeklyUrl}" class="result-weekly-link">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                      <polyline points="14,2 14,8 20,8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10,9 9,9 8,9"></polyline>
+                    </svg>
+                    주간동향 보기
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      
+      highlightText(text, query) {
+        if (!text || !query) return text;
+        const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        return text.replace(regex, '<mark style="background: #fffbdd; padding: 1px 2px; border-radius: 2px;">$1</mark>');
+      }
+      
+      showNoResults(message) {
+        document.getElementById('loading').style.display = 'none';
+        const noResultsEl = document.getElementById('no-results');
+        noResultsEl.querySelector('.no-results-message').textContent = message;
+        noResultsEl.style.display = 'block';
+      }
+      
+      addClickEvents() {
+        // 카드 클릭 이벤트 (뉴스 원문으로 이동)
+        document.querySelectorAll('.result-card-clickable').forEach(card => {
+          card.addEventListener('click', (e) => {
+            // 버튼 클릭이 아닌 경우에만 실행
+            if (!e.target.closest('.result-actions')) {
+              const link = card.getAttribute('data-link');
+              if (link) {
+                window.open(link, '_blank', 'noopener,noreferrer');
+              }
+            }
+          });
+        });
+        
+        // 제목 클릭 이벤트 (뉴스 원문으로 이동)
+        document.querySelectorAll('.result-title').forEach(title => {
+          title.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const link = title.getAttribute('data-link');
+            if (link) {
+              window.open(link, '_blank', 'noopener,noreferrer');
+            }
+          });
+        });
+      }
+      
+      showError(message) {
+        document.getElementById('loading').style.display = 'none';
+        const resultsEl = document.getElementById('search-results');
+        resultsEl.innerHTML = `
+          <div class="no-results">
+            <svg class="no-results-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <h2 class="no-results-title">오류 발생</h2>
+            <p class="no-results-message">${message}</p>
+          </div>
+        `;
+      }
+    }
+    
+    // 페이지 로드 후 검색 실행
+    new SearchResultsPage();
+  </script>
+</body>
+</html>

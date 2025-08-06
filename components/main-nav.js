@@ -9,6 +9,7 @@ class MainNav extends HTMLElement {
           display: block;
           width: 100%;
           font-family: 'Noto Sans KR', 'Inter', sans-serif;
+          box-sizing: border-box;
         }
         .nav-bg {
           width: 100%;
@@ -18,7 +19,7 @@ class MainNav extends HTMLElement {
           position: fixed;
           top: 0;
           left: 0;
-          width: 100%;
+          right: 0;
           z-index: 1000;
         }
         .nav-inner {
@@ -67,44 +68,75 @@ class MainNav extends HTMLElement {
         .nav-link:hover {
           background: var(--secondary-blue, #E6F1FF);
         }
-                 .search-trigger-btn {
-           display: flex;
-           align-items: center;
-           justify-content: space-between;
-           gap: 8px;
-           padding: 8px 16px;
-           border: 1.5px solid var(--border-light, #e8eaed);
-           background: rgba(255, 255, 255, 0.9);
-           border-radius: 20px;
-           cursor: pointer;
-           color: var(--text-secondary, #5A6573);
-           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-           font-size: 0.9rem;
-           font-weight: 500;
-           min-width: 160px;
-           height: 40px;
-           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-         }
-         .search-trigger-btn:hover {
-           background: var(--secondary-blue, #E6F1FF);
-           border-color: var(--primary-blue, #0066FF);
-           color: var(--primary-blue, #0066FF);
-           transform: translateY(-1px);
-           box-shadow: 0 4px 12px rgba(0, 102, 255, 0.15);
-         }
-         .search-trigger-icon {
-           width: 20px;
-           height: 20px;
-           flex-shrink: 0;
-         }
-         .search-trigger-text {
-           opacity: 0.7;
-           transition: opacity 0.2s;
-           font-size: 20px;
-         }
-         .search-trigger-btn:hover .search-trigger-text {
-           opacity: 1;
-         }
+                         .search-form {
+          display: flex;
+          align-items: center;
+          gap: 0;
+          position: relative;
+          background: white;
+          border: 2px solid var(--primary-blue, #0066FF);
+          border-radius: 6px;
+          overflow: hidden;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 4px rgba(0, 102, 255, 0.12);
+          height: 36px;
+        }
+        
+        .search-form:hover {
+          border-color: var(--primary-blue, #0066FF);
+        }
+        
+        .search-form:focus-within {
+          border-color: var(--primary-blue, #0066FF);
+          box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.25), 0 3px 8px rgba(0, 102, 255, 0.15);
+        }
+        
+        .search-input {
+          padding: 8px 14px;
+          border: none;
+          background: transparent;
+          color: var(--text-primary, #2c3e50);
+          font-size: 15px;
+          font-weight: 400;
+          width: 180px;
+          height: 100%;
+          outline: none;
+          line-height: 1.4;
+        }
+        
+        .search-input::placeholder {
+          color: var(--text-tertiary, #8f95a1);
+          font-size: 15px;
+        }
+        
+        .search-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 100%;
+          border: none;
+          background: var(--primary-blue, #0066FF);
+          cursor: pointer;
+          transition: all 0.2s ease;
+          flex-shrink: 0;
+        }
+        
+        .search-btn:hover {
+          background: var(--primary-blue-dark, #0052cc);
+        }
+        
+        .search-btn:active {
+          background: var(--primary-blue-darker, #003d99);
+          transform: scale(0.98);
+        }
+        
+        .search-btn-icon {
+          width: 18px;
+          height: 18px;
+          stroke: white;
+          stroke-width: 2.5;
+        }
         .lang-select {
           padding: 10px 16px;
           border-radius: 8px;
@@ -361,17 +393,7 @@ class MainNav extends HTMLElement {
         .burger-btn .line2 { top: 50%; transform: translateY(-50%); }
         .burger-btn .line3 { bottom: 0; }
 
-        .burger-btn.open .line1 {
-          top: 50%;
-          transform: translateY(-50%) rotate(45deg);
-        }
-        .burger-btn.open .line2 {
-          opacity: 0;
-        }
-        .burger-btn.open .line3 {
-          bottom: 50%;
-          transform: translateY(50%) rotate(-45deg);
-        }
+
 
         .mobile-menu,
         .mobile-menu-overlay,
@@ -415,24 +437,29 @@ class MainNav extends HTMLElement {
           z-index: 3000;
           padding: 8px;
         }
-                 @media (max-width: 700px) {
-           .search-trigger-btn {
-             display: none !important;
-           }
+                         @media (max-width: 700px) {
+          .search-form {
+            display: none !important;
+          }
            .nav-inner {
+             max-width: none;
+             width: 100%;
+             margin: 0;
              display: flex;
              flex-direction: row;
              align-items: center;
-             justify-content: space-between;
+             justify-content: flex-start;
              padding: 0 16px;
              min-height: 56px;
              position: relative;
+             box-sizing: border-box;
            }
           .nav-logo {
             margin-right: 0;
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
+            z-index: 10;
           }
           .nav-logo img {
             height: 36px;
@@ -440,24 +467,139 @@ class MainNav extends HTMLElement {
             display: block;
           }
           .burger-btn {
-            display: block !important;
+            display: flex !important;
             position: relative;
-            top: 0;
-            left: 0;
-            margin-left: 0;
-            margin-right: 0;
-            order: -1;
+            width: 24px;
+            height: 18px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            flex-shrink: 0;
           }
           .nav-left, .nav-right {
             display: none !important;
           }
-          .mobile-lang-wrapper {
-            display: block !important;
-            position: absolute;
-            right: 50px;
-            top: 50%;
-            transform: translateY(-50%);
+          .mobile-right-actions {
+            display: flex !important;
+            align-items: center;
+            gap: 12px;
+            margin-left: auto;
           }
+          .mobile-search-wrapper {
+            display: flex !important;
+            position: relative;
+            flex-shrink: 0;
+          }
+          .mobile-search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.2s;
+          }
+          .mobile-search-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+          }
+          .mobile-search-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke: #1A1D29;
+            stroke-width: 2;
+          }
+          .mobile-search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 80px;
+          }
+          .mobile-search-overlay.open {
+            display: flex;
+          }
+          .mobile-search-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 0 20px;
+            width: calc(100% - 40px);
+            max-width: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+          }
+          .mobile-search-form {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+          }
+          .mobile-search-input {
+            flex: 1;
+            border: none;
+            background: none;
+            outline: none;
+            font-size: 16px;
+            color: #1A1D29;
+          }
+          .mobile-search-input::placeholder {
+            color: #8f95a1;
+          }
+          .mobile-search-submit {
+            background: var(--primary-blue, #0066FF);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+          }
+          .mobile-search-cancel {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+          }
+          .mobile-search-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+          }
+          .mobile-lang-wrapper {
+            display: flex !important;
+            position: relative;
+            flex-shrink: 0;
+          }
+        }
+        
+        /* PC에서는 모바일 검색 기능 완전 숨김 */
+        @media (min-width: 701px) {
+          .mobile-search-wrapper {
+            display: none !important;
+          }
+          .mobile-search-overlay {
+            display: none !important;
+          }
+          .mobile-search-container {
+            display: none !important;
+          }
+        }
+        @media (max-width: 700px) {
           body {
             padding-top: 48px !important;
           }
@@ -465,105 +607,91 @@ class MainNav extends HTMLElement {
             margin-top: 0 !important;
             padding-top: 0 !important;
           }
-          .mobile-menu-overlay {
-            display: block;
+          .mobile-menu {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.25);
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100vh;
+            background: #fff;
             z-index: 1200;
+            transition: left 0.3s ease;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+          }
+          
+          .mobile-menu.open {
+            left: 0;
+          }
+          
+          .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1100;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+            transition: opacity 0.3s, visibility 0.3s;
           }
+          
           .mobile-menu-overlay.open {
             opacity: 1;
             visibility: visible;
           }
-          .mobile-menu {
-            display: block;
-            position: fixed;
-            top: 0; right: 0;
-            width: 64vw;
-            max-width: 256px;
-            height: 100vh;
-            background: #fff;
-            box-shadow: -2px 0 16px rgba(0,0,0,0.10);
-            z-index: 1202;
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+          
+          /* 메뉴가 열렸을 때 햄버거 버튼 숨기기 */
+          .burger-btn.hidden {
+            opacity: 0;
             visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
           }
-          .mobile-menu.open {
-            visibility: visible;
-            transform: translateX(0);
-          }
-          .mobile-menu-content {
+          
+          .mobile-menu-header {
             display: flex;
-            flex-direction: column;
-            gap: 18px;
-            padding: 32px 20px 20px 20px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border-light, #e8eaed);
           }
-          .mobile-menu .nav-link {
-            font-size: 1.15rem;
-            padding: 12px 0;
+          
+          .mobile-menu-header img {
+            height: 32px;
           }
-          .mobile-menu .search-box,
-          .mobile-menu .search-input {
-            width: 80vw;
-            max-width: 80vw;
-          }
-          .mobile-menu .lang-select-wrapper {
-            margin-left: 0;
-            padding: 0;
-            box-shadow: none;
-            border-radius: 8px;
+          
+          .close-btn {
             background: none;
-            position: relative;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary, #5A6573);
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
           }
-          .mobile-menu .lang-label {
-            font-size: 0.98rem;
+          
+          .mobile-menu-content {
+            padding: 20px;
+            flex: 1;
           }
-          .mobile-menu .lang-select {
-            font-size: 1rem;
-            padding: 8px 28px 8px 10px;
-            border-radius: 8px;
+          .mobile-nav-link {
+            display: block;
+            padding: 16px 0;
+            color: var(--text-primary, #1A1D29);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-light, #e8eaed);
           }
-          .mobile-menu .lang-btn {
-            width: auto;
-            justify-content: flex-start;
-            padding: 12px 16px;
-            border-radius: 8px;
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            display: inline-flex;
+          
+          .mobile-nav-link:hover {
+            color: var(--primary-blue, #0066FF);
           }
-          .mobile-menu .lang-popover {
-            position: absolute;
-            right: 0;
-            left: auto;
-            transform: none;
-            min-width: 140px;
-            width: auto;
-            max-width: 200px;
-            top: 52px;
-            z-index: 5000;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-          }
-          .nav-bg {
-            margin-bottom: 0;
-            padding-bottom: 0;
-          }
-          .search-box,
-          .search-input,
-          .mobile-menu .search-box,
-          .mobile-menu .search-input {
-            width: 80vw;
-            max-width: 80vw;
-          }
-          .mobile-menu .nav-link.nav-about,
-          .mobile-menu .nav-link.nav-archive,
-          .mobile-menu .search-box {
+          
+          .mobile-nav-link.nav-about,
+          .mobile-nav-link.nav-archive {
             display: none !important;
           }
           .lang-popover {
@@ -695,13 +823,21 @@ class MainNav extends HTMLElement {
             <a class="nav-link nav-archive" href="/weekly-mobility/archive/">아카이브</a>
           </div>
           <div class="nav-right">
-                         <button class="search-trigger-btn" aria-label="검색" title="검색하기">
-               <span class="search-trigger-text">동향 검색</span>
-               <svg class="search-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                 <circle cx="11" cy="11" r="8"></circle>
-                 <path d="m21 21-4.35-4.35"></path>
-               </svg>
-             </button>
+                                     <form class="search-form" role="search">
+              <input 
+                type="text" 
+                class="search-input" 
+                placeholder="동향 검색..." 
+                aria-label="검색어 입력"
+                autocomplete="off"
+                spellcheck="false">
+              <button type="submit" class="search-btn" aria-label="검색 실행" title="검색하기">
+                <svg class="search-btn-icon" viewBox="0 0 24 24" fill="none">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+            </form>
             <div class="lang-popover-wrapper">
                              <button class="lang-btn" aria-label="언어 선택" tabindex="0">
                  <span class="lang-flag" data-lang="ko">
@@ -736,7 +872,21 @@ class MainNav extends HTMLElement {
               </div>
             </div>
           </div>
-          <div class="mobile-lang-wrapper">
+          <button class="burger-btn" aria-label="메뉴 열기" tabindex="0">
+            <span class="line line1"></span>
+            <span class="line line2"></span>
+            <span class="line line3"></span>
+          </button>
+          <div class="mobile-right-actions">
+            <div class="mobile-search-wrapper">
+              <button class="mobile-search-btn" aria-label="검색" tabindex="0">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+              </button>
+            </div>
+            <div class="mobile-lang-wrapper">
             <button class="mobile-lang-btn" aria-label="언어 선택" tabindex="0">
               <span class="mobile-lang-flag" data-lang="ko">
                 <img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" alt="한국 국기" />
@@ -768,25 +918,41 @@ class MainNav extends HTMLElement {
                 <span class="lang-label">日本語</span>
               </button>
             </div>
+            </div>
           </div>
-          <button class="burger-btn" aria-label="메뉴 열기" tabindex="0">
-            <span class="line line1"></span>
-            <span class="line line2"></span>
-            <span class="line line3"></span>
-          </button>
         </div>
+        
+        <!-- 모바일 검색 오버레이 -->
+        <div class="mobile-search-overlay">
+          <div class="mobile-search-container">
+            <div class="mobile-search-form">
+              <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+                <circle cx="11" cy="11" r="8" stroke="#8f95a1" stroke-width="2"></circle>
+                <path d="m21 21-4.35-4.35" stroke="#8f95a1" stroke-width="2"></path>
+              </svg>
+              <input 
+                type="text" 
+                class="mobile-search-input" 
+                placeholder="검색어를 입력하세요..." 
+                autocomplete="off">
+            </div>
+            <div class="mobile-search-actions">
+              <button class="mobile-search-cancel">취소</button>
+              <button class="mobile-search-submit">검색</button>
+            </div>
+          </div>
+        </div>
+        
         <div class="mobile-menu-overlay"></div>
         <div class="mobile-menu">
-          <button class="close-btn" aria-label="메뉴 닫기" tabindex="0">×</button>
+          <div class="mobile-menu-header">
+            <img src="https://i.ibb.co/svMm1DPr/logo.png" alt="로고" />
+            <button class="close-btn" aria-label="메뉴 닫기">×</button>
+          </div>
           <div class="mobile-menu-content">
-            <a class="nav-link nav-home" href="https://busanbus.github.io/weekly-mobility/">홈</a>
-            <a class="nav-link nav-about" href="/weekly-mobility/about.html">소개</a>
-            <a class="nav-link nav-archive" href="/weekly-mobility/archive/">아카이브</a>
-            <div class="search-box">
-              <input class="search-input" type="text" placeholder="카드뉴스 검색..." />
-              <span class="search-icon">🔍</span>
-              <div class="search-results"></div>
-            </div>
+            <a href="https://busanbus.github.io/weekly-mobility/" class="mobile-nav-link">홈</a>
+            <a href="/weekly-mobility/about.html" class="mobile-nav-link nav-about">소개</a>
+            <a href="/weekly-mobility/archive/" class="mobile-nav-link nav-archive">아카이브</a>
           </div>
         </div>
         
@@ -834,21 +1000,27 @@ class MainNav extends HTMLElement {
     `;
 
     // DOM 요소 참조
-    this.searchTriggerBtn = shadow.querySelector('.search-trigger-btn');
-    this.searchModal = shadow.querySelector('.search-modal');
-    this.searchModalInput = shadow.querySelector('.search-modal-input');
-    this.searchModalResults = shadow.querySelector('.search-modal-results');
-    this.searchModalClose = shadow.querySelector('.search-modal-close');
+    this.searchForm = shadow.querySelector('.search-form');
+    this.searchInput = shadow.querySelector('.search-input');
+    this.searchBtn = shadow.querySelector('.search-btn');
     this.burgerBtn = shadow.querySelector('.burger-btn');
     this.mobileMenu = shadow.querySelector('.mobile-menu');
     this.mobileMenuOverlay = shadow.querySelector('.mobile-menu-overlay');
     this.closeBtn = shadow.querySelector('.close-btn');
+
 
     // 모바일 언어 버튼 참조
     this.mobileLangWrapper = shadow.querySelector('.mobile-lang-wrapper');
     this.mobileLangBtnMain = shadow.querySelector('.mobile-lang-btn');
     this.mobileLangPopoverMain = shadow.querySelector('.mobile-lang-popover');
     this.mobileLangFlagMain = this.mobileLangBtnMain ? this.mobileLangBtnMain.querySelector('.mobile-lang-flag img') : null;
+
+    // 모바일 검색 요소들
+    this.mobileSearchBtn = shadow.querySelector('.mobile-search-btn');
+    this.mobileSearchOverlay = shadow.querySelector('.mobile-search-overlay');
+    this.mobileSearchInput = shadow.querySelector('.mobile-search-input');
+    this.mobileSearchSubmit = shadow.querySelector('.mobile-search-submit');
+    this.mobileSearchCancel = shadow.querySelector('.mobile-search-cancel');
 
     // 언어 팝오버 관련
     this.langPopoverWrapper = shadow.querySelector('.lang-popover-wrapper');
@@ -986,26 +1158,27 @@ class MainNav extends HTMLElement {
 
     // 이벤트 리스너 설정
     this.setupEventListeners();
-    this.setupSearchModal();
+    this.setupSearchForm();
     this.updateLanguageSelector();
 
     // 햄버거 메뉴 동작
     if (this.burgerBtn && this.mobileMenu && this.mobileMenuOverlay) {
       this.burgerBtn.addEventListener('click', () => {
         const isOpen = this.mobileMenu.classList.contains('open');
-        this.burgerBtn.classList.toggle('open', !isOpen);
         if (isOpen) {
           this.mobileMenu.classList.remove('open');
           this.mobileMenuOverlay.classList.remove('open');
+          this.burgerBtn.classList.remove('hidden');
         } else {
           this.mobileMenu.classList.add('open');
           this.mobileMenuOverlay.classList.add('open');
+          this.burgerBtn.classList.add('hidden');
         }
       });
       this.mobileMenuOverlay.addEventListener('click', () => {
         this.mobileMenu.classList.remove('open');
         this.mobileMenuOverlay.classList.remove('open');
-        this.burgerBtn.classList.remove('open');
+        this.burgerBtn.classList.remove('hidden');
       });
     }
 
@@ -1054,49 +1227,91 @@ class MainNav extends HTMLElement {
   }
 
   setupEventListeners() {
-    // 기존 코드는 비워두고 나중에 정리
+    // 모바일 검색 이벤트
+    if (this.mobileSearchBtn) {
+      this.mobileSearchBtn.addEventListener('click', () => {
+        this.openMobileSearch();
+      });
+    }
+
+    if (this.mobileSearchCancel) {
+      this.mobileSearchCancel.addEventListener('click', () => {
+        this.closeMobileSearch();
+      });
+    }
+
+    if (this.mobileSearchSubmit) {
+      this.mobileSearchSubmit.addEventListener('click', () => {
+        this.performMobileSearch();
+      });
+    }
+
+    if (this.mobileSearchInput) {
+      this.mobileSearchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.performMobileSearch();
+        }
+      });
+    }
+
+    if (this.mobileSearchOverlay) {
+      this.mobileSearchOverlay.addEventListener('click', (e) => {
+        if (e.target === this.mobileSearchOverlay) {
+          this.closeMobileSearch();
+        }
+      });
+    }
+
+    // 모바일 메뉴 오버레이 클릭으로 메뉴 닫기
+    if (this.mobileMenuOverlay) {
+      this.mobileMenuOverlay.addEventListener('click', () => {
+        this.closeMobileMenu();
+      });
+    }
+
+    // X 버튼 클릭으로 메뉴 닫기
+    if (this.closeBtn) {
+      this.closeBtn.addEventListener('click', () => {
+        this.closeMobileMenu();
+      });
+    }
   }
 
-  setupSearchModal() {
-    // 검색 트리거 버튼 클릭
-    this.searchTriggerBtn.addEventListener('click', () => {
-      this.openSearchModal();
+  setupSearchForm() {
+    if (!this.searchForm || !this.searchInput || !this.searchBtn) return;
+
+    // 폼 제출 이벤트 (검색 버튼 클릭 또는 Enter 키)
+    this.searchForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      this.performSearch();
     });
 
-    // 모달 닫기 버튼
-    this.searchModalClose.addEventListener('click', () => {
-      this.closeSearchModal();
-    });
-
-    // 모달 배경 클릭 시 닫기
-    this.searchModal.addEventListener('click', (e) => {
-      if (e.target === this.searchModal) {
-        this.closeSearchModal();
+    // Enter 키 이벤트
+    this.searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        this.performSearch();
       }
     });
+  }
 
-    // ESC 키로 모달 닫기
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.searchModal.classList.contains('active')) {
-        this.closeSearchModal();
-      }
-    });
+  performSearch() {
+    const query = this.searchInput.value.trim();
+    
+    if (!query) {
+      alert('검색어를 입력해주세요.');
+      return;
+    }
 
-    // 검색 입력
-    let searchTimeout;
-    this.searchModalInput.addEventListener('input', (e) => {
-      clearTimeout(searchTimeout);
-      const query = e.target.value.trim();
-      
-      if (query.length < 2) {
-        this.showModalSearchResults([]);
-        return;
-      }
+    if (query.length < 2) {
+      alert('검색어는 2글자 이상 입력해주세요.');
+      return;
+    }
 
-      searchTimeout = setTimeout(async () => {
-        await this.performNetworkSearch(query);
-      }, 300);
-    });
+    // 검색 결과 페이지로 이동
+    const searchUrl = `/weekly-mobility/search-results.html?q=${encodeURIComponent(query)}`;
+    window.location.href = searchUrl;
   }
 
   openSearchModal() {
@@ -1314,6 +1529,58 @@ class MainNav extends HTMLElement {
     
     const regex = new RegExp(`(${query})`, 'gi');
     return text.replace(regex, '<mark style="background: #FFF3CD; color: #856404; padding: 1px 3px; border-radius: 3px;">$1</mark>');
+  }
+
+  // 모바일 검색 관련 메서드들
+  openMobileSearch() {
+    if (this.mobileSearchOverlay) {
+      this.mobileSearchOverlay.classList.add('open');
+      setTimeout(() => {
+        if (this.mobileSearchInput) {
+          this.mobileSearchInput.focus();
+        }
+      }, 100);
+    }
+  }
+
+  closeMobileSearch() {
+    if (this.mobileSearchOverlay) {
+      this.mobileSearchOverlay.classList.remove('open');
+      if (this.mobileSearchInput) {
+        this.mobileSearchInput.value = '';
+      }
+    }
+  }
+
+  performMobileSearch() {
+    const query = this.mobileSearchInput ? this.mobileSearchInput.value.trim() : '';
+    
+    if (!query) {
+      alert('검색어를 입력해주세요.');
+      return;
+    }
+
+    if (query.length < 2) {
+      alert('검색어는 2글자 이상 입력해주세요.');
+      return;
+    }
+
+    // 검색 결과 페이지로 이동
+    const searchUrl = `/weekly-mobility/search-results.html?q=${encodeURIComponent(query)}`;
+    window.location.href = searchUrl;
+  }
+
+  // 모바일 메뉴 닫기
+  closeMobileMenu() {
+    if (this.mobileMenu) {
+      this.mobileMenu.classList.remove('open');
+    }
+    if (this.mobileMenuOverlay) {
+      this.mobileMenuOverlay.classList.remove('open');
+    }
+    if (this.burgerBtn) {
+      this.burgerBtn.classList.remove('hidden');
+    }
   }
 }
 
