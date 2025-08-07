@@ -1,14 +1,14 @@
 const CACHE_NAME = 'weekly-mobility-cache-v1';
 // 오프라인 지원을 위해 캐싱할 파일 목록
 const FILES_TO_CACHE = [
-  '/weekly-mobility/',
-  '/weekly-mobility/index.html',
-  '/weekly-mobility/style/style.css',
-  '/weekly-mobility/images/logo.png',
-  '/weekly-mobility/images/logo.svg',
-  '/weekly-mobility/components/main-nav.js',
-  '/weekly-mobility/components/footer.js',
-  '/weekly-mobility/components/floating-sns.js'
+    './',
+    './index.html',
+    './style/style.css', // 👈 이 부분을 수정했습니다!
+    './images/logo.png',
+    './images/logo.svg',
+    './components/main-nav.js',
+    './components/footer.js',
+    './components/floating-sns.js'
   // 필요에 따라 다른 주요 파일들을 추가할 수 있습니다.
 ];
 
