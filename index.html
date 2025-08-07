@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta name="theme-color" content="#ffffff"/>
+  <meta name="theme-color" content="#ffffff" />
   <link rel="manifest" href="manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -706,6 +706,21 @@
   </style>
 </head>
 <body>
+  <script>
+    // 이 스크립트는 PC/모바일에 따라 다른 페이지를 보여주는 안내원 역할을 합니다.
+
+    // 1. PWA가 앱 모드(standalone 또는 fullscreen)로 실행되었는지 확인
+    const isPwaMode = window.matchMedia('(display-mode: standalone)').matches ||
+                      window.matchMedia('(display-mode: fullscreen)').matches;
+
+    // 2. 접속한 기기가 모바일인지 확인 (간단한 방식)
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+    // 3. 만약 '모바일'이면서 '앱 모드'로 실행했다면 splash.html로 즉시 이동
+    if (isMobile && isPwaMode) {
+      window.location.href = './splash.html';
+    }
+  </script>
   <!-- 히어로 섹션 -->
   <section class="hero-section">
     <div class="hero-content">
