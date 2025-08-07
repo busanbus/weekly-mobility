@@ -1,10 +1,10 @@
 {
     "name": "WeMo:모빌리티 주간동향",
-    "short_name": "WeMo",
+    "short_name": "모빌리티 주간동향",
     "start_url": "/weekly-mobility/",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#0066ff",
+    "theme_color": "#ffffff",
     "description": "부산광역시버스운송사업에서 매주 발행하는 모빌리티 관련 동향 리포트",
     "icons": [
       {
