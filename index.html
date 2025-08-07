@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <meta name="theme-color" content="#0066ff"/>
+  <link rel="manifest" href="manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>모빌리티 주간동향</title>
@@ -973,5 +975,19 @@
 
   <script type="module" src="js/chatbot.js"></script>
   <script type="module" src="components/floating-sns.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // GitHub Pages 경로에 맞게 서비스 워커를 등록합니다.
+        navigator.serviceWorker.register('/weekly-mobility/sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful:', registration);
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed:', err);
+          });
+      });
+    }
+  </script>
 </body>
 </html>
