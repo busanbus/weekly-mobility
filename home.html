@@ -127,7 +127,25 @@
     .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
     .btn-secondary { background: var(--gray-100); color: var(--gray-700); padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
     .btn-secondary:hover { background: var(--gray-200); }
-    .latest-preview { background: var(--gray-50); border-radius: 16px; padding: 24px; border: 2px dashed var(--gray-300); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
+    .latest-preview {
+      background: var(--gray-50);
+      border-radius: 16px;
+      padding: 0;
+      border: 2px dashed var(--gray-300);
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1.9 / 1; /* 너비:높이 = 1.9:1 */
+      width: 100%;
+      overflow: hidden;
+    }
+    .latest-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
     .preview-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
     .preview-text { color: var(--gray-600); font-size: 0.9rem; }
     .section-header { text-align: center; margin-bottom: 48px; animation: fadeInUp 0.8s ease-out; }
@@ -168,6 +186,32 @@
     .footer-subtitle { font-size: 1rem; opacity: 0.8; margin-bottom: 32px; }
     .footer-info { font-size: 0.9rem; opacity: 0.6; line-height: 1.8; }
     @media (max-width: 768px) { .hero-section { padding: 60px 0 80px; } .year-card { padding: 32px 24px; } .latest-section { padding: 32px 24px; } .latest-content { grid-template-columns: 1fr; gap: 24px; } .month-grid { grid-template-columns: 1fr; gap: 16px; } .hero-stats { gap: 24px; } .hero-stat-number { font-size: 2rem; } .year-header { flex-direction: column; align-items: flex-start; } .year-meta { flex-wrap: wrap; } .year-tabs { justify-content: flex-start; } .latest-actions { flex-direction: column; } }
+
+    /* 더보기 버튼 */
+    .load-more-wrap {
+      display: flex;
+      justify-content: center;
+      margin: 24px 0 8px;
+    }
+    .load-more-btn {
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      color: #fff;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+    .load-more-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .load-more-btn:active { transform: translateY(0); box-shadow: var(--shadow-sm); }
+    .load-more-btn:disabled { background: var(--gray-200); color: var(--gray-600); cursor: not-allowed; box-shadow: none; }
+    .load-more-icon { width: 18px; height: 18px; display: block; }
   </style>
 </head>
 <body>
@@ -204,47 +248,181 @@
     <!-- 기존 .latest-section div 삭제 또는 주석처리 -->
     <!-- <div class="latest-section"></div> -->
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      fetch('/archive/latest-weeks.json')
-        .then(res => res.json())
-        .then(data => {
-          // 기존 latest-section 모두 제거
-          document.querySelectorAll('.latest-section').forEach(el => el.remove());
+    <script type="module">
+    import SearchSystem from './components/search-system.js';
 
-          // 원하는 위치에 section을 추가 (예: main 태그 내부)
-          const parent = document.querySelector('main') || document.body;
+    const renderLatestWeeks = async () => {
+      const searchSystem = new SearchSystem();
+      await searchSystem.loadData();
 
-          data.forEach(item => {
-            const sec = document.createElement('section');
-            sec.className = 'latest-section';
-
-            const h3 = document.createElement('h3');
-            h3.textContent = `${item.year}년 ${item.month}월 ${item.week}주차 모빌리티 주간동향`;
-
-            const p = document.createElement('p');
-            if (item.titles && item.titles.length > 0) {
-              const titleList = item.titles.map(t => `「${t}」`).join(', ');
-              p.textContent = `이번 주차에는 ${titleList} 등 모빌리티 트렌드를 한눈에 살펴봅니다.`;
-            } else {
-              p.textContent = '이번 주차의 주요 모빌리티 트렌드를 한눈에 살펴봅니다.';
-            }
-
-            const a = document.createElement('a');
-            a.className = 'btn-primary';
-            a.href = '/' + item.path.replace(/^\\|^\//, '');
-            a.textContent = '바로 읽기';
-
-            sec.appendChild(h3);
-            sec.appendChild(p);
-            sec.appendChild(a);
-
-            parent.appendChild(sec);
+      // 전체 주차 리스트(최신순) 생성 및 주차 단위로 중복 제거
+      const seen = new Set();
+      const weeksAll = [];
+      for (const item of searchSystem.searchableData) {
+        const key = `${item.year}-${String(item.month).padStart(2,'0')}-${item.week}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          weeksAll.push({
+            year: item.year,
+            month: item.month,
+            week: item.week,
+            weeklyUrl: item.weeklyUrl,
           });
-        })
-        .catch(err => {
-          console.error('최신 주차 정보를 불러오지 못했습니다:', err);
+        }
+      }
+
+      // 주차별 대표 제목(최대 5개) 및 대표 이미지 수집
+      const weekToTitles = {};
+      const weekToImage = {};
+      for (const item of searchSystem.searchableData) {
+        const key = `${item.year}-${String(item.month).padStart(2,'0')}-${item.week}`;
+        if (seen.has(key)) {
+          if (!weekToTitles[key]) weekToTitles[key] = [];
+          if (weekToTitles[key].length < 5) weekToTitles[key].push(item.title);
+          if (!weekToImage[key] && item.image && item.image.trim()) {
+            weekToImage[key] = item.image.trim();
+          }
+        }
+      }
+
+      // 기존 latest-section 제거 후 컨테이너/버튼 구성
+      document.querySelectorAll('.latest-section').forEach(el => el.remove());
+      const parent = document.querySelector('main') || document.body;
+      const listContainer = document.createElement('div');
+      listContainer.id = 'latest-list';
+      parent.appendChild(listContainer);
+
+      const loadMoreWrap = document.createElement('div');
+      loadMoreWrap.className = 'load-more-wrap';
+      const loadMoreBtn = document.createElement('button');
+      loadMoreBtn.className = 'load-more-btn';
+      loadMoreBtn.innerHTML = `
+        <svg class="load-more-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M12 8v8M8 12h8"></path>
+        </svg>
+        더 보기`;
+      loadMoreWrap.appendChild(loadMoreBtn);
+      parent.appendChild(loadMoreWrap);
+
+      let cursor = 0;
+      const PAGE_SIZE = 5;
+
+      const renderBatch = () => {
+        const slice = weeksAll.slice(cursor, cursor + PAGE_SIZE);
+        slice.forEach(w => {
+          const sec = document.createElement('section');
+          sec.className = 'latest-section';
+
+          const header = document.createElement('div');
+          header.className = 'latest-header';
+          const titleWrap = document.createElement('div');
+          titleWrap.className = 'latest-title';
+          const icon = document.createElement('div');
+          icon.className = 'latest-icon';
+          icon.textContent = '🚀';
+          titleWrap.appendChild(icon);
+          titleWrap.append('최신 동향');
+          const badge = document.createElement('div');
+          badge.className = 'latest-badge';
+          badge.textContent = 'NEW';
+          header.appendChild(titleWrap);
+          header.appendChild(badge);
+
+          const content = document.createElement('div');
+          content.className = 'latest-content';
+
+          const info = document.createElement('div');
+          info.className = 'latest-info';
+          const h3 = document.createElement('h3');
+          h3.textContent = `${w.year}년 ${w.month}월 ${w.week}주차 모빌리티 주간동향`;
+          const meta = document.createElement('div');
+          meta.className = 'latest-meta';
+          const span = document.createElement('span');
+          span.textContent = `📅 ${w.year}.${String(w.month).padStart(2,'0')}.주차${w.week}`;
+          meta.appendChild(span);
+          const p = document.createElement('p');
+          const key = `${w.year}-${String(w.month).padStart(2,'0')}-${w.week}`;
+          const titles = weekToTitles[key] || [];
+          if (titles.length) {
+            const titleList = titles.map(t => `「${t}」`).join(', ');
+            p.textContent = `이번 주차에는 ${titleList} 등 모빌리티 트렌드를 한눈에 살펴봅니다.`;
+          } else {
+            p.textContent = '이번 주차의 주요 모빌리티 트렌드를 한눈에 살펴봅니다.';
+          }
+          const actions = document.createElement('div');
+          actions.className = 'latest-actions';
+          const a = document.createElement('a');
+          a.className = 'btn-primary';
+          a.href = w.weeklyUrl;
+          a.textContent = '📖 바로 읽기';
+          actions.appendChild(a);
+
+          info.appendChild(h3);
+          info.appendChild(meta);
+          info.appendChild(p);
+          info.appendChild(actions);
+
+          const preview = document.createElement('div');
+          preview.className = 'latest-preview';
+          const imageUrl = weekToImage[key];
+          if (imageUrl) {
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = `${w.year}년 ${w.month}월 ${w.week}주차 대표 이미지`;
+            img.loading = 'lazy';
+            img.onerror = () => {
+              preview.innerHTML = '';
+              const previewIcon = document.createElement('div');
+              previewIcon.className = 'preview-icon';
+              previewIcon.textContent = '📰';
+              const previewText = document.createElement('div');
+              previewText.className = 'preview-text';
+              previewText.textContent = '이미지를 불러올 수 없습니다';
+              preview.appendChild(previewIcon);
+              preview.appendChild(previewText);
+            };
+            preview.appendChild(img);
+          } else {
+            const previewIcon = document.createElement('div');
+            previewIcon.className = 'preview-icon';
+            previewIcon.textContent = '📰';
+            const previewText = document.createElement('div');
+            previewText.className = 'preview-text';
+            previewText.textContent = '대표 이미지가 없습니다';
+            preview.appendChild(previewIcon);
+            preview.appendChild(previewText);
+          }
+
+          content.appendChild(info);
+          content.appendChild(preview);
+
+          sec.appendChild(header);
+          sec.appendChild(content);
+
+          listContainer.appendChild(sec);
         });
+
+        cursor += slice.length;
+        if (cursor >= weeksAll.length) {
+          loadMoreBtn.disabled = true;
+          loadMoreBtn.textContent = '모든 항목을 표시했습니다';
+        }
+      };
+
+      // 초기 5개 렌더
+      renderBatch();
+
+      // 더보기 클릭 시 다음 5개 추가 렌더
+      loadMoreBtn.addEventListener('click', () => {
+        if (cursor < weeksAll.length) {
+          renderBatch();
+        }
+      });
+    };
+
+    renderLatestWeeks().catch(err => {
+      console.error('최신 주차 정보를 불러오지 못했습니다:', err);
     });
     </script>
   </main>
