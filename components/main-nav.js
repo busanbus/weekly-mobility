@@ -819,6 +819,7 @@ class MainNav extends HTMLElement {
           </a>
           <div class="nav-left">
             <a class="nav-link nav-home" href="https://busanbus.github.io/weekly-mobility/">홈</a>
+            <a class="nav-link nav-latest" href="/weekly-mobility/home.html">최신 동향</a>
             <a class="nav-link nav-about" href="/weekly-mobility/about.html">소개</a>
             <a class="nav-link nav-archive" href="/weekly-mobility/archive/">아카이브</a>
           </div>
@@ -951,6 +952,7 @@ class MainNav extends HTMLElement {
           </div>
           <div class="mobile-menu-content">
             <a href="https://busanbus.github.io/weekly-mobility/" class="mobile-nav-link">홈</a>
+            <a href="/weekly-mobility/home.html" class="mobile-nav-link">최신 동향</a>
             <a href="/weekly-mobility/about.html" class="mobile-nav-link nav-about">소개</a>
             <a href="/weekly-mobility/archive/" class="mobile-nav-link nav-archive">아카이브</a>
           </div>
