@@ -43,6 +43,8 @@ class FloatingSNS extends HTMLElement {
             filter: brightness(0) invert(1);
             display: block;
           }
+          .sns-btn.busanbus { background: #ffffFF; }
+          .sns-btn.busanbus img { filter: none; width: 36px; height: 33px; }
           .sns-btn:hover {
             box-shadow: 0 0 0 6px rgba(0,0,0,0.08);
             transform: translateY(-2px) scale(1.07);
@@ -93,9 +95,13 @@ class FloatingSNS extends HTMLElement {
               height: 32px;
               padding: 2px;
             }
+            .sns-btn.busanbus img { width: 36px; height: 36px; }
           }
         </style>
         <div class="floating-sns">
+          <a href="https://www.busanbus.or.kr/#/" target="_blank" class="sns-btn busanbus" title="부산시내버스운송사업조합">
+            <img src="https://i.ibb.co/cKZnjsCC/001-2.png" alt="부산버스 로고" />
+          </a>
           <a href="https://www.instagram.com/busholic_busan/" target="_blank" class="sns-btn insta" title="인스타그램">
             <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="인스타그램" />
           </a>

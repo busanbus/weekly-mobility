@@ -819,7 +819,7 @@ class MainNav extends HTMLElement {
           </a>
           <div class="nav-left">
             <a class="nav-link nav-home" href="https://busanbus.github.io/weekly-mobility/">홈</a>
-            <a class="nav-link nav-latest" href="/weekly-mobility/home.html">최신 동향</a>
+            <a class="nav-link nav-latest" href="/weekly-mobility/home.html">지난 기사보기</a>
             <a class="nav-link nav-about" href="/weekly-mobility/about.html">소개</a>
             <a class="nav-link nav-archive" href="/weekly-mobility/archive/">아카이브</a>
           </div>
@@ -952,7 +952,7 @@ class MainNav extends HTMLElement {
           </div>
           <div class="mobile-menu-content">
             <a href="https://busanbus.github.io/weekly-mobility/" class="mobile-nav-link">홈</a>
-            <a href="/weekly-mobility/home.html" class="mobile-nav-link">최신 동향</a>
+            <a href="/weekly-mobility/home.html" class="mobile-nav-link">지난 기사보기</a>
             <a href="/weekly-mobility/about.html" class="mobile-nav-link nav-about">소개</a>
             <a href="/weekly-mobility/archive/" class="mobile-nav-link nav-archive">아카이브</a>
           </div>
@@ -1191,6 +1191,23 @@ class MainNav extends HTMLElement {
         this.burgerBtn.classList.remove('open');
       });
     }
+
+    // Archive 페이지에서 헤더 로고의 외부 링크 제거
+    try {
+      const path = window.location.pathname || '';
+      if (path.includes('/archive/')) {
+        document.querySelectorAll('a[href^="https://www.busanbus.or.kr"]').forEach((anchor) => {
+          const logoImg = anchor.querySelector('img.header-logo, .header-logo');
+          if (logoImg) {
+            anchor.replaceWith(logoImg);
+          } else {
+            anchor.removeAttribute('href');
+            anchor.removeAttribute('target');
+            anchor.removeAttribute('rel');
+          }
+        });
+      }
+    } catch (_) {}
   }
 
   updateLanguageSelector() {
