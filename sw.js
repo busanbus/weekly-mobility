@@ -1,4 +1,4 @@
-const CACHE_NAME = 'weekly-mobility-cache-v1';
+const CACHE_NAME = 'weekly-mobility-cache-v2';
 // 오프라인 지원을 위해 캐싱할 파일 목록
 const FILES_TO_CACHE = [
     './',
@@ -19,6 +19,21 @@ self.addEventListener('install', (event) => {
       console.log('[ServiceWorker] Caching app shell');
       return cache.addAll(FILES_TO_CACHE);
     })
+  );
+  // 즉시 대기 상태 건너뛰고 새 SW 활성화 시도
+  self.skipWaiting();
+});
+
+// 오래된 캐시 정리 및 즉시 컨트롤 권한 획득
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+      );
+      await self.clients.claim();
+    })()
   );
 });
 
