@@ -997,17 +997,12 @@
   <script type="module" src="js/chatbot.js"></script>
   <script type="module" src="components/floating-sns.js"></script>
   <script>
+    // PWA 비활성화: 기존 서비스워커 해제 및 캐시 비우기
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        // GitHub Pages 경로에 맞게 서비스 워커를 등록합니다.
-        navigator.serviceWorker.register('/weekly-mobility/sw.js')
-          .then(registration => {
-            console.log('ServiceWorker registration successful:', registration);
-          })
-          .catch(err => {
-            console.log('ServiceWorker registration failed:', err);
-          });
-      });
+      navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+    }
+    if (window.caches) {
+      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
     }
   </script>
 </body>

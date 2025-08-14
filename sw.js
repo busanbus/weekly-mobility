@@ -39,10 +39,43 @@ self.addEventListener('activate', (event) => {
 
 // 네트워크 요청 감지 시
 self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  if (req.method !== 'GET') return; // 비-GET은 그대로 네트워크
+
+  const url = new URL(req.url);
+  const accept = req.headers.get('accept') || '';
+
+  // 1) HTML 문서(페이지)는 네트워크 우선
+  const isHtmlRequest = req.mode === 'navigate' || accept.includes('text/html');
+  const isAppAsset = /\.(js|css|json)$/i.test(url.pathname);
+
+  if (isHtmlRequest || isAppAsset) {
+    event.respondWith(
+      (async () => {
+        try {
+          const networkResp = await fetch(req, { cache: 'no-store' });
+          const cache = await caches.open(CACHE_NAME);
+          cache.put(req, networkResp.clone());
+          return networkResp;
+        } catch (err) {
+          const cached = await caches.match(req);
+          return cached || caches.match('./index.html');
+        }
+      })()
+    );
+    return;
+  }
+
+  // 2) 나머지 정적 리소스는 캐시 우선 + 네트워크 갱신
   event.respondWith(
-    // 캐시에서 먼저 찾아보고, 없으면 네트워크로 요청
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    (async () => {
+      const cached = await caches.match(req);
+      const fetchPromise = fetch(req).then(async (networkResp) => {
+        const cache = await caches.open(CACHE_NAME);
+        cache.put(req, networkResp.clone());
+        return networkResp;
+      }).catch(() => undefined);
+      return cached || fetchPromise;
+    })()
   );
 });
