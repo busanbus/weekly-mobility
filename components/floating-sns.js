@@ -43,7 +43,7 @@ class FloatingSNS extends HTMLElement {
             filter: brightness(0) invert(1);
             display: block;
           }
-          .sns-btn.busanbus { background: #ffffFF; }
+          .sns-btn.busanbus { background: #FFffff; }
           .sns-btn.busanbus img { filter: none; width: 36px; height: 33px; }
           .sns-btn:hover {
             box-shadow: 0 0 0 6px rgba(0,0,0,0.08);
