@@ -1,7 +1,7 @@
 {
     "name": "WeMo:모빌리티 주간동향",
     "short_name": "모빌리티 주간동향",
-    "start_url": "/index.html",
+    "start_url": "./splash.html",
     "display": "standalone",
     "background_color": "#ffffff",
     

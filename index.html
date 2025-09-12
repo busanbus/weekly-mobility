@@ -997,12 +997,17 @@
   <script type="module" src="js/chatbot.js"></script>
   <script type="module" src="components/floating-sns.js"></script>
   <script>
-    // PWA 비활성화: 기존 서비스워커 해제 및 캐시 비우기
+    // PWA 활성화: 서비스 워커 등록
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
-    }
-    if (window.caches) {
-      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((registration) => {
+            console.log('SW registered: ', registration);
+          })
+          .catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
     }
   </script>
 </body>
