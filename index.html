@@ -743,11 +743,11 @@
       </p>
       <div class="hero-stats">
         <div class="hero-stat">
-          <span class="hero-stat-number">25</span>
+          <span class="hero-stat-number">26</span>
           <span class="hero-stat-label">누적 리포트</span>
         </div>
         <div class="hero-stat">
-          <span class="hero-stat-number">25-09-29</span>
+          <span class="hero-stat-number">25-10-13</span>
           <span class="hero-stat-label">최근 업데이트</span>
         </div>
       </div>
@@ -768,15 +768,15 @@
       
       <div class="latest-content">
         <div class="latest-info">
-          <h3>2025년 9월 4주차 모빌리티 주간동향</h3>
+          <h3>2025년 10월 1・2주차 모빌리티 주간동향</h3>
           <div class="latest-meta">
-            <span>📅 2025.09.29 발행</span>
+            <span>📅 2025.10.13 발행</span>
           </div>
           <p>
-            이번 주차에는 마을조합, 환승제 탈퇴 공식 발표 vs. 市, 법적 대응, 법인택시 1000대 면허 말소, 개인택시 500대 면허 증대, 오픈 루프(Open-Loop) 결제 시스템 도입 필요성 등 모빌리티 트렌드를 한눈에 살펴봅니다.
+            이번 주차에는 저상버스 보조금 차등지급 추진 검토, 전국 최초 진주형 MaaS 및 하모콜버스 개통, 자율주행차 교통법규위반 제재 근거, 현재로선 “無” 등 모빌리티 트렌드를 한눈에 살펴봅니다.
           </p>
           <div class="latest-actions" style="margin-top: 32px;">
-            <a href="archive/2025/09/week4.html" class="btn-primary">
+            <a href="archive/2025/10/week1.html" class="btn-primary">
               📖 바로 읽기
             </a>
           </div>
@@ -997,17 +997,12 @@
   <script type="module" src="js/chatbot.js"></script>
   <script type="module" src="components/floating-sns.js"></script>
   <script>
-    // PWA 활성화: 서비스 워커 등록
+    // PWA 비활성화: 기존 서비스워커 해제 및 캐시 비우기
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then((registration) => {
-            console.log('SW registered: ', registration);
-          })
-          .catch((registrationError) => {
-            console.log('SW registration failed: ', registrationError);
-          });
-      });
+      navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+    }
+    if (window.caches) {
+      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
     }
   </script>
 </body>
