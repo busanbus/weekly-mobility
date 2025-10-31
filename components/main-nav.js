@@ -815,7 +815,7 @@ class MainNav extends HTMLElement {
       <nav class="nav-bg">
         <div class="nav-inner">
           <a class="nav-logo" href="https://busanbus.github.io/weekly-mobility">
-            <img src="https://i.ibb.co/svMm1DPr/logo.png" alt="로고" />
+            <img src="https://cdn.jsdelivr.net/gh/busanbus/weekly-mobility/images/logo.png" alt="로고" />
           </a>
           <div class="nav-left">
             <a class="nav-link nav-home" href="https://busanbus.github.io/weekly-mobility/">홈</a>
@@ -947,7 +947,7 @@ class MainNav extends HTMLElement {
         <div class="mobile-menu-overlay"></div>
         <div class="mobile-menu">
           <div class="mobile-menu-header">
-            <img src="https://i.ibb.co/svMm1DPr/logo.png" alt="로고" />
+            <img src="https://cdn.jsdelivr.net/gh/busanbus/weekly-mobility/images/logo.png" alt="로고" />
             <button class="close-btn" aria-label="메뉴 닫기">×</button>
           </div>
           <div class="mobile-menu-content">

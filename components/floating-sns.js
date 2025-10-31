@@ -100,7 +100,7 @@ class FloatingSNS extends HTMLElement {
         </style>
         <div class="floating-sns">
           <a href="https://www.busanbus.or.kr/#/" target="_blank" class="sns-btn busanbus" title="부산시내버스운송사업조합">
-            <img src="https://i.ibb.co/cKZnjsCC/001-2.png" alt="부산버스 로고" />
+            <img src="https://cdn.jsdelivr.net/gh/busanbus/weekly-mobility/images/bubuslogo.png" alt="부산버스 로고" />
           </a>
           <a href="https://www.instagram.com/busholic_busan/" target="_blank" class="sns-btn insta" title="인스타그램">
             <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="인스타그램" />
