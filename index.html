@@ -63,7 +63,7 @@
       </p>
       <div class="hero-stats">
         <div class="hero-stat">
-          <span class="hero-stat-number">38</span>
+          <span class="hero-stat-number" id="totalReports">-</span>
           <span class="hero-stat-label">누적 리포트</span>
         </div>
         <div class="hero-stat">
@@ -74,8 +74,8 @@
 
   <!-- 메인 컨테이너 -->
   <main class="main-container">
-    <!-- 최신 동향 섹션 -->
-    <section class="latest-section">
+    <!-- 최신 동향 섹션 (동적으로 생성됨) -->
+    <section class="latest-section" id="latest-section-placeholder">
       <div class="latest-header">
         <div class="latest-title">
           <div class="latest-icon">🚀</div>
@@ -86,15 +86,13 @@
       
       <div class="latest-content">
         <div class="latest-info">
-          <h3>2026년 1월 1주차 모빌리티 주간동향</h3>
+          <h3>로딩 중...</h3>
           <div class="latest-meta">
             <span>📅 2026.01.05 발행</span>
           </div>
-          <p>
-            이번 주차에는 2026년 주요 시책 발표, 수요응답형교통(DRT) 도입・운영 가이드라인 배포, 김해공항리무진버스 노선개편(1/5~ ) 등 모빌리티 트렌드를 한눈에 살펴봅니다.
-          </p>
+          <p>데이터를 불러오는 중입니다...</p>
           <div class="latest-actions" style="margin-top: 32px;">
-            <a href="archive/2026/01/week1.html" class="btn-primary">
+            <a href="#" class="btn-primary">
               📖 바로 읽기
             </a>
           </div>
@@ -458,9 +456,118 @@
           <div style="color: var(--gray-700); font-size: 1rem;"><br>최신 정책·트렌드 지속 반영</div>
         </div>
       </div>
-      <div style="margin-top: 32px; color: var(--gray-600); font-size: 1rem;">
-        <b>문의</b> : 부산시내버스운송사업조합 전략기획팀<br>
-        <span style="font-size: 0.97em;">이메일: <a href="mailto:chha@busanbus.or.kr" style="color: var(--primary-blue); text-decoration: underline;">chha@busanbus.or.kr</a></span>
+    </div>
+  </section>
+
+  <!-- 컨택트 섹션 -->
+  <section class="contact-section" style="background: white; padding: 72px 0; margin-top: 43px;">
+    <div style="max-width: 720px; margin: 0 auto; padding: 0 24px;">
+      <div style="text-align: center; margin-bottom: 43px;">
+        <h2 style="font-size: 1.98rem; font-weight: 800; color: var(--gray-900); margin-bottom: 14px; background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          문의하기
+        </h2>
+        <p style="font-size: 0.99rem; color: var(--gray-600); max-width: 450px; margin: 0 auto;">
+          모빌리티 주간동향에 대한 문의사항이나 제안사항을 보내주세요.
+        </p>
+      </div>
+
+      <form id="contactForm" style="background: var(--gray-50); border-radius: 22px; padding: 43px; box-shadow: var(--shadow-lg); border: 1px solid var(--gray-200);">
+        <div style="margin-bottom: 22px;">
+          <label for="contactName" style="display: block; font-weight: 600; color: var(--gray-900); margin-bottom: 7px; font-size: 0.86rem;">
+            이름 <span style="color: var(--primary-blue);">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="contactName" 
+            name="name" 
+            required 
+            style="width: 100%; padding: 13px 16px; border: 2px solid var(--gray-200); border-radius: 11px; font-size: 0.9rem; font-family: 'Noto Sans KR', sans-serif; transition: all 0.3s ease; background: white;"
+            placeholder="이름을 입력해주세요"
+            onfocus="this.style.borderColor='var(--primary-blue)'; this.style.boxShadow='0 0 0 3px rgba(0, 102, 255, 0.1)'"
+            onblur="this.style.borderColor='var(--gray-200)'; this.style.boxShadow='none'"
+          />
+        </div>
+
+        <div style="margin-bottom: 22px;">
+          <label for="contactEmail" style="display: block; font-weight: 600; color: var(--gray-900); margin-bottom: 7px; font-size: 0.86rem;">
+            이메일 <span style="color: var(--primary-blue);">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="contactEmail" 
+            name="email" 
+            required 
+            style="width: 100%; padding: 13px 16px; border: 2px solid var(--gray-200); border-radius: 11px; font-size: 0.9rem; font-family: 'Noto Sans KR', sans-serif; transition: all 0.3s ease; background: white;"
+            placeholder="your@email.com"
+            onfocus="this.style.borderColor='var(--primary-blue)'; this.style.boxShadow='0 0 0 3px rgba(0, 102, 255, 0.1)'"
+            onblur="this.style.borderColor='var(--gray-200)'; this.style.boxShadow='none'"
+          />
+        </div>
+
+        <div style="margin-bottom: 22px;">
+          <label for="contactSubject" style="display: block; font-weight: 600; color: var(--gray-900); margin-bottom: 7px; font-size: 0.86rem;">
+            제목 <span style="color: var(--primary-blue);">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="contactSubject" 
+            name="subject" 
+            required 
+            style="width: 100%; padding: 13px 16px; border: 2px solid var(--gray-200); border-radius: 11px; font-size: 0.9rem; font-family: 'Noto Sans KR', sans-serif; transition: all 0.3s ease; background: white;"
+            placeholder="문의 제목을 입력해주세요"
+            onfocus="this.style.borderColor='var(--primary-blue)'; this.style.boxShadow='0 0 0 3px rgba(0, 102, 255, 0.1)'"
+            onblur="this.style.borderColor='var(--gray-200)'; this.style.boxShadow='none'"
+          />
+        </div>
+
+        <div style="margin-bottom: 29px;">
+          <label for="contactMessageTextarea" style="display: block; font-weight: 600; color: var(--gray-900); margin-bottom: 7px; font-size: 0.86rem;">
+            메시지 <span style="color: var(--primary-blue);">*</span>
+          </label>
+          <textarea 
+            id="contactMessageTextarea" 
+            name="message" 
+            required 
+            rows="6"
+            style="width: 100%; padding: 13px 16px; border: 2px solid var(--gray-200); border-radius: 11px; font-size: 0.9rem; font-family: 'Noto Sans KR', sans-serif; transition: all 0.3s ease; background: white; resize: vertical; min-height: 135px;"
+            placeholder="문의 내용을 입력해주세요"
+            onfocus="this.style.borderColor='var(--primary-blue)'; this.style.boxShadow='0 0 0 3px rgba(0, 102, 255, 0.1)'"
+            onblur="this.style.borderColor='var(--gray-200)'; this.style.boxShadow='none'"
+          ></textarea>
+        </div>
+
+        <div style="display: flex; gap: 11px; flex-wrap: wrap;">
+          <button 
+            type="submit" 
+            id="contactSubmitBtn"
+            style="flex: 1; min-width: 180px; background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue)); color: white; padding: 14px 29px; border: none; border-radius: 11px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-family: 'Noto Sans KR', sans-serif;"
+            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'"
+            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none'"
+          >
+            <span>📧</span>
+            <span>메일 보내기</span>
+          </button>
+          <button 
+            type="button" 
+            onclick="document.getElementById('contactForm').reset();"
+            style="padding: 14px 29px; background: var(--gray-100); color: var(--gray-700); border: 2px solid var(--gray-200); border-radius: 11px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; font-family: 'Noto Sans KR', sans-serif;"
+            onmouseover="this.style.background='var(--gray-200)'"
+            onmouseout="this.style.background='var(--gray-100)'"
+          >
+            초기화
+          </button>
+        </div>
+
+        <div id="contactStatusMessage" style="margin-top: 22px; padding: 14px; border-radius: 11px; display: none; font-size: 0.86rem;"></div>
+      </form>
+
+      <div style="margin-top: 29px; text-align: center; color: var(--gray-600); font-size: 0.86rem;">
+        <p style="margin-bottom: 7px;">
+          <b>부산시내버스운송사업조합</b> 전략기획팀
+        </p>
+        <p>
+          이메일: <a href="mailto:chha@busanbus.or.kr" style="color: var(--primary-blue); text-decoration: underline;">chha@busanbus.or.kr</a>
+        </p>
       </div>
     </div>
   </section>
@@ -474,6 +581,137 @@
   <script type="module" src="js/chatbot.js"></script>
   <script type="module" src="components/floating-sns.js"></script>
   <script type="module" src="components/home-index-footer.js"></script>
+  <script type="module">
+    // 누적 리포트 개수 및 최근 업데이트 날짜 자동 업데이트
+    // 최신 동향 섹션 동적 생성
+    import SearchSystem from './components/search-system.js';
+
+    async function updateHeroStats() {
+      try {
+        const searchSystem = new SearchSystem();
+        await searchSystem.loadData();
+
+        // 중복 제거된 주차 목록 생성
+        const seen = new Set();
+        const uniqueWeeks = [];
+
+        for (const item of searchSystem.searchableData) {
+          const key = `${item.year}-${String(item.month).padStart(2, '0')}-${item.week}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            uniqueWeeks.push({
+              year: item.year,
+              month: item.month,
+              week: item.week
+            });
+          }
+        }
+
+        // 누적 리포트 개수 업데이트
+        const totalReportsElement = document.getElementById('totalReports');
+        if (totalReportsElement) {
+          totalReportsElement.textContent = uniqueWeeks.length;
+        }
+
+        // 최근 업데이트 날짜는 하드코딩으로 관리 (히어로 섹션에서 직접 수정)
+      } catch (error) {
+        console.error('히어로 통계 업데이트 실패:', error);
+        // 실패 시 기본값 유지
+      }
+    }
+
+    // 최신 동향 섹션 동적 생성
+    async function renderLatestSection() {
+      try {
+        // SearchSystem은 이미 updateHeroStats에서 로드되므로 재사용
+        const searchSystem = new SearchSystem();
+        await searchSystem.loadData();
+
+        // 전체 주차 리스트(최신순) 생성 및 주차 단위로 중복 제거
+        const seen = new Set();
+        const weeksAll = [];
+        for (const item of searchSystem.searchableData) {
+          const key = `${item.year}-${String(item.month).padStart(2,'0')}-${item.week}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            weeksAll.push({
+              year: item.year,
+              month: item.month,
+              week: item.week,
+              weeklyUrl: item.weeklyUrl,
+            });
+          }
+        }
+
+        // 가장 최신 주차 정보
+        if (weeksAll.length === 0) {
+          console.warn('주차 데이터가 없습니다.');
+          return;
+        }
+
+        const latestWeek = weeksAll[0];
+        const weekKey = `${latestWeek.year}-${String(latestWeek.month).padStart(2,'0')}-${latestWeek.week}`;
+
+        // 주차별 대표 제목 수집 (최대 3개)
+        const weekTitles = [];
+        for (const item of searchSystem.searchableData) {
+          const key = `${item.year}-${String(item.month).padStart(2,'0')}-${item.week}`;
+          if (key === weekKey && item.title && item.title.trim()) {
+            if (weekTitles.length < 3) {
+              weekTitles.push(item.title.trim());
+            }
+          }
+        }
+
+        // latest-section 업데이트
+        const latestSection = document.getElementById('latest-section-placeholder');
+        if (latestSection) {
+          const h3 = latestSection.querySelector('h3');
+          const metaSpan = latestSection.querySelector('.latest-meta span');
+          const p = latestSection.querySelector('p');
+          const link = latestSection.querySelector('.btn-primary');
+
+          if (h3) {
+            h3.textContent = `${latestWeek.year}년 ${latestWeek.month}월 ${latestWeek.week}주차 모빌리티 주간동향`;
+          }
+
+          // metaSpan은 하드코딩으로 관리 (HTML에서 직접 수정)
+
+          if (p) {
+            if (weekTitles.length > 0) {
+              const titleList = weekTitles.map(t => `「${t}」`).join(', ');
+              p.textContent = `이번 주차에는 ${titleList} 등 모빌리티 트렌드를 한눈에 살펴봅니다.`;
+            } else {
+              p.textContent = '이번 주차의 주요 모빌리티 트렌드를 한눈에 살펴봅니다.';
+            }
+          }
+
+          if (link) {
+            // weeklyUrl이 절대 경로일 수 있으므로 상대 경로로 변환
+            let href = latestWeek.weeklyUrl;
+            if (href.startsWith('/weekly-mobility/')) {
+              href = href.replace('/weekly-mobility', '');
+            } else if (href.startsWith('/')) {
+              href = href.substring(1);
+            }
+            // 상대 경로가 아니면 직접 생성
+            if (!href || href.startsWith('http')) {
+              href = `archive/${latestWeek.year}/${String(latestWeek.month).padStart(2,'0')}/week${latestWeek.week}.html`;
+            }
+            link.href = href;
+          }
+        }
+      } catch (error) {
+        console.error('최신 동향 섹션 생성 실패:', error);
+      }
+    }
+
+    // 페이지 로드 시 실행 (두 함수 모두 실행)
+    document.addEventListener('DOMContentLoaded', async () => {
+      await updateHeroStats();
+      await renderLatestSection();
+    });
+  </script>
   <script>
     // 연도 탭 전환 함수
     function showYear(year) {
@@ -501,6 +739,76 @@
         }
       });
     }
+
+    // 컨택트 폼 제출 처리
+    document.addEventListener('DOMContentLoaded', function() {
+      const contactForm = document.getElementById('contactForm');
+      const contactStatusMessage = document.getElementById('contactStatusMessage');
+      const submitBtn = document.getElementById('contactSubmitBtn');
+
+      if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const name = document.getElementById('contactName').value.trim();
+          const email = document.getElementById('contactEmail').value.trim();
+          const subject = document.getElementById('contactSubject').value.trim();
+          const message = document.getElementById('contactMessageTextarea').value.trim();
+
+          // 유효성 검사
+          if (!name || !email || !subject || !message) {
+            showMessage('모든 필드를 입력해주세요.', 'error');
+            return;
+          }
+
+          // 이메일 형식 검사
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            showMessage('올바른 이메일 주소를 입력해주세요.', 'error');
+            return;
+          }
+
+          // mailto 링크 생성
+          const recipient = 'chha@busanbus.or.kr';
+          const emailSubject = encodeURIComponent(`[모빌리티 주간동향 문의] ${subject}`);
+          const emailBody = encodeURIComponent(
+            `보낸이: ${name}\n이메일: ${email}\n\n${message}`
+          );
+          
+          const mailtoLink = `mailto:${recipient}?subject=${emailSubject}&body=${emailBody}`;
+
+          // 이메일 클라이언트 열기
+          window.location.href = mailtoLink;
+
+          // 성공 메시지 표시
+          showMessage('이메일 클라이언트가 열렸습니다. 메일을 확인해주세요.', 'success');
+
+          // 폼 초기화 (선택사항)
+          setTimeout(() => {
+            contactForm.reset();
+            hideMessage();
+          }, 5000);
+        });
+      }
+
+      function showMessage(text, type) {
+        if (contactStatusMessage) {
+          contactStatusMessage.textContent = text;
+          contactStatusMessage.style.display = 'block';
+          contactStatusMessage.style.background = type === 'success' 
+            ? 'var(--success-green)' 
+            : 'var(--warning-orange)';
+          contactStatusMessage.style.color = 'white';
+          contactStatusMessage.style.border = 'none';
+        }
+      }
+
+      function hideMessage() {
+        if (contactStatusMessage) {
+          contactStatusMessage.style.display = 'none';
+        }
+      }
+    });
 
     // PWA 비활성화: 기존 서비스워커 해제 및 캐시 비우기
     if ('serviceWorker' in navigator) {

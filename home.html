@@ -45,7 +45,7 @@
       </p>
       <div class="hero-stats">
         <div class="hero-stat">
-          <span class="hero-stat-number">38</span>
+          <span class="hero-stat-number" id="totalReports">-</span>
           <span class="hero-stat-label">누적 리포트</span>
         </div>
         <div class="hero-stat">
@@ -246,5 +246,46 @@
   <script type="module" src="components/floating-sns.js"></script>
   <script type="module" src="components/main-nav-no-lang.js"></script>
   <script type="module" src="components/home-index-footer.js"></script>
+  <script type="module">
+    // 누적 리포트 개수 및 최근 업데이트 날짜 자동 업데이트
+    import SearchSystem from './components/search-system.js';
+
+    async function updateHeroStats() {
+      try {
+        const searchSystem = new SearchSystem();
+        await searchSystem.loadData();
+
+        // 중복 제거된 주차 목록 생성
+        const seen = new Set();
+        const uniqueWeeks = [];
+
+        for (const item of searchSystem.searchableData) {
+          const key = `${item.year}-${String(item.month).padStart(2, '0')}-${item.week}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            uniqueWeeks.push({
+              year: item.year,
+              month: item.month,
+              week: item.week
+            });
+          }
+        }
+
+        // 누적 리포트 개수 업데이트
+        const totalReportsElement = document.getElementById('totalReports');
+        if (totalReportsElement) {
+          totalReportsElement.textContent = uniqueWeeks.length;
+        }
+
+        // 최근 업데이트 날짜는 하드코딩으로 관리 (히어로 섹션에서 직접 수정)
+      } catch (error) {
+        console.error('히어로 통계 업데이트 실패:', error);
+        // 실패 시 기본값 유지
+      }
+    }
+
+    // 페이지 로드 시 실행
+    document.addEventListener('DOMContentLoaded', updateHeroStats);
+  </script>
 </body>
 </html> 
