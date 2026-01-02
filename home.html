@@ -49,7 +49,7 @@
           <span class="hero-stat-label">누적 리포트</span>
         </div>
         <div class="hero-stat">
-          <span class="hero-stat-number">26-01-05</span>
+          <span class="hero-stat-number" id="latestUpdate">26-01-05</span>
           <span class="hero-stat-label">최근 업데이트</span>
         </div>
       </div>
@@ -277,7 +277,37 @@
           totalReportsElement.textContent = uniqueWeeks.length;
         }
 
-        // 최근 업데이트 날짜는 하드코딩으로 관리 (히어로 섹션에서 직접 수정)
+        // 최근 업데이트 날짜: 발행일이 있으면 사용, 없으면 하드코딩 값 유지
+        if (uniqueWeeks.length > 0) {
+          const latestWeek = uniqueWeeks[0];
+          // 해당 주차의 발행일 찾기 (발행일이 있는 첫 번째 아이템 찾기)
+          const latestWeekData = searchSystem.searchableData.find(item => 
+            item.year === latestWeek.year && 
+            item.month === latestWeek.month && 
+            item.week === latestWeek.week &&
+            item.publishDate && item.publishDate.trim() // 발행일이 있는 것만
+          );
+          
+          if (latestWeekData && latestWeekData.publishDate) {
+            // 발행일이 있으면 YYYY.MM.DD 형식을 YY-MM-DD로 변환
+            const publishDate = latestWeekData.publishDate.trim();
+            // 2026.01.05 -> 26-01-05
+            const dateMatch = publishDate.match(/(\d{4})\.(\d{2})\.(\d{2})/);
+            if (dateMatch) {
+              const yearShort = dateMatch[1].slice(-2);
+              const month = dateMatch[2];
+              const day = dateMatch[3];
+              const latestUpdateElement = document.getElementById('latestUpdate');
+              if (latestUpdateElement) {
+                latestUpdateElement.textContent = `${yearShort}-${month}-${day}`;
+                console.log('✅ 히어로 섹션 최근 업데이트 날짜 업데이트:', `${yearShort}-${month}-${day}`);
+              }
+            }
+          } else {
+            console.log('⚠️ 발행일 데이터를 찾을 수 없습니다. 하드코딩 값 유지');
+          }
+          // 발행일이 없으면 하드코딩 값 유지 (히어로 섹션에서 직접 수정)
+        }
       } catch (error) {
         console.error('히어로 통계 업데이트 실패:', error);
         // 실패 시 기본값 유지

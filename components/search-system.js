@@ -57,6 +57,7 @@ class SearchSystem {
       const month = values[headerMap['월']] || '';
       const week = values[headerMap['주차']] || '';
       const pdfUrl = values[headerMap['PDF URL']] || '';
+      const publishDate = values[headerMap['발행일']] || ''; // YYYY.MM.DD 형식 (예: 2026.01.05)
 
       // 빈 년도/월/주차는 건너뛰기
       if (!year || !month || !week) continue;
@@ -79,6 +80,7 @@ class SearchSystem {
             month: parseInt(month),
             week: parseInt(week),
             pdfUrl: pdfUrl.trim(),
+            publishDate: publishDate.trim(), // 발행일 (YYYY.MM.DD 형식)
             
             // 뉴스 정보
             title: title.trim(),
