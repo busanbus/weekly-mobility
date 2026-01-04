@@ -735,16 +735,23 @@
           }
 
           if (link) {
-            // weeklyUrl이 절대 경로일 수 있으므로 상대 경로로 변환
+            // weeklyUrl에 /weekly-mobility/ 경로가 포함되도록 보장
             let href = latestWeek.weeklyUrl;
-            if (href.startsWith('/weekly-mobility/')) {
-              href = href.replace('/weekly-mobility', '');
-            } else if (href.startsWith('/')) {
-              href = href.substring(1);
+            // weeklyUrl이 /archive/로 시작하면 /weekly-mobility를 앞에 추가
+            if (href && href.startsWith('/archive/')) {
+              href = '/weekly-mobility' + href;
             }
-            // 상대 경로가 아니면 직접 생성
-            if (!href || href.startsWith('http')) {
-              href = `archive/${latestWeek.year}/${String(latestWeek.month).padStart(2,'0')}/week${latestWeek.week}.html`;
+            // weeklyUrl이 archive/로 시작하면 (앞에 / 없이) /weekly-mobility/를 앞에 추가
+            else if (href && href.startsWith('archive/')) {
+              href = '/weekly-mobility/' + href;
+            }
+            // weeklyUrl에 /weekly-mobility/가 없으면 추가
+            else if (href && !href.includes('/weekly-mobility/')) {
+              if (href.startsWith('/')) {
+                href = '/weekly-mobility' + href;
+              } else {
+                href = '/weekly-mobility/' + href;
+              }
             }
             link.href = href;
           }
