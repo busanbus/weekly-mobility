@@ -760,9 +760,44 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ payload })
         });
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          let errorMessage = `Worker 오류 (${res.status}): ${errorText}`;
+          
+          // DeepL 403 오류인 경우 특별 안내
+          if (errorText.includes('Legacy authentication') || errorText.includes('form body')) {
+            errorMessage = `❌ DeepL 인증 오류 (403)\n\n` +
+              `에러: ${errorText}\n\n` +
+              `원인: Cloudflare Worker에서 DeepL API를 호출할 때 레거시 인증 방식을 사용하고 있습니다.\n\n` +
+              `해결 방법:\n` +
+              `1. Cloudflare Workers 대시보드에서 Worker 코드를 확인하세요.\n` +
+              `2. DeepL API 호출 시 다음 형식을 사용하세요:\n` +
+              `   headers: {\n` +
+              `     'Authorization': 'DeepL-Auth-Key YOUR_API_KEY',\n` +
+              `     'Content-Type': 'application/json'\n` +
+              `   }\n` +
+              `3. form body에 auth_key를 넣는 방식은 더 이상 사용할 수 없습니다.\n\n` +
+              `참고: deepl-worker-example.js 파일을 확인하세요.`;
+          }
+          
+          alert(errorMessage);
+          return;
+        }
+        
         const { success, data, error } = await res.json();
         if (!success) {
-          alert('번역 실패: ' + (error || 'unknown'));
+          let errorMessage = '번역 실패: ' + (error || 'unknown');
+          
+          // DeepL 관련 오류인 경우
+          if (error && (error.includes('403') || error.includes('Legacy authentication'))) {
+            errorMessage = `❌ DeepL 인증 오류\n\n` +
+              `에러: ${error}\n\n` +
+              `Cloudflare Worker 코드에서 DeepL API 인증 방식을 수정해야 합니다.\n` +
+              `deepl-worker-example.js 파일을 참고하세요.`;
+          }
+          
+          alert(errorMessage);
           return;
         }
         const week = String(payload.week || '1').trim();
@@ -811,9 +846,44 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ payload })
         });
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          let errorMessage = `Worker 오류 (${res.status}): ${errorText}`;
+          
+          // DeepL 403 오류인 경우 특별 안내
+          if (errorText.includes('Legacy authentication') || errorText.includes('form body')) {
+            errorMessage = `❌ DeepL 인증 오류 (403)\n\n` +
+              `에러: ${errorText}\n\n` +
+              `원인: Cloudflare Worker에서 DeepL API를 호출할 때 레거시 인증 방식을 사용하고 있습니다.\n\n` +
+              `해결 방법:\n` +
+              `1. Cloudflare Workers 대시보드에서 Worker 코드를 확인하세요.\n` +
+              `2. DeepL API 호출 시 다음 형식을 사용하세요:\n` +
+              `   headers: {\n` +
+              `     'Authorization': 'DeepL-Auth-Key YOUR_API_KEY',\n` +
+              `     'Content-Type': 'application/json'\n` +
+              `   }\n` +
+              `3. form body에 auth_key를 넣는 방식은 더 이상 사용할 수 없습니다.\n\n` +
+              `참고: deepl-worker-example.js 파일을 확인하세요.`;
+          }
+          
+          alert(errorMessage);
+          return;
+        }
+        
         const result = await res.json();
         if (!result.success) {
-          alert('번역 실패: ' + (result.error || 'unknown'));
+          let errorMessage = '번역 실패: ' + (result.error || 'unknown');
+          
+          // DeepL 관련 오류인 경우
+          if (result.error && (result.error.includes('403') || result.error.includes('Legacy authentication'))) {
+            errorMessage = `❌ DeepL 인증 오류\n\n` +
+              `에러: ${result.error}\n\n` +
+              `Cloudflare Worker 코드에서 DeepL API 인증 방식을 수정해야 합니다.\n` +
+              `deepl-worker-example.js 파일을 참고하세요.`;
+          }
+          
+          alert(errorMessage);
           return;
         }
         translatedData = result.data;
