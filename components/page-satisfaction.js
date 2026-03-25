@@ -6,7 +6,9 @@
  * <script type="module" src="../components/page-satisfaction.js"></script>
  *
  * 선택 속성:
- * - submit-url : GAS WebApp URL. 없으면 제출 시 payload만 alert + console (UI 테스트용)
+ * - submit-url : GAS WebApp URL.
+ *   - 이 속성이 없으면 기본값(하드코딩된 WebApp URL)으로 전송
+ *   - 빈 문자열(`submit-url=""`)이면 제출 시 payload만 alert + console (UI 테스트용)
  * - allow-repeat : 있으면 중복 제출 방지(localStorage)를 끔 (로컬 UI 테스트용)
  */
 class PageSatisfaction extends HTMLElement {
@@ -31,7 +33,11 @@ class PageSatisfaction extends HTMLElement {
     const year = this.getAttribute('year') || '';
     const month = this.getAttribute('month') || '';
     const week = this.getAttribute('week') || '';
-    const submitUrl = (this.getAttribute('submit-url') || '').trim();
+    const DEFAULT_SUBMIT_URL =
+      'https://script.google.com/macros/s/AKfycbyLfSmsQ4lN17ijkUrGC4fx5IiYIDy7_JeX2Cup_MXeqhEvEe9XZ6z_wxMZykQQQ_WM/exec';
+    const submitUrlAttrRaw = this.getAttribute('submit-url');
+    const submitUrlAttr = (submitUrlAttrRaw || '').trim();
+    const submitUrl = submitUrlAttrRaw === null ? DEFAULT_SUBMIT_URL : submitUrlAttr;
     const allowRepeat = this.hasAttribute('allow-repeat');
 
     const t = this._strings(lang);
@@ -507,11 +513,12 @@ class PageSatisfaction extends HTMLElement {
         scoreLabel: t.labelByScore[score],
         feedback: score === 1 || score === 2 ? feedback : '',
         pageUrl: typeof location !== 'undefined' ? location.href : '',
+        user_agent: typeof navigator !== 'undefined' && navigator.userAgent ? navigator.userAgent : '',
         submittedAt: new Date().toISOString(),
       };
 
       if (!submitUrl) {
-        console.log('[page-satisfaction] 테스트 제출 (submit-url 미설정):', payload);
+        console.log('[page-satisfaction] 테스트 제출 (submit-url 비어있음):', payload);
         alert(t.demoThanks + '\n\n' + JSON.stringify(payload, null, 2));
         markSubmitted();
         alreadyDone = true;
@@ -520,19 +527,32 @@ class PageSatisfaction extends HTMLElement {
 
       setButtonsDisabled(true);
       try {
-        const res = await fetch(submitUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-          body: JSON.stringify(payload),
-        });
-        const text = await res.text();
-        let json = null;
-        try {
-          json = JSON.parse(text);
-        } catch (_) {}
-        if (!res.ok || (json && json.success === false)) {
-          throw new Error((json && json.error) || text || res.statusText);
+        // GAS WebApp은 CORS 헤더를 임의로 추가하기가 어려워 로컬(127.0.0.1)에서
+        // 일반 fetch(JSON, application/json)로는 preflight(OPTIONS) 단계에서 차단될 수 있음.
+        // 그래서 preflight가 없는 전송 방식(sendBeacon / no-cors)을 우선 사용한다.
+        const payloadText = JSON.stringify(payload);
+
+        let sent = false;
+        if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
+          try {
+            const blob = new Blob([payloadText], { type: 'text/plain;charset=UTF-8' });
+            sent = navigator.sendBeacon(submitUrl, blob);
+          } catch (_) {
+            sent = false;
+          }
         }
+
+        if (!sent) {
+          // no-cors로 보내면 응답 본문/상태를 읽을 수 없지만, 전송 자체는 가능.
+          await fetch(submitUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            keepalive: true,
+            headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+            body: payloadText,
+          });
+        }
+
         alert(t.thanks);
         markSubmitted();
         alreadyDone = true;
@@ -584,7 +604,7 @@ class PageSatisfaction extends HTMLElement {
       thanks: '평가가 접수되었습니다. 소중한 의견 감사합니다.',
       error: '전송에 실패했습니다.',
       alreadyTitle: '이미 평가를 제출하셨습니다.',
-      alreadyDesc: '같은 주차 페이지에서는 한 번만 평가할 수 있습니다. 다른 기기나 브라우저에서는 다시 보일 수 있습니다.',
+      alreadyDesc: '같은 주차 페이지에서는 한 번만 평가할 수 있습니다.',
     };
 
     const en = {
