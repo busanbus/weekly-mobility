@@ -12,7 +12,7 @@
  * - allow-repeat : 있으면 중복 제출 방지(localStorage)를 끔 (로컬 UI 테스트용)
  */
 class PageSatisfaction extends HTMLElement {
-  static UI_VERSION = '2026-03-26-stars-left';
+  static UI_VERSION = '2026-03-26-stars-left-no-text-gap';
   static _storageKey(year, month, week, lang) {
     const path =
       typeof location !== 'undefined'
@@ -381,6 +381,9 @@ class PageSatisfaction extends HTMLElement {
           .score-row {
             width: 100%;
             font-size: 1.05rem;
+            justify-content: flex-start;
+            padding-left: 14px;
+            padding-right: 10px;
           }
 
           .row-stars .star {
@@ -426,7 +429,6 @@ class PageSatisfaction extends HTMLElement {
                   <label class="score-row" data-score="${score}">
                     <input type="radio" name="ps-score" value="${score}" aria-label="${String(t.labels[score]).replace(/"/g, '&quot;')}" />
                     ${starsMarkup(score)}
-                    <span class="row-label">${t.shortLabels[score]}</span>
                   </label>
                 `).join('')}
               </div>
