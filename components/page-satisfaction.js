@@ -13,6 +13,7 @@
  */
 class PageSatisfaction extends HTMLElement {
   static UI_VERSION = '2026-03-26-stars-left-no-text-gap';
+  static GLOBALLY_DISABLED = true;
   static _storageKey(year, month, week, lang) {
     const path =
       typeof location !== 'undefined'
@@ -29,6 +30,25 @@ class PageSatisfaction extends HTMLElement {
   connectedCallback() {
     if (this._rendered) return;
     this._rendered = true;
+
+    // 운영/테스트 중 잠시 비활성화: 모든 week 페이지에서 컴포넌트 UI를 숨김
+    // - 현재 브라우저만 영향을 받음
+    //   예) DevTools 콘솔에서:
+    //     localStorage.setItem('ps:disable', '1'); location.reload();
+    // - 다시 켜기:
+    //     localStorage.removeItem('ps:disable'); location.reload();
+    const disabledByFlag =
+      PageSatisfaction.GLOBALLY_DISABLED === true ||
+      (typeof window !== 'undefined' && window.__PS_DISABLED__ === true) ||
+      (typeof localStorage !== 'undefined' && localStorage.getItem('ps:disable') === '1') ||
+      this.hasAttribute('disabled');
+    if (disabledByFlag) {
+      try {
+        this.style.display = 'none';
+      } catch (_) {}
+      return;
+    }
+
     this.setAttribute('data-ui-version', PageSatisfaction.UI_VERSION);
     if (typeof console !== 'undefined' && console.log) {
       console.log('[page-satisfaction] ui version:', PageSatisfaction.UI_VERSION);
