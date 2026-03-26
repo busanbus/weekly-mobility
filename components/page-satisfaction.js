@@ -12,6 +12,7 @@
  * - allow-repeat : 있으면 중복 제출 방지(localStorage)를 끔 (로컬 UI 테스트용)
  */
 class PageSatisfaction extends HTMLElement {
+  static UI_VERSION = '2026-03-26-stars-left';
   static _storageKey(year, month, week, lang) {
     const path =
       typeof location !== 'undefined'
@@ -28,6 +29,10 @@ class PageSatisfaction extends HTMLElement {
   connectedCallback() {
     if (this._rendered) return;
     this._rendered = true;
+    this.setAttribute('data-ui-version', PageSatisfaction.UI_VERSION);
+    if (typeof console !== 'undefined' && console.log) {
+      console.log('[page-satisfaction] ui version:', PageSatisfaction.UI_VERSION);
+    }
 
     const lang = (this.getAttribute('lang') || 'ko').toLowerCase();
     const year = this.getAttribute('year') || '';
@@ -179,19 +184,23 @@ class PageSatisfaction extends HTMLElement {
           margin: 0;
           accent-color: var(--ps-primary);
           cursor: pointer;
+          order: 0; /* radio circle은 가장 왼쪽 */
         }
 
         .score-row .row-label {
           font-weight: 500;
           line-height: 1.2;
+          order: 2; /* 텍스트는 오른쪽 */
         }
 
         .row-stars {
           display: inline-flex;
           align-items: center;
           gap: 2px;
-          margin-left: 1px;
+          margin-left: 0;
+          margin-right: 1px;
           line-height: 0;
+          order: 1; /* 별점은 왼쪽 */
         }
 
         .row-stars .star {
@@ -416,8 +425,8 @@ class PageSatisfaction extends HTMLElement {
                 ${[5, 4, 3, 2, 1].map((score) => `
                   <label class="score-row" data-score="${score}">
                     <input type="radio" name="ps-score" value="${score}" aria-label="${String(t.labels[score]).replace(/"/g, '&quot;')}" />
-                    <span class="row-label">${t.shortLabels[score]}</span>
                     ${starsMarkup(score)}
+                    <span class="row-label">${t.shortLabels[score]}</span>
                   </label>
                 `).join('')}
               </div>
@@ -699,4 +708,7 @@ class PageSatisfaction extends HTMLElement {
   }
 }
 
-customElements.define('page-satisfaction', PageSatisfaction);
+// 중복 정의 방지: 일부 페이지는 로컬 스크립트 + footer 주입(CDN) 모두 로드될 수 있음
+if (!customElements.get('page-satisfaction')) {
+  customElements.define('page-satisfaction', PageSatisfaction);
+}
