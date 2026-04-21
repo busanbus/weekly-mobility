@@ -12,8 +12,8 @@
  * - allow-repeat : 있으면 중복 제출 방지(localStorage)를 끔 (로컬 UI 테스트용)
  */
 class PageSatisfaction extends HTMLElement {
-  static UI_VERSION = '2026-03-26-stars-left-no-text-gap';
-  static GLOBALLY_DISABLED = true;
+  static UI_VERSION = '2026-03-26-three-scale-emoji';
+  static GLOBALLY_DISABLED = false;
   static _storageKey(year, month, week, lang) {
     const path =
       typeof location !== 'undefined'
@@ -76,19 +76,10 @@ class PageSatisfaction extends HTMLElement {
       }
     }
 
-    /** 채워진 별 filled개 + 빈 별 (5-filled)개 (점수 5~1) */
-    const starsMarkup = (filled) => {
-      const starPath =
-        'M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z';
-      let html = '<span class="row-stars" aria-hidden="true">';
-      for (let i = 0; i < 5; i++) {
-        const isOn = i < filled;
-        html += isOn
-          ? `<svg class="star star--filled" viewBox="0 0 24 24"><path d="${starPath}"/></svg>`
-          : `<svg class="star star--empty" viewBox="0 0 24 24"><path d="${starPath}"/></svg>`;
-      }
-      html += '</span>';
-      return html;
+    const emojiByScore = {
+      3: '😊',
+      2: '😐',
+      1: '😕',
     };
 
     this.shadowRoot.innerHTML = `
@@ -98,10 +89,17 @@ class PageSatisfaction extends HTMLElement {
           font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           --ps-primary: #0066ff;
           --ps-primary-dark: #0052cc;
-          --ps-text: #1a1d29;
-          --ps-muted: #5a6573;
-          --ps-border: #e8eaed;
+          --ps-primary-soft: #e8f0ff;
+          --ps-accent-start: #4f8cff;
+          --ps-accent-end: #0052cc;
+          --ps-gold-start: #fbbf24;
+          --ps-gold-end: #f59e0b;
+          --ps-text: #0f172a;
+          --ps-muted: #64748b;
+          --ps-border: #e6e9ef;
+          --ps-border-strong: #d5dae2;
           --ps-bg: #ffffff;
+          --ps-bg-soft: #f8fafc;
         }
 
         * {
@@ -109,17 +107,21 @@ class PageSatisfaction extends HTMLElement {
         }
 
         .card {
-          margin: 24px auto 10px;
+          position: relative;
+          margin: 28px auto 12px;
           max-width: 1280px;
-          border: 1px solid var(--border-light, var(--ps-border));
-          border-radius: var(--border-radius, 12px);
-          background: var(--bg-card, var(--ps-bg));
-          box-shadow: var(--shadow-lg, 0 1px 2px rgba(0, 0, 0, 0.04));
+          border: 1px solid var(--ps-border);
+          border-radius: 18px;
+          background: var(--ps-bg);
+          box-shadow:
+            0 1px 0 rgba(15, 23, 42, 0.03),
+            0 12px 32px -18px rgba(15, 23, 42, 0.18),
+            0 4px 12px -6px rgba(15, 23, 42, 0.08);
           overflow: hidden;
         }
 
         .card-body {
-          padding: 16px 18px;
+          padding: 24px 24px 32px;
         }
 
         .form-panel[hidden],
@@ -127,147 +129,214 @@ class PageSatisfaction extends HTMLElement {
           display: none !important;
         }
 
+        /* ========== DONE PANEL ========== */
         .done-panel {
           display: flex;
           align-items: flex-start;
-          gap: 10px;
+          gap: 14px;
+          padding: 4px 0;
         }
 
         .done-panel .check-wrap {
           flex-shrink: 0;
-          width: 28px;
-          height: 28px;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
+          background: linear-gradient(135deg, #d1fadf 0%, #a7f3d0 100%);
           border: 1px solid #86efac;
-          background: #f0fdf4;
           display: flex;
           align-items: center;
           justify-content: center;
+          box-shadow: 0 6px 14px -6px rgba(16, 163, 74, 0.35);
         }
 
         .done-panel .check {
-          width: 16px;
-          height: 16px;
-          color: #16a34a;
+          width: 20px;
+          height: 20px;
+          color: #15803d;
         }
 
         .done-title {
-          margin: 0 0 4px;
-          font-size: 1.12rem;
+          margin: 2px 0 4px;
+          font-size: 1.08rem;
           font-weight: 700;
           color: var(--ps-text);
+          letter-spacing: -0.01em;
         }
 
         .done-desc {
           margin: 0;
-          font-size: 0.96rem;
+          font-size: 0.94rem;
           line-height: 1.6;
           color: var(--ps-muted);
         }
 
+        /* ========== HEAD ========== */
         .head {
-          margin-bottom: 50px;
+          margin-bottom: 42px;
           text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 2px;
+          width: 100%;
+        }
+
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          background: #f0f4ff;
+          color: #0066ff;
+          font-size: 12px;
+          font-weight: 600;
+          border-radius: 20px;
+          padding: 6px 12px;
+          margin-bottom: 0;
+          width: fit-content;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          align-self: flex-start;
+        }
+
+        .badge-dot {
+          display: none;
         }
 
         .question {
           margin: 0;
-          font-size: 1.33rem;
-          line-height: 1.45;
-          font-weight: 700;
+          font-size: 1.36rem;
+          line-height: 1.4;
+          font-weight: 800;
+          letter-spacing: -0.015em;
           color: var(--ps-text);
+          text-align: center;
         }
 
-        .options {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px 16px;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .score-row {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          cursor: pointer;
-          color: var(--ps-text);
-          font-size: 1.08rem;
-          user-select: none;
-          -webkit-tap-highlight-color: transparent;
-          padding: 2px 0;
-        }
-
-        .score-row input {
-          width: 18px;
-          height: 18px;
+        .subline {
           margin: 0;
-          accent-color: var(--ps-primary);
-          cursor: pointer;
-          order: 0; /* radio circle은 가장 왼쪽 */
+          font-size: 0.9rem;
+          line-height: 1.55;
+          color: var(--ps-muted);
+          max-width: 560px;
         }
 
-        .score-row .row-label {
-          font-weight: 500;
-          line-height: 1.2;
-          order: 2; /* 텍스트는 오른쪽 */
-        }
-
-        .row-stars {
-          display: inline-flex;
-          align-items: center;
-          gap: 2px;
-          margin-left: 0;
-          margin-right: 1px;
-          line-height: 0;
-          order: 1; /* 별점은 왼쪽 */
-        }
-
-        .row-stars .star {
-          width: 15px;
-          height: 15px;
-          flex-shrink: 0;
-        }
-
-        .star--filled {
-          fill: #f59e0b;
-          stroke: none;
-        }
-
-        .star--empty {
-          fill: none;
-          stroke: #cbd5e1;
-          stroke-width: 1.45;
-          stroke-linejoin: round;
-        }
-
-        .feedback-block {
-          width: 100%;
-          display: none;
-          margin-top: 12px;
-          padding-top: 12px;
-          border-top: 1px dashed var(--ps-border);
-        }
-
+        /* ========== OPTIONS (star rows) ========== */
         .options-foot {
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: flex-start;
-          gap: 36px;
+          gap: 22px;
           margin-bottom: 0;
-          padding: 0 22px;
+          padding: 0;
           width: 100%;
         }
 
+        .options {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 72px;
+          align-items: flex-start;
+          justify-content: center;
+          width: 100%;
+        }
+
+        .face-option {
+          display: inline-flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 12px;
+          cursor: pointer;
+          user-select: none;
+          -webkit-tap-highlight-color: transparent;
+          padding: 2px;
+          background: transparent;
+          border: none;
+          transition: transform 0.15s ease;
+        }
+
+        .face-option:hover {
+          transform: translateY(-2px);
+        }
+
+        /* visually hidden radio input (접근성 유지) */
+        .face-option input {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+
+        .face-emoji {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 43.2px;
+          line-height: 1;
+          transition: transform 0.15s ease;
+          /* 이모지가 OS별로 색감이 살도록 */
+          font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji',
+            'Segoe UI Symbol', sans-serif;
+        }
+
+        .face-option:hover .face-emoji {
+          transform: scale(1.08);
+        }
+
+        .face-option:has(input:checked) .face-emoji {
+          filter: drop-shadow(0 0 6px rgba(0, 102, 255, 0.2));
+        }
+
+        .face-option input:focus-visible + .face-emoji {
+          outline: 2px solid var(--ps-primary);
+          outline-offset: 6px;
+          border-radius: 8px;
+        }
+
+        .face-label {
+          font-size: 0.92rem;
+          font-weight: 500;
+          color: var(--ps-muted);
+          line-height: 1.3;
+          transition: color 0.18s ease;
+        }
+
+        .face-option:has(input:checked) .face-label {
+          color: var(--ps-text);
+          font-weight: 600;
+        }
+
+        /* ========== FEEDBACK ========== */
+        .feedback-block {
+          width: 100%;
+          overflow: hidden;
+          max-height: 0;
+          opacity: 0;
+          margin-top: 0;
+          padding-top: 0;
+          border-top: 1px dashed transparent;
+          transition: max-height 0.35s ease, opacity 0.3s ease,
+            margin-top 0.3s ease, padding-top 0.3s ease,
+            border-color 0.3s ease;
+        }
+
         .feedback-block.visible {
-          display: block;
+          max-height: 600px;
+          opacity: 1;
+          margin-top: 20px;
+          padding-top: 18px;
+          border-top-color: var(--ps-border);
         }
 
         .feedback-actions {
           display: flex;
           justify-content: flex-end;
-          margin-top: 10px;
+          margin-top: 12px;
           width: 100%;
         }
 
@@ -281,7 +350,7 @@ class PageSatisfaction extends HTMLElement {
 
         .feedback-label {
           display: block;
-          font-size: 1.01rem;
+          font-size: 0.95rem;
           font-weight: 600;
           color: var(--ps-text);
           margin-bottom: 8px;
@@ -289,28 +358,39 @@ class PageSatisfaction extends HTMLElement {
 
         .feedback-area {
           width: 100%;
-          min-height: 108px;
+          min-height: 112px;
           padding: 12px 14px;
-          font-size: 1.05rem;
+          font-size: 1.02rem;
           line-height: 1.6;
-          border: 1px solid #dbe1e8;
-          border-radius: 8px;
+          border: 1px solid var(--ps-border-strong);
+          border-radius: 12px;
           resize: vertical;
           font-family: inherit;
           background: #fff;
+          color: var(--ps-text);
+          transition: border-color 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .feedback-area::placeholder {
+          font-size: 0.97rem;
+          color: #94a3b8;
+        }
+
+        .feedback-area:hover {
+          border-color: #b9c2d0;
         }
 
         .feedback-area:focus {
           outline: none;
           border-color: var(--ps-primary);
-          box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.15);
+          box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.14);
         }
 
         .hint {
-          font-size: 0.92rem;
+          font-size: 0.88rem;
           font-weight: 500;
           color: #dc2626;
-          margin-top: 6px;
+          margin-top: 8px;
           display: none;
         }
 
@@ -318,107 +398,112 @@ class PageSatisfaction extends HTMLElement {
           display: block;
         }
 
-        .foot {
-          display: flex;
-          justify-content: flex-end;
-          margin-top: 0;
-          align-self: flex-end;
-        }
-
+        /* ========== SUBMIT BUTTON (news-link 스타일 기반, 크기 업) ========== */
         .submit-btn {
+          background: linear-gradient(135deg, #0066ff 0%, #003dd1 100%);
+          color: white;
+          text-decoration: none;
+          padding: 10px 26px;
+          border-radius: 50px;
+          font-size: 15px;
+          font-weight: 600;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 0;
-          padding: 10px 18px;
-          font-size: 0.92rem;
-          font-weight: 700;
-          color: #fff;
-          border: 1px solid transparent;
-          border-radius: 8px;
+          gap: 10px;
+          height: 48px;
+          border: none;
           cursor: pointer;
           white-space: nowrap;
-          background: var(--ps-primary);
-          box-shadow: 0 3px 8px rgba(0, 102, 255, 0.2);
-          transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+          font-family: inherit;
+        }
+
+        .submit-btn::after {
+          content: "→";
+          font-size: 18px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .submit-btn:hover:not(:disabled) {
-          background: var(--ps-primary-dark);
-          box-shadow: 0 4px 10px rgba(0, 82, 204, 0.25);
-          transform: translateY(-1px);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 102, 255, 0.3);
         }
 
-        .submit-btn:active:not(:disabled) {
-          transform: translateY(0);
+        .submit-btn:hover:not(:disabled)::after {
+          transform: translateX(4px);
         }
 
         .submit-btn:disabled {
-          opacity: 0.6;
+          opacity: 0.55;
           cursor: not-allowed;
           transform: none;
         }
 
-        .submit-btn svg {
-          width: 18px;
-          height: 18px;
-          flex-shrink: 0;
-        }
-
+        /* ========== MOBILE ========== */
         @media (max-width: 768px) {
           .card {
             margin: 20px auto 8px;
-            border-radius: 10px;
+            border-radius: 14px;
           }
 
           .card-body {
-            padding: 14px 12px;
-          }
-
-          .question {
-            font-size: 1.22rem;
+            padding: 18px 16px 16px;
           }
 
           .head {
-            margin-bottom: 12px;
-            text-align: left;
+            margin-bottom: 22px;
+            text-align: center;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            width: 100%;
+          }
+
+          .question {
+            font-size: 1.16rem;
+          }
+
+          .subline {
+            font-size: 0.86rem;
           }
 
           .options-foot {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 12px;
+            align-items: stretch;
+            gap: 14px;
             padding: 0;
           }
 
           .options {
-            flex-direction: column;
+            flex-direction: row;
             align-items: flex-start;
-            justify-content: flex-start;
-            gap: 9px;
+            justify-content: space-around;
+            gap: 12px;
           }
 
-          .score-row {
-            width: 100%;
-            font-size: 1.05rem;
-            justify-content: flex-start;
-            padding-left: 14px;
-            padding-right: 10px;
+          .face-option {
+            flex: 1 1 0;
+            gap: 8px;
+            flex-direction: column;
           }
 
-          .row-stars .star {
-            width: 14px;
-            height: 14px;
+          .face-emoji {
+            font-size: 37.44px;
           }
 
-          .foot {
-            margin-top: 12px;
-            align-self: stretch;
+          .face-label {
+            font-size: 0.88rem;
           }
 
           .submit-btn {
             width: 100%;
-            min-height: 42px;
+            font-size: 16.5px;
+            border-radius: 12px;
+          }
+
+          .feedback-area {
+            border-radius: 10px;
           }
         }
       </style>
@@ -440,23 +525,22 @@ class PageSatisfaction extends HTMLElement {
 
           <div class="form-panel" part="form-panel" ${alreadyDone ? 'hidden' : ''}>
             <div class="head">
+              <span class="badge" aria-hidden="true">
+                <span class="badge-dot"></span>
+                ${t.badge}
+              </span>
               <h2 class="question">${t.question}</h2>
             </div>
 
             <div class="options-foot">
               <div class="options" role="radiogroup" aria-label="${t.scoreGroup}">
-                ${[5, 4, 3, 2, 1].map((score) => `
-                  <label class="score-row" data-score="${score}">
+                ${[3, 2, 1].map((score) => `
+                  <label class="face-option" data-score="${score}">
                     <input type="radio" name="ps-score" value="${score}" aria-label="${String(t.labels[score]).replace(/"/g, '&quot;')}" />
-                    ${starsMarkup(score)}
+                    <span class="face-emoji" aria-hidden="true">${emojiByScore[score]}</span>
+                    <span class="face-label">${t.shortLabels[score]}</span>
                   </label>
                 `).join('')}
-              </div>
-
-              <div class="foot">
-                <button type="button" class="submit-btn submit-btn-main" part="submit">
-                  ${t.submit}
-                </button>
               </div>
             </div>
 
@@ -466,9 +550,7 @@ class PageSatisfaction extends HTMLElement {
               <p class="hint" part="hint">${t.feedbackRequired}</p>
 
               <div class="feedback-actions">
-                <button type="button" class="submit-btn submit-btn-feedback" part="submit">
-                  ${t.submit}
-                </button>
+                <button type="button" class="submit-btn submit-btn-feedback" part="submit">${t.submit}</button>
               </div>
             </div>
 
@@ -481,28 +563,69 @@ class PageSatisfaction extends HTMLElement {
     const formPanel = root.querySelector('.form-panel');
     const donePanel = root.querySelector('.done-panel');
     const radios = root.querySelectorAll('input[name="ps-score"]');
+    const faceOptions = root.querySelectorAll('.face-option');
     const feedbackBlock = root.querySelector('.feedback-block');
     const feedbackEl = root.querySelector('#ps-feedback');
     const hint = root.querySelector('.hint');
-    const btnMain = root.querySelector('.submit-btn-main');
     const btnFeedback = root.querySelector('.submit-btn-feedback');
+
+    const updateFloatingSnsVisibility = (isFeedbackVisible) => {
+      const isMobile =
+        typeof window !== 'undefined' &&
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(max-width: 768px)').matches;
+      const shouldHide = isMobile && isFeedbackVisible;
+      const snsNodes = typeof document !== 'undefined' ? document.querySelectorAll('floating-sns') : [];
+
+      snsNodes.forEach((el) => {
+        if (shouldHide) {
+          if (el.dataset.psDisplayBackup === undefined) {
+            el.dataset.psDisplayBackup = el.style.display || '';
+          }
+          el.style.display = 'none';
+          return;
+        }
+
+        if (el.dataset.psDisplayBackup !== undefined) {
+          el.style.display = el.dataset.psDisplayBackup;
+          delete el.dataset.psDisplayBackup;
+        }
+      });
+    };
 
     const updateFeedbackVisibility = () => {
       const selected = root.querySelector('input[name="ps-score"]:checked');
       const score = selected ? parseInt(selected.value, 10) : null;
-      const low = score === 1 || score === 2;
+      // 1점(별로에요) 선택 시에만 개선의견 폼 노출
+      const low = score === 1;
       feedbackBlock.classList.toggle('visible', low);
       hint.classList.remove('visible');
       if (!low) feedbackEl.value = '';
 
-      // 1·2점이면 제출 버튼을 textarea 하단에 표시
-      if (btnMain) btnMain.style.display = low ? 'none' : '';
+      // 별로에요 선택 시에만 textarea 하단 제출 버튼 표시
       if (btnFeedback) btnFeedback.style.display = low ? '' : 'none';
+      updateFloatingSnsVisibility(low);
     };
 
     radios.forEach((r) => {
       r.addEventListener('change', updateFeedbackVisibility);
     });
+    faceOptions.forEach((option) => {
+      option.addEventListener('click', () => {
+        if (alreadyDone && !allowRepeat) return;
+        const input = option.querySelector('input[name="ps-score"]');
+        if (!input) return;
+        input.checked = true;
+        const score = parseInt(input.value, 10);
+        updateFeedbackVisibility();
+        if (score === 2 || score === 3) {
+          submitScore(score, '');
+        }
+      });
+    });
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', updateFeedbackVisibility);
+    }
 
     const markSubmitted = () => {
       if (allowRepeat || typeof localStorage === 'undefined') return;
@@ -514,27 +637,10 @@ class PageSatisfaction extends HTMLElement {
     };
 
     const setButtonsDisabled = (disabled) => {
-      if (btnMain) btnMain.disabled = disabled;
       if (btnFeedback) btnFeedback.disabled = disabled;
     };
 
-    const submitHandler = async () => {
-      if (alreadyDone && !allowRepeat) return;
-
-      const selected = root.querySelector('input[name="ps-score"]:checked');
-      if (!selected) {
-        alert(t.alertSelect);
-        return;
-      }
-      const score = parseInt(selected.value, 10);
-      const feedback = (feedbackEl.value || '').trim();
-      if ((score === 1 || score === 2) && !feedback) {
-        hint.classList.add('visible');
-        feedbackEl.focus();
-        return;
-      }
-      hint.classList.remove('visible');
-
+    const submitScore = async (score, feedback) => {
       const payload = {
         year: year === '' ? null : parseInt(year, 10),
         month: month === '' ? null : parseInt(month, 10),
@@ -542,7 +648,7 @@ class PageSatisfaction extends HTMLElement {
         lang,
         score,
         scoreLabel: t.labelByScore[score],
-        feedback: score === 1 || score === 2 ? feedback : '',
+        feedback: score === 1 ? feedback : '',
         pageUrl: typeof location !== 'undefined' ? location.href : '',
         user_agent: typeof navigator !== 'undefined' && navigator.userAgent ? navigator.userAgent : '',
         submittedAt: new Date().toISOString(),
@@ -600,128 +706,138 @@ class PageSatisfaction extends HTMLElement {
       }
     };
 
-    if (btnMain) btnMain.addEventListener('click', submitHandler);
-    if (btnFeedback) btnFeedback.addEventListener('click', submitHandler);
+    if (btnFeedback) {
+      btnFeedback.addEventListener('click', () => {
+        if (alreadyDone && !allowRepeat) return;
+        const selected = root.querySelector('input[name="ps-score"]:checked');
+        const score = selected ? parseInt(selected.value, 10) : null;
+        if (score !== 1) {
+          alert(t.alertSelect);
+          return;
+        }
+        const feedback = (feedbackEl.value || '').trim();
+        if (!feedback) {
+          hint.classList.add('visible');
+          feedbackEl.focus();
+          return;
+        }
+        hint.classList.remove('visible');
+        submitScore(1, feedback);
+      });
+    }
+    updateFeedbackVisibility();
   }
 
   _strings(lang) {
     const ko = {
-      ariaLabel: '페이지 만족도 평가',
-      badge: '만족도',
-      subline: '점수를 선택한 뒤 평가하기를 눌러 주세요. 소중한 의견은 서비스 개선에 활용됩니다.',
-      question: '이 페이지에서 제공하는 정보를 평가해주세요!',
-      scoreGroup: '만족도 점수',
-      shortLabels: { 5: '매우만족', 4: '만족', 3: '보통', 2: '불만족', 1: '매우불만족' },
+      ariaLabel: '주간동향 피드백',
+      badge: '피드백',
+      question: '이번 주 주간동향 어떠셨나요?',
+      scoreGroup: '주간동향 반응',
+      shortLabels: { 3: '좋아요', 2: '보통이에요', 1: '별로에요' },
       labels: {
-        5: '매우만족(5점)',
-        4: '만족(4점)',
-        3: '보통(3점)',
-        2: '불만족(2점)',
-        1: '매우불만족(1점)',
+        3: '좋아요',
+        2: '보통이에요',
+        1: '별로에요',
       },
       labelByScore: {
-        5: '매우만족',
-        4: '만족',
-        3: '보통',
-        2: '불만족',
-        1: '매우불만족',
+        3: '좋아요',
+        2: '보통이에요',
+        1: '별로에요',
       },
       submit: '제출하기',
       feedbackLabel: '개선의견',
-      feedbackPlaceholder: '불편하셨던 점이나 개선 아이디어를 적어 주세요.',
-      feedbackRequired: '불만족·매우불만족 선택 시 개선의견을 입력해 주세요.',
-      alertSelect: '만족도를 선택해 주세요.',
+      feedbackPlaceholder: '어떤 점이 아쉬우셨나요? 자유롭게 알려 주세요.',
+      feedbackRequired: '‘별로에요’ 선택 시 개선의견을 입력해 주세요.',
+      alertSelect: '반응을 선택해 주세요.',
       demoThanks: '[UI 테스트] 아래 내용이 시트로 보내질 데이터 예시입니다.',
-      thanks: '평가가 접수되었습니다. 소중한 의견 감사합니다.',
+      thanks: '만족도 조사에 참가해주셔서 감사합니다!',
       error: '전송에 실패했습니다.',
-      alreadyTitle: '이미 평가를 제출하셨습니다.',
-      alreadyDesc: '같은 주차 페이지에서는 한 번만 평가할 수 있습니다.',
+      alreadyTitle: '이미 의견을 남기셨어요.',
+      alreadyDesc: '같은 주차 페이지에서는 한 번만 의견을 남길 수 있어요.',
     };
 
     const en = {
-      ariaLabel: 'Page satisfaction survey',
+      ariaLabel: 'Weekly briefing feedback',
       badge: 'Feedback',
-      subline: 'Select a score, then tap Submit. Your input helps us improve.',
-      question: 'Are you satisfied with the content and usability of this page?',
-      scoreGroup: 'Satisfaction score',
-      shortLabels: { 5: 'Very satisfied', 4: 'Satisfied', 3: 'Neutral', 2: 'Dissatisfied', 1: 'Very dissatisfied' },
+      question: "How did you find this week's briefing?",
+      scoreGroup: 'Reaction',
+      shortLabels: { 3: 'Helpful', 2: 'Okay', 1: 'Not helpful' },
       labels: {
-        5: 'Very satisfied (5)',
-        4: 'Satisfied (4)',
-        3: 'Neutral (3)',
-        2: 'Dissatisfied (2)',
-        1: 'Very dissatisfied (1)',
+        3: 'Helpful',
+        2: 'Okay',
+        1: 'Not helpful',
       },
       labelByScore: {
-        5: 'Very satisfied',
-        4: 'Satisfied',
-        3: 'Neutral',
-        2: 'Dissatisfied',
-        1: 'Very dissatisfied',
+        3: 'Helpful',
+        2: 'Okay',
+        1: 'Not helpful',
       },
       submit: 'Submit',
       feedbackLabel: 'Suggestions',
-      feedbackPlaceholder: 'Please share what we can improve.',
-      feedbackRequired: 'Please enter feedback when selecting dissatisfied or very dissatisfied.',
-      alertSelect: 'Please select a rating.',
+      feedbackPlaceholder: 'Let us know what could be better.',
+      feedbackRequired: 'Please share a suggestion when selecting “Not helpful”.',
+      alertSelect: 'Please choose a reaction.',
       demoThanks: '[UI test] Sample payload that would be sent to the sheet:',
-      thanks: 'Thank you for your feedback.',
+      thanks: 'Thanks for your feedback!',
       error: 'Submission failed.',
-      alreadyTitle: 'You have already submitted feedback.',
+      alreadyTitle: "You've already shared your reaction.",
       alreadyDesc: 'Only one response per week page is allowed in this browser.',
     };
 
     const cn = {
-      ariaLabel: '页面满意度评价',
-      badge: '满意度',
-      subline: '请选择分数后点击提交。您的意见将用于改进服务。',
-      question: '您对当前页面的内容和使用便利性满意吗？',
-      scoreGroup: '满意度',
-      shortLabels: { 5: '非常满意', 4: '满意', 3: '一般', 2: '不满意', 1: '非常不满意' },
+      ariaLabel: '周报反馈',
+      badge: '反馈',
+      question: '本期周报您觉得如何？',
+      scoreGroup: '反馈',
+      shortLabels: { 3: '不错', 2: '还行', 1: '一般' },
       labels: {
-        5: '非常满意(5分)',
-        4: '满意(4分)',
-        3: '一般(3分)',
-        2: '不满意(2分)',
-        1: '非常不满意(1分)',
+        3: '不错',
+        2: '还行',
+        1: '一般',
       },
-      labelByScore: { 5: '非常满意', 4: '满意', 3: '一般', 2: '不满意', 1: '非常不满意' },
-      submit: '提交评价',
-      feedbackLabel: '改进意见',
-      feedbackPlaceholder: '请填写您的不便或改进建议。',
-      feedbackRequired: '选择不满意或非常不满意时，请填写改进意见。',
-      alertSelect: '请选择满意度。',
+      labelByScore: {
+        3: '不错',
+        2: '还行',
+        1: '一般',
+      },
+      submit: '提交',
+      feedbackLabel: '改进建议',
+      feedbackPlaceholder: '哪些地方可以改进？欢迎留言。',
+      feedbackRequired: '选择“一般”时请留下改进建议。',
+      alertSelect: '请选择一项。',
       demoThanks: '[界面测试] 将提交到表格的示例数据：',
-      thanks: '感谢您的评价。',
+      thanks: '感谢您的反馈！',
       error: '提交失败。',
-      alreadyTitle: '您已提交过评价。',
-      alreadyDesc: '同一周页面在本浏览器中仅可评价一次。',
+      alreadyTitle: '您已提交过反馈。',
+      alreadyDesc: '同一周页面在本浏览器中仅可反馈一次。',
     };
 
     const jp = {
-      ariaLabel: 'ページ満足度アンケート',
-      badge: '満足度',
-      subline: '点数を選んでから「評価する」を押してください。ご意見は改善に役立てます。',
-      question: '現在ご覧のページの内容や使いやすさに満足していますか？',
-      scoreGroup: '満足度',
-      shortLabels: { 5: '大変満足', 4: '満足', 3: '普通', 2: '不満', 1: '大変不満' },
+      ariaLabel: '週報フィードバック',
+      badge: 'フィードバック',
+      question: '今週のレポートはいかがでしたか？',
+      scoreGroup: 'フィードバック',
+      shortLabels: { 3: 'よかった', 2: 'ふつう', 1: 'いまいち' },
       labels: {
-        5: '大変満足(5点)',
-        4: '満足(4点)',
-        3: '普通(3点)',
-        2: '不満(2点)',
-        1: '大変不満(1点)',
+        3: 'よかった',
+        2: 'ふつう',
+        1: 'いまいち',
       },
-      labelByScore: { 5: '大変満足', 4: '満足', 3: '普通', 2: '不満', 1: '大変不満' },
-      submit: '評価する',
-      feedbackLabel: '改善のご意見',
-      feedbackPlaceholder: 'ご不便な点や改善案をご記入ください。',
-      feedbackRequired: '不満・大変不満を選んだ場合は、ご意見の入力が必要です。',
-      alertSelect: '満足度を選択してください。',
+      labelByScore: {
+        3: 'よかった',
+        2: 'ふつう',
+        1: 'いまいち',
+      },
+      submit: '送信',
+      feedbackLabel: 'ご意見',
+      feedbackPlaceholder: '改善点やご感想をご記入ください。',
+      feedbackRequired: '「いまいち」を選んだ場合はご意見をご記入ください。',
+      alertSelect: '反応を選んでください。',
       demoThanks: '[UIテスト] シートに送るデータの例：',
-      thanks: 'ご回答ありがとうございました。',
+      thanks: 'フィードバックをありがとうございました！',
       error: '送信に失敗しました。',
-      alreadyTitle: 'すでに回答済みです。',
+      alreadyTitle: 'すでにご回答いただきました。',
       alreadyDesc: '同じ週のページでは、このブラウザでは1回のみ回答できます。',
     };
 
