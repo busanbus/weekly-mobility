@@ -203,12 +203,12 @@ class PageSatisfaction extends HTMLElement {
         }
 
         .question {
-          margin: 0;
-          font-size: 1.36rem;
+          margin: 0 0 12px;
+          font-size: 20px;
           line-height: 1.4;
-          font-weight: 800;
-          letter-spacing: -0.015em;
-          color: var(--ps-text);
+          font-weight: 700;
+          letter-spacing: -0.01em;
+          color: #1a1d29;
           text-align: center;
         }
 
@@ -276,7 +276,7 @@ class PageSatisfaction extends HTMLElement {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          font-size: 43.2px;
+          font-size: 49.68px;
           line-height: 1;
           transition: transform 0.15s ease;
           /* 이모지가 OS별로 색감이 살도록 */
@@ -443,12 +443,12 @@ class PageSatisfaction extends HTMLElement {
         /* ========== MOBILE ========== */
         @media (max-width: 768px) {
           .card {
-            margin: 20px auto 8px;
+            margin: 1px auto 8px;
             border-radius: 14px;
           }
 
           .card-body {
-            padding: 18px 16px 16px;
+            padding: 20px 20px 20px;
           }
 
           .head {
@@ -461,7 +461,7 @@ class PageSatisfaction extends HTMLElement {
           }
 
           .question {
-            font-size: 1.16rem;
+            font-size: 20px;
           }
 
           .subline {
@@ -484,12 +484,12 @@ class PageSatisfaction extends HTMLElement {
 
           .face-option {
             flex: 1 1 0;
-            gap: 8px;
+            gap: 18px;
             flex-direction: column;
           }
 
           .face-emoji {
-            font-size: 37.44px;
+            font-size: 43.056px;
           }
 
           .face-label {
@@ -525,10 +525,6 @@ class PageSatisfaction extends HTMLElement {
 
           <div class="form-panel" part="form-panel" ${alreadyDone ? 'hidden' : ''}>
             <div class="head">
-              <span class="badge" aria-hidden="true">
-                <span class="badge-dot"></span>
-                ${t.badge}
-              </span>
               <h2 class="question">${t.question}</h2>
             </div>
 
@@ -731,7 +727,7 @@ class PageSatisfaction extends HTMLElement {
   _strings(lang) {
     const ko = {
       ariaLabel: '주간동향 피드백',
-      badge: '피드백',
+      badge: '만족도',
       question: '이번 주 주간동향 어떠셨나요?',
       scoreGroup: '주간동향 반응',
       shortLabels: { 3: '좋아요', 2: '보통이에요', 1: '별로에요' },
