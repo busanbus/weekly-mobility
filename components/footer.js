@@ -129,6 +129,60 @@ class MobilityFooter extends HTMLElement {
       </footer>
     `;
   }
+
+  connectedCallback() {
+    // 2026 아카이브 주차 페이지에서는 만족도 컴포넌트를 자동 주입한다.
+    // (수동 태그가 있으면 중복 주입하지 않음)
+    const AUTO_INJECT_SATISFACTION = true;
+    if (!AUTO_INJECT_SATISFACTION) return;
+
+    const lang = (this.getAttribute('lang') || 'ko').toLowerCase();
+
+    // /weekly-mobility/archive/2026/03/week2.html
+    // /weekly-mobility/archive/2026/03/en/week2.html  (en/cn/jp)
+    const m =
+      typeof location !== 'undefined'
+        ? location.pathname.match(/\/archive\/(\d{4})\/(\d{2})\/(?:(en|cn|jp)\/)?(week\d+)\.html$/)
+        : null;
+    if (!m) return;
+
+    const year = m[1];
+    const month = String(parseInt(m[2], 10)); // '03' -> '3'
+    const week = String(parseInt(m[4].replace(/^week/, ''), 10)); // 'week2' -> '2'
+    if (year !== '2026') return;
+
+    // 1) page-satisfaction 태그가 없으면 주입
+    if (!document.querySelector('page-satisfaction')) {
+      const ps = document.createElement('page-satisfaction');
+      ps.setAttribute('year', year);
+      ps.setAttribute('month', month);
+      ps.setAttribute('week', week);
+      ps.setAttribute('lang', lang);
+
+      // mobility-footer 바로 위(같은 컨테이너 내부)에 삽입
+      const parent = this.parentNode;
+      if (parent && parent.insertBefore) {
+        parent.insertBefore(ps, this);
+      } else if (document.body) {
+        document.body.appendChild(ps);
+      }
+    }
+
+    // 2) page-satisfaction custom element가 등록되지 않았다면 CDN에서 로드
+    // (HTML에 상대경로 스크립트가 있더라도, 로딩 순서 때문에 먼저 정의가 안 될 수 있어 방어적으로 처리)
+    if (!customElements.get('page-satisfaction')) {
+      const SCRIPT_ID = 'ps-page-satisfaction-loader';
+      if (!document.getElementById(SCRIPT_ID)) {
+        const s = document.createElement('script');
+        s.id = SCRIPT_ID;
+        s.type = 'module';
+        // 상대경로(깊이에 따른 ../..)를 피하기 위해 CDN 절대경로 사용
+        s.src =
+          'https://cdn.jsdelivr.net/gh/busanbus/weekly-mobility/components/page-satisfaction.js';
+        document.head ? document.head.appendChild(s) : document.documentElement.appendChild(s);
+      }
+    }
+  }
 }
 
 customElements.define('mobility-footer', MobilityFooter);
