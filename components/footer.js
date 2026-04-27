@@ -11,7 +11,7 @@ class MobilityFooter extends HTMLElement {
       ko: {
         title: '모빌리티 주간 동향',
         description: '모빌리티의 트렌드와 정책 동향을 매주 정리하여 전해드립니다.',
-        contact: '문의 : 부산시내버스운송사업조합 전략기획팀',
+        contact: '문의 : 부산시버스운송사업조합 전략기획팀',
         email: '이메일:',
         copyright: '© 2025 Busan Metrobus Company Association. All rights reserved.'
       },
