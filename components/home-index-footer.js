@@ -79,7 +79,7 @@ class HomeIndexFooter extends HTMLElement {
         <div class="footer-content">
           <div class="footer-title">모빌리티 주간동향</div>
           <div class="footer-subtitle">
-            부산시내버스운송사업조합이 제공하는 대중교통·모빌리티 정책 트렌드 서비스
+            부산시버스운송사업조합이 제공하는 대중교통·모빌리티 정책 트렌드 서비스
           </div>
           <div class="footer-info">
             본 사이트의 모든 자료는 공공 목적의 정보 제공을 위해 제작되었으며,<br>
