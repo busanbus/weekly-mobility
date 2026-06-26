@@ -89,8 +89,8 @@ class MolitSource(Source):
     MAX_PAGES = 10
 
     # 담당부서 추출용 상세페이지 동시 fetch 한도
-    DETAIL_CONCURRENCY = 6
-    DETAIL_TIMEOUT = 12.0
+    DETAIL_CONCURRENCY = 12
+    DETAIL_TIMEOUT = 10.0
 
     @staticmethod
     def _build_params(from_date: str, to_date: str, page: int, psize: int) -> dict:

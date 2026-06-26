@@ -128,9 +128,9 @@ class DaeguSource(Source):
     enabled = True
 
     MAX_PAGES = 40
-    PAGE_CONCURRENCY = 2
-    DETAIL_CONCURRENCY = 6
-    REQUEST_TIMEOUT = 12.0
+    PAGE_CONCURRENCY = 3
+    DETAIL_CONCURRENCY = 14
+    REQUEST_TIMEOUT = 10.0
 
     async def fetch(self, from_date: str, to_date: str) -> List[PressItem]:
         async with httpx.AsyncClient(

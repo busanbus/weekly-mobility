@@ -122,8 +122,8 @@ class UlsanSource(Source):
 
     PAGE_SIZE = 10
     MAX_PAGES = 80
-    PAGE_CONCURRENCY = 3
-    REQUEST_TIMEOUT = 12.0
+    PAGE_CONCURRENCY = 5
+    REQUEST_TIMEOUT = 10.0
 
     async def fetch(self, from_date: str, to_date: str) -> List[PressItem]:
         async with httpx.AsyncClient(
