@@ -52,6 +52,33 @@ app.add_middleware(
 _cache: TTLCache = TTLCache(maxsize=128, ttl=300)
 
 
+async def _fetch_source_with_retry(adapter, from_date: str, to_date: str, retries: int = 2):
+    """정부/지자체 사이트의 순간 연결 실패를 흡수하기 위한 출처 단위 재시도.
+
+    개별 어댑터 내부에서도 httpx -> urllib 폴백을 하지만, 공공 사이트는 가끔
+    첫 요청만 TLS/timeout/500 으로 실패하고 바로 다음 요청은 성공하는 경우가 있어
+    API 레벨에서 한 번 더 재시도한다.
+    """
+    last_error: Exception | None = None
+    for attempt in range(1, retries + 2):
+        try:
+            if attempt > 1:
+                log.info(
+                    "  [%s] retry %s/%s",
+                    adapter.id,
+                    attempt - 1,
+                    retries,
+                )
+            return await adapter.fetch(from_date, to_date)
+        except Exception as e:  # noqa: BLE001
+            last_error = e
+            if attempt > retries:
+                break
+            # 짧은 지수 백오프: 0.5s, 1.0s
+            await asyncio.sleep(0.5 * attempt)
+    raise last_error or RuntimeError(f"{adapter.id} fetch failed")
+
+
 # ---------------------------------------------------------------------- #
 # 유틸
 # ---------------------------------------------------------------------- #
@@ -120,7 +147,7 @@ async def get_press(
             skipped[sid] = "현재 비활성화된 출처"
             continue
         selected.append(sid)
-        coros.append(adapter.fetch(from_, to))
+        coros.append(_fetch_source_with_retry(adapter, from_, to))
 
     # 병렬 실행
     log.info(f"fetch {selected}  from={from_} to={to}")
@@ -132,11 +159,12 @@ async def get_press(
     for sid, res in zip(selected, results):
         adapter = REGISTRY[sid]
         if isinstance(res, Exception):
-            log.warning(f"  [{sid}] FAIL: {res}")
+            err = str(res) or repr(res)
+            log.warning(f"  [{sid}] FAIL: {err}")
             stats[sid] = {
                 "name": adapter.name,
                 "ok": False,
-                "error": str(res),
+                "error": err,
                 "count": 0,
             }
             continue

@@ -18,15 +18,12 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
   /** 백엔드 베이스 URL.
-   *  same-origin (localhost:8000) 으로 서빙된다면 빈 문자열로 두어 상대경로 사용.
-   *  file:// 또는 8000 이외 포트에서 열린 경우엔 강제로 localhost:8000 으로.
+   *  FastAPI가 HTML과 API를 함께 서빙하는 경우에는 현재 origin의 상대경로를 사용한다.
+   *  그래야 localhost뿐 아니라 내부망 IP(예: 192.168.x.x:8001) 접속도 그대로 동작한다.
    */
   function resolveApiBase() {
-    if (location.protocol === 'file:') return 'http://localhost:8000';
-    if (location.port && location.port !== '8000') {
-      // Live Server 등에서 열었을 때
-      return `${location.protocol}//${location.hostname}:8000`;
-    }
+    if (location.protocol === 'file:') return 'http://localhost:8001';
+    if (location.hostname.endsWith('github.io')) return 'http://localhost:8001';
     return '';
   }
   const API_BASE = resolveApiBase();
@@ -38,6 +35,10 @@
     items: [],            // 마지막 응답의 items
     filteredItems: [],
     keyword: '',
+    sort: {
+      date: 'desc',
+      source: null,
+    },
     lastResponse: null,
     fetching: false,
   };
@@ -85,6 +86,76 @@
   // ──────────────────────────────────────────────────────────────────
   // 1) 출처 목록 로드 → 칩 렌더
   // ──────────────────────────────────────────────────────────────────
+
+  function getEnabledSources() {
+    return state.sources.filter((src) => src.enabled);
+  }
+
+  function buildStatusChips(stats) {
+    return stats
+      .map(
+        (s) =>
+          `<span class="ph-status-chip">${escapeHtml(s.name)} <strong>${s.count}</strong>건</span>`
+      )
+      .join('');
+  }
+
+  // 출처별 건수를 기본 접힘 상태로 보여주는 토글 블록
+  function buildStatusBreakdown(stats) {
+    const chips = buildStatusChips(stats);
+    if (!chips) return '';
+    return `
+      <details class="ph-status-details">
+        <summary class="ph-status-details__summary">
+          출처별 건수 <span class="ph-status-details__state"></span>
+        </summary>
+        <div class="ph-status-card__breakdown">${chips}</div>
+      </details>
+    `;
+  }
+
+  function buildFetchSuccessMessage(data, elapsed) {
+    const okStats = Object.values(data.stats || {}).filter((s) => s.ok);
+
+    return `
+      <div class="ph-status-card">
+        <div class="ph-status-card__head">
+          <span class="ph-status-card__icon" aria-hidden="true">✅</span>
+          <div class="ph-status-card__title-wrap">
+            <strong class="ph-status-card__title">총 ${data.total}건 불러오기 완료</strong>
+            <span class="ph-status-card__meta">${elapsed}초 소요 · ${okStats.length}개 출처</span>
+          </div>
+        </div>
+        ${buildStatusBreakdown(okStats)}
+      </div>
+    `;
+  }
+
+  function buildFetchWarningMessage(data, elapsed) {
+    const partial = Object.values(data.stats || {}).filter((s) => !s.ok);
+    const okStats = Object.values(data.stats || {}).filter((s) => s.ok);
+    const failItems = partial
+      .map(
+        (s) =>
+          `<div class="ph-status-fail-item"><strong>${escapeHtml(s.name)}</strong> — ${escapeHtml(s.error || '알 수 없는 오류')}</div>`
+      )
+      .join('');
+
+    return `
+      <div class="ph-status-card">
+        <div class="ph-status-card__head">
+          <span class="ph-status-card__icon" aria-hidden="true">⚠️</span>
+          <div class="ph-status-card__title-wrap">
+            <strong class="ph-status-card__title">일부 출처 가져오기 실패</strong>
+            <span class="ph-status-card__meta">${elapsed}초 소요 · 성공 ${okStats.length}개 / 실패 ${partial.length}개</span>
+          </div>
+        </div>
+        ${buildStatusBreakdown(okStats)}
+        ${failItems ? `<div class="ph-status-card__failures">${failItems}</div>` : ''}
+      </div>
+    `;
+  }
+
   async function loadSources() {
     try {
       const res = await fetch(`${API_BASE}/api/sources`);
@@ -101,23 +172,24 @@
   function renderSourceChips() {
     const wrap = $('#ph-sources');
     wrap.innerHTML = '';
+    state.selectedIds.clear();
+
+    const enabledSources = getEnabledSources();
+    enabledSources.forEach((src) => state.selectedIds.add(src.id));
 
     state.sources.forEach((src) => {
       const chip = document.createElement('label');
       chip.className = 'ph-source-chip';
-      chip.style.setProperty('--src-color', src.color || '#0066ff');
       if (!src.enabled) chip.dataset.disabled = 'true';
 
       chip.innerHTML = `
-        <span class="dot"></span>
-        <input type="checkbox" value="${src.id}" ${src.enabled ? 'checked' : 'disabled'}>
+        <input type="checkbox" value="${src.id}" data-source-id="${src.id}" ${src.enabled ? 'checked' : 'disabled'}>
         <span>${escapeHtml(src.name)}</span>
-        ${src.enabled ? '' : '<span style="font-size:0.72rem;opacity:0.7;">(준비중)</span>'}
+        ${src.enabled ? '' : '<span style="font-size:0.72rem;opacity:0.7;">준비중</span>'}
       `;
 
       const cb = chip.querySelector('input');
       if (src.enabled) {
-        state.selectedIds.add(src.id);
         cb.addEventListener('change', () => {
           if (cb.checked) state.selectedIds.add(src.id);
           else state.selectedIds.delete(src.id);
@@ -125,6 +197,24 @@
       }
       wrap.appendChild(chip);
     });
+
+    bindSourceTools(enabledSources);
+  }
+
+  function bindSourceTools(enabledSources) {
+    const wrap = $('#ph-sources');
+    const setAll = (checked) => {
+      enabledSources.forEach((src) => {
+        const cb = wrap.querySelector(`[data-source-id="${src.id}"]`);
+        if (checked) state.selectedIds.add(src.id);
+        else state.selectedIds.delete(src.id);
+        if (cb) cb.checked = checked;
+      });
+    };
+    const selectAllBtn = $('#ph-select-all');
+    const deselectAllBtn = $('#ph-deselect-all');
+    if (selectAllBtn) selectAllBtn.onclick = () => setAll(true);
+    if (deselectAllBtn) deselectAllBtn.onclick = () => setAll(false);
   }
 
   function renderBackendDownNotice(err) {
@@ -139,10 +229,10 @@
         </small>
       </div>`
     );
-    // 출처 칩이라도 placeholder 로 그려둠
+    // 출처 선택 영역 placeholder
     const wrap = $('#ph-sources');
     wrap.innerHTML =
-      '<span style="color:var(--gray-500);font-size:0.9rem;">백엔드 연결 후 출처 목록이 표시됩니다.</span>';
+      '<div style="padding:8px 2px;color:var(--gray-500);font-size:0.88rem;">서버를 실행한 뒤 페이지를 새로고침해 주세요.</div>';
     $('#ph-fetch-btn').disabled = true;
   }
 
@@ -222,26 +312,13 @@
 
       // 결과 메타 메시지
       const partial = Object.values(data.stats || {}).filter((s) => !s.ok);
-      const okStats = Object.values(data.stats || {}).filter((s) => s.ok);
-      const okSummary = okStats.map((s) => `${s.name} ${s.count}건`).join(' · ');
 
       if (partial.length > 0) {
-        const failList = partial.map((s) => `${s.name}: ${s.error}`).join('<br>');
-        setStatus(
-          'warning',
-          `<div>
-            <strong>일부 출처 가져오기 실패</strong> (${elapsed}s)<br>
-            성공: ${okSummary || '없음'}<br>
-            <small>${escapeHtml(failList)}</small>
-          </div>`
-        );
+        setStatus('warning', buildFetchWarningMessage(data, elapsed));
       } else if (state.items.length === 0) {
         setStatus('empty', `<span class="big">📭</span><span>해당 기간 보도자료가 없습니다.</span>`);
       } else {
-        setStatus(
-          'success',
-          `✅ <strong>${data.total}건</strong> 가져옴 — ${okSummary} <small>(${elapsed}s)</small>`
-        );
+        setStatus('success', buildFetchSuccessMessage(data, elapsed));
       }
 
       applyFilter();
@@ -267,7 +344,7 @@
   function applyFilter() {
     const k = state.keyword.trim().toLowerCase();
     if (!k) {
-      state.filteredItems = state.items;
+      state.filteredItems = [...state.items];
     } else {
       // 필터 대상: 제목/분류/담당부서 (출처는 제외)
       state.filteredItems = state.items.filter((it) =>
@@ -276,11 +353,54 @@
         )
       );
     }
+    applySort();
     render();
+  }
+
+  function applySort() {
+    const dateDir = state.sort.date === 'asc' ? 1 : -1;
+    const sourceDir = state.sort.source === 'asc' ? 1 : state.sort.source === 'desc' ? -1 : 0;
+    state.filteredItems.sort((a, b) => {
+      const as = a.sourceName || a.source || '';
+      const bs = b.sourceName || b.source || '';
+      const ad = a.date || '';
+      const bd = b.date || '';
+
+      // 출처 정렬이 켜져 있으면 출처별로 먼저 묶고, 각 출처 안에서 작성일을 정렬한다.
+      if (sourceDir !== 0) {
+        const sourceCompare = as.localeCompare(bs, 'ko');
+        if (sourceCompare !== 0) return sourceCompare * sourceDir;
+        if (ad !== bd) return ad > bd ? dateDir : -dateDir;
+        return (a.title || '').localeCompare(b.title || '', 'ko');
+      }
+
+      // 출처 정렬이 꺼져 있으면 기존처럼 전체 결과를 작성일 기준으로 정렬한다.
+      if (ad !== bd) return ad > bd ? dateDir : -dateDir;
+      return (a.title || '').localeCompare(b.title || '', 'ko');
+    });
+    updateSortIndicators();
+  }
+
+  function updateSortIndicators() {
+    const dateIndicator = $('[data-sort-indicator="date"]');
+    const sourceIndicator = $('[data-sort-indicator="source"]');
+    if (dateIndicator) dateIndicator.textContent = state.sort.date === 'asc' ? '↑' : '↓';
+    if (sourceIndicator) sourceIndicator.textContent = state.sort.source ? (state.sort.source === 'asc' ? '↑' : '↓') : '';
+
+    const sortSelect = $('#ph-sort-select');
+    if (sortSelect) {
+      let value;
+      if (state.sort.source === 'asc') value = 'source-asc';
+      else if (state.sort.source === 'desc') value = 'source-desc';
+      else value = state.sort.date === 'asc' ? 'date-asc' : 'date-desc';
+      sortSelect.value = value;
+    }
   }
 
   function render() {
     const wrap = $('#ph-table-wrap');
+    const toolbar = $('#ph-table-toolbar');
+    const sortMobile = $('#ph-sort-mobile');
     const tbody = $('#ph-tbody');
     const countEl = $('#ph-count');
 
@@ -290,6 +410,14 @@
 
     if (state.filteredItems.length === 0) {
       wrap.style.display = 'none';
+      if (sortMobile) sortMobile.style.display = 'none';
+      toolbar.style.display = state.items.length > 0 ? '' : 'none';
+      if (state.items.length > 0) {
+        setStatus(
+          'empty',
+          `<span class="big">🔎</span><span>검색한 내용이 없습니다.</span><small>키워드를 바꾸거나 비워서 다시 검색해 주세요.</small>`
+        );
+      }
       return;
     }
 
@@ -306,7 +434,7 @@
 
         return `
           <tr>
-            <td class="ph-cell-num">${escapeHtml(it.num) || idx + 1}</td>
+            <td class="ph-cell-num">${idx + 1}</td>
             <td class="ph-cell-cat">${
               it.category
                 ? `<span class="ph-cat-badge">${escapeHtml(it.category)}</span>`
@@ -331,18 +459,80 @@
       .join('');
 
     wrap.style.display = '';
+    toolbar.style.display = '';
+    if (sortMobile) sortMobile.style.display = '';
+    if (statusEl.querySelector('.ph-empty')) {
+      setStatus(null);
+    }
   }
 
   // ──────────────────────────────────────────────────────────────────
   // 5) 이벤트 바인딩
   // ──────────────────────────────────────────────────────────────────
+  function applySearchControls() {
+    state.keyword = $('#ph-filter').value;
+    applyFilter();
+  }
+
+  function resetResultControls() {
+    $('#ph-filter').value = '';
+    state.keyword = '';
+    state.sort.date = 'desc';
+    state.sort.source = null;
+    applyFilter();
+  }
+
   function bindEvents() {
     $('#ph-fetch-btn').addEventListener('click', fetchAll);
 
-    $('#ph-filter').addEventListener('input', (e) => {
-      state.keyword = e.target.value;
-      applyFilter();
+    $('#ph-search-btn').addEventListener('click', applySearchControls);
+    $('#ph-reset-btn').addEventListener('click', resetResultControls);
+
+    $('#ph-filter').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        applySearchControls();
+      }
     });
+
+    $$('[data-sort-key]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.sortKey;
+        if (key === 'date') {
+          state.sort.date = state.sort.date === 'asc' ? 'desc' : 'asc';
+        } else if (key === 'source') {
+          state.sort.source = state.sort.source === 'asc' ? 'desc' : 'asc';
+        } else {
+          return;
+        }
+        applyFilter();
+      });
+    });
+
+    // 모바일 전용 정렬 드롭다운
+    const sortSelect = $('#ph-sort-select');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        switch (sortSelect.value) {
+          case 'date-asc':
+            state.sort.date = 'asc';
+            state.sort.source = null;
+            break;
+          case 'source-asc':
+            state.sort.source = 'asc';
+            break;
+          case 'source-desc':
+            state.sort.source = 'desc';
+            break;
+          case 'date-desc':
+          default:
+            state.sort.date = 'desc';
+            state.sort.source = null;
+            break;
+        }
+        applyFilter();
+      });
+    }
 
     // Ctrl/Cmd + Enter 로 빠르게 불러오기
     document.addEventListener('keydown', (e) => {

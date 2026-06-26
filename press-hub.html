@@ -55,7 +55,10 @@
     .ph-page-header .ph-tag-beta {
       display: inline-block;
       background: var(--warning-orange);
-      color: #fff;
+      color: #000;
+      -webkit-text-fill-color: #000;
+      background-clip: border-box;
+      -webkit-background-clip: border-box;
       font-size: 0.72rem;
       font-weight: 700;
       padding: 3px 10px;
@@ -70,30 +73,94 @@
       background: #fff;
       border: 1px solid var(--gray-200);
       border-radius: 16px;
-      padding: 24px 28px;
+      padding: 22px;
       box-shadow: var(--shadow-md);
       display: grid;
-      grid-template-columns: 1.4fr 1.4fr auto;
-      gap: 24px;
-      align-items: end;
+      grid-template-columns: minmax(320px, 0.85fr) minmax(0, 1.15fr);
+      grid-template-areas:
+        "period sources"
+        "action action";
+      gap: 20px 28px;
+      align-items: start;
       margin-bottom: 16px;
     }
-    .ph-control-group { display: flex; flex-direction: column; gap: 10px; }
-    .ph-control-group > label {
+    .ph-controls-action {
+      grid-area: action;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 0;
+      margin: 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--gray-200);
+    }
+    .ph-control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+    }
+    .ph-control-group:nth-child(1) { grid-area: period; }
+    .ph-control-group:nth-child(2) { grid-area: sources; }
+    .ph-control-group > label,
+    .ph-control-head label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.82rem;
       font-weight: 700;
       color: var(--gray-800);
       letter-spacing: 0.01em;
+      min-height: 22px;
     }
+    .ph-control-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 22px;
+    }
+    .ph-source-tools {
+      display: inline-flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .ph-mini-btn {
+      border: 1px solid var(--gray-200);
+      background: #fff;
+      color: var(--gray-600);
+      font-family: inherit;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 4px 11px;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: color .15s ease, border-color .15s ease,
+                  background .15s ease, transform .1s ease;
+    }
+    .ph-mini-btn:hover {
+      color: var(--primary-blue);
+      border-color: var(--primary-blue);
+      background: var(--secondary-blue);
+    }
+    .ph-mini-btn:active { transform: translateY(1px); }
     .ph-quick-period {
-      display: flex; gap: 6px; flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
     }
     .ph-quick-period button {
+      width: 100%;
       background: var(--gray-100);
       border: 1.5px solid transparent;
       color: var(--gray-800);
-      padding: 7px 14px;
-      border-radius: 999px;
+      min-height: 40px;
+      padding: 8px 12px;
+      border-radius: 10px;
       font-size: 0.86rem;
       font-weight: 600;
       cursor: pointer;
@@ -107,11 +174,16 @@
       box-shadow: 0 4px 10px rgba(0,102,255,0.25);
     }
     .ph-date-range {
-      display: flex; align-items: center; gap: 8px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
     }
     .ph-date-range input[type="date"] {
-      flex: 1;
-      padding: 9px 12px;
+      width: 100%;
+      min-width: 0;
+      min-height: 42px;
+      padding: 10px 12px;
       border: 1.5px solid var(--gray-200);
       border-radius: 10px;
       font-size: 0.95rem;
@@ -128,46 +200,78 @@
     .ph-date-range span { color: var(--gray-600); font-weight: 600; }
 
     .ph-sources {
-      display: flex; gap: 10px; flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+      gap: 8px;
+      align-content: flex-start;
     }
     .ph-source-chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 7px 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      min-height: 40px;
+      padding: 8px 12px;
       border: 1.5px solid var(--gray-200);
-      border-radius: 999px;
+      border-radius: 10px;
       background: #fff;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: border-color .2s, background .2s, box-shadow .2s;
       user-select: none;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 600;
-      color: var(--gray-800);
+      color: #000;
+      line-height: 1.2;
+      overflow: hidden;
     }
-    .ph-source-chip input { display: none; }
+    .ph-source-chip > span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ph-source-chip input {
+      width: 14px;
+      height: 14px;
+      margin: 0;
+      accent-color: var(--primary-blue);
+      flex-shrink: 0;
+    }
+    .ph-source-chip:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-300);
+      box-shadow: var(--shadow-sm);
+    }
     .ph-source-chip:has(input:checked) {
       background: var(--secondary-blue);
       border-color: var(--primary-blue);
-      color: var(--primary-blue);
-    }
-    .ph-source-chip .dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--src-color, var(--primary-blue));
-      flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(0,102,255,0.08);
     }
     .ph-source-chip[data-disabled="true"] {
-      opacity: 0.5; cursor: not-allowed;
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .ph-source-chip[data-disabled="true"]:hover {
+      background: #fff;
+      border-color: var(--gray-200);
+      box-shadow: none;
     }
 
     .ph-fetch-btn {
+      width: auto;
       background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
       color: #fff;
       border: none;
-      padding: 13px 26px;
+      min-width: 156px;
+      min-height: 52px;
+      padding: 14px 20px;
       border-radius: 12px;
       font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      display: inline-flex; align-items: center; gap: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       box-shadow: var(--shadow-md);
       transition: transform .15s ease, box-shadow .2s ease, opacity .2s;
       white-space: nowrap;
@@ -200,21 +304,114 @@
       color: var(--gray-600);
       font-weight: 600;
     }
-    .ph-filter-input {
-      width: 320px;
-      max-width: 100%;
-      padding: 9px 14px;
+    .ph-result-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .ph-table-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin: 10px 0 14px;
+      padding: 14px 16px;
+      background: #fff;
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .ph-filter-copy {
+      min-width: 150px;
+      color: var(--gray-700);
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+    .ph-filter-copy small {
+      display: block;
+      margin-top: 2px;
+      color: var(--gray-500);
+      font-size: 0.76rem;
+      font-weight: 500;
+    }
+    .ph-filter-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+    .ph-filter-field {
+      position: relative;
+      flex: 1;
+      max-width: 420px;
+      min-width: 260px;
+    }
+    .ph-search-btn {
+      min-width: 88px;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
+      color: #fff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: transform .15s ease, box-shadow .2s ease, opacity .2s;
+    }
+    .ph-search-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .ph-search-btn:active {
+      transform: translateY(0);
+    }
+    .ph-reset-btn {
+      min-width: 78px;
+      min-height: 44px;
+      padding: 10px 14px;
       border: 1.5px solid var(--gray-200);
-      border-radius: 10px;
+      border-radius: 12px;
+      background: var(--gray-50);
+      color: var(--gray-700);
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .ph-reset-btn:hover {
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+      background: var(--secondary-blue);
+    }
+    .ph-filter-input {
+      width: 100%;
+      max-width: 100%;
+      min-height: 44px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 12px;
       font-size: 0.92rem;
       font-family: inherit;
       outline: none;
-      transition: border-color .2s, box-shadow .2s;
+      background: var(--gray-50);
+      transition: border-color .2s, box-shadow .2s, background .2s;
     }
     .ph-filter-input:focus {
       border-color: var(--primary-blue);
+      background: #fff;
       box-shadow: 0 0 0 3px rgba(0,102,255,0.1);
     }
+    /* 모바일 전용 정렬 컨트롤 (PC/태블릿에서는 표 헤더로 정렬하므로 숨김) */
+    .ph-sort-mobile { display: none; }
 
     /* 상태 메시지 */
     .ph-status { margin: 16px 0; }
@@ -228,9 +425,123 @@
     }
     @keyframes ph-fadein { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
     .ph-status .ph-loading { background: var(--secondary-blue); color: var(--primary-blue); }
-    .ph-status .ph-success { background: #e7f8f0; color: #047857; }
-    .ph-status .ph-warning { background: #fff7e6; color: #b45309; }
+    .ph-status .ph-success {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      align-items: stretch;
+      padding: 16px 18px;
+    }
+    .ph-status .ph-warning {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      align-items: stretch;
+      padding: 16px 18px;
+    }
     .ph-status .ph-error { background: #fee2e2; color: #b91c1c; }
+    .ph-status-card {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .ph-status-card__head {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .ph-status-card__icon {
+      font-size: 1.2rem;
+      line-height: 1;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+    .ph-status-card__title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+    .ph-status-card__title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: inherit;
+      line-height: 1.35;
+    }
+    .ph-status-card__meta {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: color-mix(in srgb, currentColor 72%, var(--gray-600));
+    }
+    .ph-status-details {
+      margin-top: 2px;
+    }
+    .ph-status-details__summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: inherit;
+      opacity: 0.9;
+    }
+    .ph-status-details__summary::-webkit-details-marker { display: none; }
+    .ph-status-details__summary::before {
+      content: "▸";
+      font-size: 0.8rem;
+      transition: transform .15s ease;
+    }
+    .ph-status-details[open] .ph-status-details__summary::before {
+      transform: rotate(90deg);
+    }
+    .ph-status-details__state {
+      font-weight: 600;
+      opacity: 0.7;
+    }
+    .ph-status-details__state::before { content: "(펼치기)"; }
+    .ph-status-details[open] .ph-status-details__state::before { content: "(접기)"; }
+    .ph-status-details .ph-status-card__breakdown {
+      margin-top: 10px;
+    }
+    .ph-status-card__breakdown {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .ph-status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: inherit;
+      line-height: 1.2;
+    }
+    .ph-status-chip strong {
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
+    .ph-status-card__failures {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 4px;
+      border-top: 1px dashed rgba(146, 64, 14, 0.25);
+    }
+    .ph-status-fail-item {
+      font-size: 0.84rem;
+      line-height: 1.45;
+      color: inherit;
+    }
     .ph-status .ph-empty {
       background: var(--gray-50);
       color: var(--gray-600);
@@ -265,6 +576,34 @@
       border-bottom: 1.5px solid var(--gray-200);
       white-space: nowrap;
       letter-spacing: 0.02em;
+    }
+    .ph-sort-th {
+      padding: 0 !important;
+    }
+    .ph-sort-th button {
+      width: 100%;
+      height: 100%;
+      padding: 14px 16px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .ph-sort-th button:hover {
+      color: var(--primary-blue);
+      background: rgba(0, 102, 255, 0.06);
+    }
+    .ph-sort-indicator {
+      color: var(--primary-blue);
+      font-size: 0.78rem;
+      min-width: 1em;
     }
     .ph-table tbody td {
       padding: 14px 16px;
@@ -337,21 +676,326 @@
       font-size: 0.85em;
     }
 
-    /* 반응형 */
+    /* ============ 반응형 ============ */
+
+    /* 태블릿 (1024px 이하) — 데이터는 '표' 형태를 유지 */
+    @media (max-width: 1024px) {
+      body { zoom: 1; }
+      .ph-page {
+        max-width: 100%;
+        margin: 24px auto 64px;
+        padding: 0 20px;
+      }
+      .ph-page-header { margin-bottom: 24px; }
+      .ph-page-header h1 { font-size: clamp(1.7rem, 4.2vw, 2.2rem); }
+      .ph-controls {
+        grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.1fr);
+        gap: 18px 20px;
+        padding: 20px;
+      }
+      .ph-sources {
+        grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+      }
+      /* 표가 좁아지면 가로 스크롤로 보호 */
+      .ph-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .ph-table { min-width: 720px; font-size: 0.9rem; }
+      .ph-table thead th,
+      .ph-table tbody td { padding: 12px 12px; }
+    }
+
+    /* 좁은 태블릿 (900px 이하) — 컨트롤을 1열로 */
     @media (max-width: 900px) {
       .ph-controls {
         grid-template-columns: 1fr;
+        grid-template-areas:
+          "period"
+          "sources"
+          "action";
         gap: 18px;
         padding: 20px 22px;
       }
+      .ph-date-range { max-width: none; }
+      .ph-controls-action {
+        width: 100%;
+        margin: 0;
+      }
       .ph-fetch-btn { width: 100%; justify-content: center; }
     }
-    @media (max-width: 700px) {
-      .ph-page { padding: 0 14px; margin: 16px auto 60px; }
-      .ph-page-header h1 { font-size: 1.6rem; }
-      .ph-table { font-size: 0.86rem; }
-      .ph-table thead th, .ph-table tbody td { padding: 11px 10px; }
-      .ph-cell-num, .ph-cell-dept { display: none; }
+    /* 스마트폰 (768px 이하) — 표를 카드형 목록으로 전환 */
+    @media (max-width: 768px) {
+      body { zoom: 1; background: var(--gray-50); }
+
+      .ph-page {
+        width: 100%;
+        margin: 18px auto 48px;
+        padding: 0 14px;
+      }
+
+      .ph-page-header {
+        text-align: left;
+        margin-bottom: 18px;
+      }
+      .ph-page-header h1 {
+        font-size: 1.55rem;
+        line-height: 1.25;
+        margin-bottom: 8px;
+      }
+      .ph-page-header p {
+        font-size: 0.92rem;
+        line-height: 1.55;
+      }
+
+      .ph-controls {
+        border-radius: 18px;
+        padding: 18px;
+        gap: 20px;
+      }
+      .ph-control-group > label {
+        font-size: 0.86rem;
+      }
+      .ph-quick-period {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: none;
+        gap: 8px;
+      }
+      .ph-quick-period button {
+        padding: 10px 8px;
+        font-size: 0.9rem;
+      }
+      .ph-date-range {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .ph-date-range span {
+        text-align: center;
+        line-height: 1;
+      }
+      .ph-date-range input[type="date"] {
+        min-height: 46px;
+        font-size: 1rem;
+      }
+      .ph-sources {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .ph-source-chip {
+        justify-content: center;
+        min-height: 42px;
+        padding: 9px 10px;
+        font-size: 0.86rem;
+      }
+      .ph-fetch-btn {
+        min-height: 48px;
+        border-radius: 14px;
+        font-size: 1rem;
+      }
+
+      .ph-result-bar {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+        margin: 18px 0 12px;
+      }
+      .ph-result-meta {
+        justify-content: space-between;
+        font-size: 0.95rem;
+      }
+      .ph-result-tools {
+        display: none;
+      }
+      .ph-filter-input {
+        width: 100%;
+        min-height: 44px;
+        font-size: 0.95rem;
+      }
+      .ph-table-toolbar {
+        display: block !important;
+        padding: 14px;
+        margin: 8px 0 12px;
+      }
+      .ph-filter-copy {
+        margin-bottom: 10px;
+        min-width: 0;
+      }
+      .ph-filter-controls {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 72px 72px;
+        gap: 8px;
+      }
+      .ph-filter-field {
+        min-width: 0;
+        max-width: none;
+      }
+      .ph-table-toolbar .ph-filter-input,
+      .ph-table-toolbar .ph-search-btn,
+      .ph-table-toolbar .ph-reset-btn {
+        width: 100%;
+        min-height: 44px;
+      }
+      .ph-table-toolbar .ph-search-btn {
+        padding: 0 8px;
+        min-width: 0;
+      }
+      .ph-table-toolbar .ph-reset-btn {
+        padding: 0 8px;
+        font-size: 0.84rem;
+        min-width: 0;
+      }
+      .ph-sort-mobile {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 50%;
+        margin: 4px 0 12px auto;
+        padding: 12px 14px;
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: 14px;
+        box-shadow: var(--shadow-sm);
+      }
+      .ph-sort-mobile__label {
+        font-size: 0.86rem;
+        font-weight: 700;
+        color: var(--gray-700);
+        flex-shrink: 0;
+      }
+      .ph-sort-mobile select {
+        flex: 1;
+        min-width: 0;
+        min-height: 44px;
+        padding: 8px 12px;
+        border: 1.5px solid var(--gray-200);
+        border-radius: 12px;
+        background: var(--gray-50);
+        font-family: inherit;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        outline: none;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        padding-right: 36px;
+      }
+      .ph-sort-mobile select:focus {
+        border-color: var(--primary-blue);
+        background-color: #fff;
+        box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+      }
+
+      .ph-status > div {
+        align-items: flex-start;
+        padding: 13px 14px;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      /* 모바일에서는 표를 카드형 목록으로 전환 */
+      .ph-table-wrap {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        overflow: visible;
+      }
+      .ph-table,
+      .ph-table thead,
+      .ph-table tbody,
+      .ph-table tr,
+      .ph-table td {
+        display: block;
+        width: 100%;
+        min-width: 0;
+      }
+      .ph-table thead {
+        display: none;
+      }
+      .ph-table tbody tr {
+        background: #fff;
+        border: 1px solid var(--gray-200);
+        border-radius: 16px;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 12px;
+        padding: 14px 14px 12px;
+      }
+      .ph-table tbody tr:hover {
+        background: #fff;
+      }
+      .ph-table tbody td {
+        border-bottom: none;
+        padding: 0;
+      }
+      .ph-cell-num {
+        display: none !important;
+      }
+      .ph-cell-title {
+        min-width: 0;
+        margin-bottom: 10px;
+      }
+      .ph-title-link {
+        display: block;
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.45;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+      }
+      .ph-cell-cat,
+      .ph-cell-dept,
+      .ph-cell-date,
+      .ph-cell-source {
+        width: auto;
+        white-space: normal;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-top: 7px;
+        color: var(--gray-700);
+        font-size: 0.9rem;
+      }
+      .ph-cell-cat::before,
+      .ph-cell-dept::before,
+      .ph-cell-date::before,
+      .ph-cell-source::before {
+        color: var(--gray-500);
+        font-size: 0.8rem;
+        font-weight: 700;
+        flex: 0 0 auto;
+      }
+      .ph-cell-cat::before { content: "분류"; }
+      .ph-cell-dept::before { content: "담당부서"; }
+      .ph-cell-date::before { content: "작성일"; }
+      .ph-cell-source::before { content: "출처"; }
+      .ph-cat-badge,
+      .ph-source-badge {
+        max-width: 70%;
+        justify-content: flex-end;
+        text-align: right;
+      }
+
+      .ph-help {
+        margin-top: 20px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        font-size: 0.85rem;
+      }
+    }
+
+    /* 소형 스마트폰 (430px 이하) */
+    @media (max-width: 430px) {
+      .ph-page { padding: 0 10px; }
+      .ph-page-header h1 { font-size: 1.4rem; }
+      .ph-controls { padding: 16px 14px; }
+      .ph-sources { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ph-quick-period { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ph-quick-period button { font-size: 0.86rem; }
+      .ph-source-tools { gap: 5px; }
+      .ph-mini-btn { padding: 5px 9px; font-size: 0.72rem; }
+      .ph-title-link { font-size: 0.96rem; }
     }
   </style>
 </head>
@@ -372,8 +1016,10 @@
         <div class="ph-quick-period" id="ph-quick-period">
           <button type="button" data-days="7" class="active">최근 1주</button>
           <button type="button" data-days="14">최근 2주</button>
+          <button type="button" data-days="21">최근 3주</button>
           <button type="button" data-days="30">최근 1개월</button>
           <button type="button" data-days="90">최근 3개월</button>
+          <button type="button" data-days="180">최근 6개월</button>
         </div>
         <div class="ph-date-range">
           <input type="date" id="ph-from" aria-label="시작일">
@@ -383,17 +1029,25 @@
       </div>
 
       <div class="ph-control-group">
-        <label>🏛 출처 선택</label>
+        <div class="ph-control-head">
+          <label>🏛 출처 선택</label>
+          <div class="ph-source-tools">
+            <button type="button" class="ph-mini-btn" id="ph-select-all">전체선택</button>
+            <button type="button" class="ph-mini-btn" id="ph-deselect-all">선택해제</button>
+          </div>
+        </div>
         <div class="ph-sources" id="ph-sources">
           <!-- JS에서 동적으로 채움 -->
         </div>
       </div>
 
-      <button type="button" class="ph-fetch-btn" id="ph-fetch-btn">
-        <span class="icon">📥</span>
-        <span class="spinner" aria-hidden="true"></span>
-        <span class="label">불러오기</span>
-      </button>
+      <div class="ph-controls-action">
+        <button type="button" class="ph-fetch-btn" id="ph-fetch-btn">
+          <span class="icon">📥</span>
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="label">불러오기</span>
+        </button>
+      </div>
     </section>
 
     <!-- 결과 컨트롤 -->
@@ -401,12 +1055,37 @@
       <div class="ph-result-meta">
         <span id="ph-count">총 0건</span>
       </div>
-      <input type="text" class="ph-filter-input" id="ph-filter"
-             placeholder="🔎 키워드 필터 (예: BRT, 자율주행)" />
+    </div>
+
+    <!-- 결과 필터/정렬 -->
+    <div class="ph-table-toolbar" id="ph-table-toolbar" style="display:none;">
+      <div class="ph-filter-copy">
+        결과 내 검색
+        <small>제목·분류·담당부서 기준</small>
+      </div>
+      <div class="ph-filter-controls">
+        <label class="ph-filter-field" for="ph-filter">
+          <input type="text" class="ph-filter-input" id="ph-filter"
+                 placeholder="BRT, 자율주행, 버스 등" />
+        </label>
+        <button type="button" class="ph-search-btn" id="ph-search-btn">검색</button>
+        <button type="button" class="ph-reset-btn" id="ph-reset-btn">초기화</button>
+      </div>
     </div>
 
     <!-- 상태 메시지 -->
     <div class="ph-status" id="ph-status"></div>
+
+    <!-- 모바일 전용 정렬 (결과 영역 바로 위) -->
+    <div class="ph-sort-mobile" id="ph-sort-mobile" style="display:none;">
+      <span class="ph-sort-mobile__label">↕ 정렬</span>
+      <select id="ph-sort-select" aria-label="정렬 기준">
+        <option value="date-desc">작성일 최신순</option>
+        <option value="date-asc">작성일 오래된순</option>
+        <option value="source-asc">출처순 (가나다)</option>
+        <option value="source-desc">출처순 (역순)</option>
+      </select>
+    </div>
 
     <!-- 결과 표 -->
     <div class="ph-table-wrap" id="ph-table-wrap" style="display:none;">
@@ -417,8 +1096,16 @@
             <th class="ph-cell-cat">분류</th>
             <th class="ph-cell-title">제목</th>
             <th class="ph-cell-dept">담당부서</th>
-            <th class="ph-cell-date">작성일</th>
-            <th class="ph-cell-source">출처</th>
+            <th class="ph-cell-date ph-sort-th">
+              <button type="button" data-sort-key="date" aria-label="작성일 기준 정렬">
+                작성일 <span class="ph-sort-indicator" data-sort-indicator="date">↓</span>
+              </button>
+            </th>
+            <th class="ph-cell-source ph-sort-th">
+              <button type="button" data-sort-key="source" aria-label="출처 기준 정렬">
+                출처 <span class="ph-sort-indicator" data-sort-indicator="source"></span>
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody id="ph-tbody"></tbody>
@@ -428,12 +1115,11 @@
     <!-- 안내 -->
     <div class="ph-help">
       <strong>💡 사용 안내</strong><br>
-      · 이 페이지는 로컬 백엔드(<code>http://localhost:8000</code>)에서 실행되어야 동작합니다.
-        <code>server\start.bat</code> 을 실행하고 <code>http://localhost:8000/press-hub.html</code> 로 접속하세요.<br>
-      · 기간/출처를 선택하고 <strong>불러오기</strong>를 누르면 백엔드가 각 기관 사이트를 실시간 크롤링해 표로 보여 줍니다.<br>
-      · 제목을 클릭하면 해당 기관 사이트의 원문 보도자료가 새 창으로 열립니다.<br>
-      · 데이터는 DB에 저장되지 않으며, 백엔드에서 5분간 메모리에 캐시됩니다.<br>
-      · 디버그가 필요하면 콘솔에서 <code>__pressHubDebug()</code> 로 마지막 응답 원본을 볼 수 있습니다.
+      · <strong>기간</strong>과 <strong>출처</strong>를 선택한 뒤 <strong>불러오기</strong>를 누르면 각 기관 보도자료를 실시간으로 모아 보여 줍니다.<br>
+      · 결과가 나온 뒤에는 키워드를 입력한 후 <strong>🔎 검색</strong> 또는 <strong>Enter</strong>로 결과를 좁힐 수 있습니다.<br>
+      · 표의 <strong>작성일</strong> 또는 <strong>출처</strong> 제목을 클릭하면 오름차순/내림차순으로 정렬됩니다.<br>
+      · 제목을 클릭하면 해당 기관의 원문 보도자료가 새 창으로 열립니다.<br>
+      · 데이터는 별도 DB에 저장하지 않고, 같은 조건의 조회 결과만 백엔드에서 5분간 임시 캐시합니다.
     </div>
   </main>
 

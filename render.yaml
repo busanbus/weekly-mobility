@@ -1,0 +1,16 @@
+# Render Blueprint — 보도자료 허브 (Press Hub)
+# FastAPI 서버 하나가 프론트(HTML/JS/CSS)와 API를 같은 주소에서 함께 서빙한다.
+# Render 대시보드 > New > Blueprint 에서 이 파일이 있는 저장소를 선택하면 자동 구성된다.
+services:
+  - type: web
+    name: press-hub
+    runtime: python
+    region: singapore          # 한국 정부/지자체 사이트 접근성을 위해 가까운 리전 사용
+    plan: free                 # 무료 플랜 (15분 미사용 시 슬립 → 첫 접속 시 30~60초 콜드스타트)
+    rootDir: server            # build/start 명령이 server/ 폴더에서 실행됨
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true           # main 브랜치에 push 하면 자동 재배포
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7

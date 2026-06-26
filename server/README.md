@@ -31,6 +31,23 @@ weekly-mobility/
 
 > **종료**: 검정 콘솔창에서 `Ctrl + C` 또는 창을 닫으세요.
 
+### 외부 PC/모바일에서 임시 접속 (Cloudflare Tunnel)
+
+로컬 서버를 켜둔 내 PC를 임시 HTTPS 주소로 외부에 열 수 있습니다.
+
+1. `server\start.bat` 을 먼저 실행해 `http://localhost:8000/press-hub.html` 이 열리는지 확인합니다.
+2. `cloudflared` 를 설치합니다.
+   ```powershell
+   winget install --id Cloudflare.cloudflared
+   ```
+3. `server\start-tunnel.bat` 을 실행합니다.
+4. 콘솔에 표시되는 `https://...trycloudflare.com` 주소를 다른 PC/모바일에서 접속합니다.
+
+주의:
+- 내 PC, `start.bat`, `start-tunnel.bat` 이 모두 켜져 있어야 접속됩니다.
+- 임시 터널 주소는 실행할 때마다 바뀔 수 있습니다.
+- 회사 보안정책상 외부 터널 사용이 제한될 수 있습니다.
+
 ### Windows 외 환경 / 수동 실행
 
 ```bash

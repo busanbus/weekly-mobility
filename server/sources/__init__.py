@@ -8,21 +8,34 @@
 from typing import Dict, List
 
 from .base import PressItem, Source
+from .busan import BusanSource
+from .daegu import DaeguSource
+from .daejeon import DaejeonSource
+from .gwangju import GwangjuSource
+from .incheon import IncheonSource
+from .jeju import JejuSource
 from .molit import MolitSource
+from .seoul import SeoulSource
+from .sejong import SejongSource
+from .ulsan import UlsanSource
 
 
 # 실제로 fetch 가능한 어댑터들 (구현 완료)
 IMPLEMENTED: List[Source] = [
     MolitSource(),
+    BusanSource(),
+    SeoulSource(),
+    IncheonSource(),
+    GwangjuSource(),
+    UlsanSource(),
+    DaeguSource(),
+    DaejeonSource(),
+    SejongSource(),
+    JejuSource(),
 ]
 
 # 아직 구현 전이지만 UI 에는 비활성 칩으로 보여줄 후보 출처들
-PLACEHOLDERS: List[Dict] = [
-    {"id": "seoul",   "name": "서울특별시",  "color": "#cc0033", "enabled": False},
-    {"id": "busan",   "name": "부산광역시",  "color": "#005bac", "enabled": False},
-    {"id": "ulsan",   "name": "울산광역시",  "color": "#1e7e34", "enabled": False},
-    {"id": "gwangju", "name": "광주광역시",  "color": "#7c3aed", "enabled": False},
-]
+PLACEHOLDERS: List[Dict] = []
 
 
 REGISTRY: Dict[str, Source] = {s.id: s for s in IMPLEMENTED}

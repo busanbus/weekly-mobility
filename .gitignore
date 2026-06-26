@@ -1,0 +1,30 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# 가상환경 (절대 커밋하지 말 것: 수천 개 파일 + 용량 큼)
+.venv/
+server/.venv/
+venv/
+env/
+ENV/
+
+# ===== 캐시/로그 =====
+*.log
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ===== OS / 에디터 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
