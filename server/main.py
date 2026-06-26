@@ -51,6 +51,18 @@ app.add_middleware(
 # 5분 TTL 캐시 (key = (from, to, sources tuple))
 _cache: TTLCache = TTLCache(maxsize=128, ttl=300)
 
+# 출처 1개가 느려도 전체 응답을 막지 않도록 하는 출처별 시간 상한(초).
+# 이 시간을 넘기면 해당 출처만 '실패'로 처리하고 나머지 결과를 즉시 반환한다.
+SOURCE_TIMEOUT = 25.0
+
+
+async def _fetch_with_budget(adapter, from_date: str, to_date: str):
+    """출처별 재시도 로직에 전체 시간 상한을 씌운다."""
+    return await asyncio.wait_for(
+        _fetch_source_with_retry(adapter, from_date, to_date),
+        timeout=SOURCE_TIMEOUT,
+    )
+
 
 async def _fetch_source_with_retry(adapter, from_date: str, to_date: str, retries: int = 2):
     """정부/지자체 사이트의 순간 연결 실패를 흡수하기 위한 출처 단위 재시도.
@@ -147,7 +159,7 @@ async def get_press(
             skipped[sid] = "현재 비활성화된 출처"
             continue
         selected.append(sid)
-        coros.append(_fetch_source_with_retry(adapter, from_, to))
+        coros.append(_fetch_with_budget(adapter, from_, to))
 
     # 병렬 실행
     log.info(f"fetch {selected}  from={from_} to={to}")
@@ -159,7 +171,10 @@ async def get_press(
     for sid, res in zip(selected, results):
         adapter = REGISTRY[sid]
         if isinstance(res, Exception):
-            err = str(res) or repr(res)
+            if isinstance(res, asyncio.TimeoutError):
+                err = f"시간 초과({int(SOURCE_TIMEOUT)}초) — 사이트 응답 지연/차단"
+            else:
+                err = str(res) or repr(res)
             log.warning(f"  [{sid}] FAIL: {err}")
             stats[sid] = {
                 "name": adapter.name,

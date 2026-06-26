@@ -126,7 +126,9 @@ class JejuSource(Source):
     id = "jeju"
     name = "제주특별자치도"
     color = "#f58220"
-    enabled = True
+    # 클라우드(해외) IP에서 jeju.go.kr 접속이 차단/타임아웃되어 임시 비활성화.
+    # 로컬에서 돌릴 때 다시 쓰려면 True 로 바꾸거나 환경변수로 제어하면 된다.
+    enabled = False
 
     MAX_PAGES = 50
     PAGE_CONCURRENCY = 3
